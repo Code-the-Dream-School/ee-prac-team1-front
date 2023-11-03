@@ -1,30 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { getAllData } from './util/index';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-const URL = 'http://localhost:8000/api/v1/';
+import { Register, Login, Dashboard } from './pages';
 
-function App() {
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Dashboard />,
+  },
+  {
+    path: 'register',
+    element: <Register />,
+  },
+  {
+    path: 'login',
+    element: <Login />,
+  },
+]);
 
-const [message, setMessage] = useState(''); 
-
-  useEffect(() => {
-
-    (async () => {
-      const myData = await getAllData(URL)
-      setMessage(myData.data);
-    })();
-      
-    return () => {
-      console.log('unmounting');
-    }
-
-  }, []);
-
-  return (
-    <>
-      <h1>{message}</h1>
-    </>
-  );
-}
+const App = () => {
+  return <RouterProvider router={router} />;
+};
 
 export default App;
