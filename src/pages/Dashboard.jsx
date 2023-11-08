@@ -1,10 +1,10 @@
-import { Navbar, ActivityCard } from '../components';
+import { Navbar, ActivitiesContainer } from '../components';
 
 const Dashboard = () => {
   return (
     <>
       <Navbar />
-      <ActivityCard />
+      <ActivitiesContainer />
     </>
   );
 };

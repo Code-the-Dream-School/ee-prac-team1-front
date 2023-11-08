@@ -30,7 +30,7 @@ const ActivityCard = () => {
           maxWidth: { xs: 378, sm: 378, md: 378 },
           borderRadius: '14px',
           display: 'flex',
-
+          margin: 'auto',
           paddingTop: 1,
         }}
       >
