@@ -1,6 +1,6 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { Register, Login, Dashboard, ActivityDetails } from './pages';
+import { Register, Login, Dashboard } from './pages';
 
 const router = createBrowserRouter([
   {
@@ -8,16 +8,12 @@ const router = createBrowserRouter([
     element: <Dashboard />,
   },
   {
-    path: '/register',
+    path: 'register',
     element: <Register />,
   },
   {
-    path: '/login',
+    path: 'login',
     element: <Login />,
-  },
-  {
-    path: '/activities/:id',
-    element: <ActivityDetails/>,
   },
 ]);
 
