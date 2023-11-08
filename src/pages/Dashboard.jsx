@@ -1,12 +1,10 @@
-import { Typography } from '@mui/material';
-import { Navbar, GameCard } from '../components';
+import { Navbar, ActivityCard } from '../components';
 
 const Dashboard = () => {
   return (
     <>
-      <Typography variant="h2">Dashboard</Typography>
       <Navbar />
-      <GameCard />
+      <ActivityCard />
     </>
   );
 };
