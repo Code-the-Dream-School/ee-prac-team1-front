@@ -6,7 +6,7 @@ const Dashboard = () => {
       <Navbar />
       <ActivityCard />
     </>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard
