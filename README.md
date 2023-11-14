@@ -55,7 +55,7 @@ SportType, Description, Date, Time, Location (Court Number, Street, City, State,
 
 <h1>Technologies Used</h1>
 
-<p>Front-end (React.js, Figma)
+<p>Front-end (React.js, Figma, Material UI)
 Back-end (Node.js, MongoDB, Express).</p>
 
 <h1>Contributors</h1>
@@ -65,9 +65,9 @@ Tammam Alwafai - tammam.wafai@gmail.com
 Vitalii Popovych - popovych@gmail.com
 Ljiljana Janjic - ljiljajanjic@gmail.com
 Selam Yihew - syihew@gmail.com
-Oxana - oxana.mitch@gmail.com
+Oxana Michkasova - oxana.mitch@gmail.com
 Fany - fkreminsky@gmail.com
 </p>
 
 <h1>License</h1>
-<p>We kindly request that you seek permission from the project's contributors, particularly when considering commercial use of this project.</p>
+<p>We kindly request that you seek permission from the project's contributors, particularly when considering the commercial use of this project.</p>
