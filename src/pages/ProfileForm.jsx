@@ -1,66 +1,98 @@
+import React from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import {
-    Box,
+    TextField,
     Button,
-    InputLabel,
     MenuItem,
     Select,
-    TextField,
+    InputLabel,
     ThemeProvider,
+    Box,
 } from "@mui/material";
 
-import Logo from "../assets/logo70.png";
-import { theme } from "../utils/theme";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { theme } from "../utils/theme";
+import ProfileImage from "./ProfileImage";
+
+const validationSchema = Yup.object({
+    phoneNumber: Yup.string().matches(
+        /^\d{10}$/,
+        "Phone number must be 10 digits, no dashes"
+    ),
+    dateOfBirth: Yup.date()
+        .nullable()
+        .max(new Date(), "Date of birth must be in the past"),
+    address: Yup.string(),
+    city: Yup.string(),
+    zipCode: Yup.string().matches(/^\d{5}$/, "Invalid zip code."),
+    state: Yup.string().length(2, "State must be 2 letters"),
+    experienceLevel: Yup.string().oneOf([
+        "Beginner",
+        "Intermediate",
+        "Advanced",
+    ]),
+});
+
+const experienceLevel = ["Beginner", "Intermediate", "Advanced"];
 
 const ProfileForm = () => {
-    const [userData, setUserData] = useState({
-        phoneNumber: "",
-        dateOfBirth: "",
-        address: "",
-        city: "",
-        state: "",
-        zipCode: "",
-        experienceLevel: "Beginner",
-    });
     const navigate = useNavigate();
-    
-    const handleInputChange = (e) => {
-        setUserData((prevData) => ({
-            ...prevData,
+    const formik = useFormik({
+        initialValues: {
+            phoneNumber: "",
+            dateOfBirth: "",
+            address: "",
+            city: "",
+            state: "",
+            zipCode: "",
+            experienceLevel: "Beginner",
+        },
+        validationSchema: validationSchema,
+        onSubmit: async (values, helpers) => {
+            console.log("Saved:", values);
+        },
+    });
+
+    const handleChange = (e) => {
+        formik.setValues({
+            ...formik.values,
             [e.target.name]: e.target.value,
-        }));
+        });
     };
 
-    const handleSave = (e) => {
-        // e.preventDefault();
-        // const endpoint = "/api/v1/profiledata";
-        // axios.post(endpoint, userData)
-        //     .then((response) => {
-        //         console.log("Saved successfully:", response.data);
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error:', error);
-        //     });
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // const convertedDateOfBirth = formik.values.dateOfBirth
+        //    ? new Date(formik.values.dateOfBirth).toISOString()
+        //     : ""null"";
+
+        // formik.setValues({
+        //     ...formik.values,
+        //     dateOfBirth: convertedDateOfBirth,
+        // });
+
+        // const endpoint = "/api/v1/user";
+        //     axios
+        //         .post(endpoint, formik.values)
+        //         .then((response) => {
+        //             console.log("Saved successfully:", response.data);
+        //             navigate("/");
+        //         })
+        //         .catch((error) => {
+        //             console.error("Error:", error);
+        //         });
     };
 
     const handleCancel = () => {
-            navigate("/");
-    };
-
-    const commonButtonStyles = {
-        marginTop: 15,
-        fontSize: 14,
-        fontWeight: "800",
-        fontFamily: "Poppins",
-        color: "#090759",
+        navigate("/");
     };
 
     return (
         <>
             <ThemeProvider theme={theme}>
-                <Box sx={{ bgcolor: "#DFF8D6" }}>
-                    <form onSubmit={handleSave}>
+                <Box sx={{ bgcolor: theme.palette.background.main }}>
+                    <form onSubmit={formik.handleSubmit}>
                         <Box
                             display="flex"
                             flexDirection={"column"}
@@ -71,43 +103,48 @@ const ProfileForm = () => {
                             gap={1}
                             padding={3}
                         >
-                            <img src={Logo} alt="Player Buddy Logo" />
+                            <ProfileImage
+                                sx={{
+                                    paddingLeft: 10,
+                                }}
+                                // firstName={userData.firstName}
+                                // lastName={userData.lastName}
+                            />
 
+                            {/* Phone number */}
                             <TextField
-                                marginTop={3}
                                 size="small"
                                 sx={{
                                     bgcolor: "#fff",
                                     // width: "200",
 
-                                    "& label": {
-                                        "&.Mui-focused": {
-                                            color: "#090759",
-                                        },
-                                    },
-
-                                    "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                            borderColor: "#DFF8D6",
-                                        },
-                                        "&:hover fieldset": {
-                                            borderColor: "#00367D",
-                                        },
-                                        "&.Mui-focused fieldset": {
-                                            borderColor: "#00367D",
-                                        },
-                                    },
+                                    "& .MuiInputLabel-root.Mui-focused":
+                                        theme.overrides.MuiInputLabel.root[
+                                            "&.Mui-focused"
+                                        ],
+                                    "& .MuiOutlinedInput-root":
+                                        theme.overrides.MuiOutlinedInput.root,
+                                    // ...customizedLabelStyles,
                                 }}
                                 label="Phone Number"
                                 name="phoneNumber"
                                 id="outlined"
                                 variant="outlined"
-                                value={userData.phoneNumber}
-                                InputProps={{
-                                    placeholder: "Phone Number",
-                                }}
-                                onChange={handleInputChange}
+                                value={formik.values.phoneNumber}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={
+                                    formik.touched.phoneNumber &&
+                                    Boolean(formik.errors.phoneNumber)
+                                }
+                                helperText={
+                                    formik.touched.phoneNumber &&
+                                    formik.errors.phoneNumber
+                                }
+                                {...formik.getFieldProps("phoneNumber")}
                             />
+
+                            {/* Date of Birth */}
                             <InputLabel
                                 sx={{
                                     fontSize: 14,
@@ -118,157 +155,154 @@ const ProfileForm = () => {
                             >
                                 Date of Birth
                             </InputLabel>
+
                             <TextField
                                 sx={{
                                     bgcolor: "#fff",
-                                    "& label": {
-                                        "&.Mui-focused": {
-                                            color: "#090759",
-                                        },
-                                    },
-
-                                    "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                            borderColor: "#DFF8D6",
-                                        },
-                                        "&:hover fieldset": {
-                                            borderColor: "#00367D",
-                                        },
-                                        "&.Mui-focused fieldset": {
-                                            borderColor: "#00367D",
-                                        },
-                                    },
+                                    "& .MuiInputLabel-root.Mui-focused":
+                                        theme.overrides.MuiInputLabel.root[
+                                            "&.Mui-focused"
+                                        ],
+                                    "& .MuiOutlinedInput-root":
+                                        theme.overrides.MuiOutlinedInput.root,
                                 }}
+                                id="dateOfBirth"
                                 size="small"
                                 type="date"
                                 name="dateOfBirth"
-                                value={userData.dateOfBirth}
-                                onChange={handleInputChange}
+                                variant="outlined"
+                                value={formik.values.dateOfBirth}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={
+                                    formik.touched.dateOfBirth &&
+                                    Boolean(formik.errors.dateOfBirth)
+                                }
+                                helperText={
+                                    formik.touched.dateOfBirth &&
+                                    formik.errors.dateOfBirth
+                                }
+                                {...formik.getFieldProps("dateOfBirth")}
                             />
+
+                            {/* Address */}
                             <TextField
                                 sx={{
                                     bgcolor: "#fff",
-
-                                    "& label": {
-                                        "&.Mui-focused": {
-                                            color: "#090759",
-                                        },
-                                    },
-
-                                    "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                            borderColor: "#DFF8D6",
-                                        },
-                                        "&:hover fieldset": {
-                                            borderColor: "#00367D",
-                                        },
-                                        "&.Mui-focused fieldset": {
-                                            borderColor: "#00367D",
-                                        },
-                                    },
+                                    "& .MuiInputLabel-root.Mui-focused":
+                                        theme.overrides.MuiInputLabel.root[
+                                            "&.Mui-focused"
+                                        ],
+                                    "& .MuiOutlinedInput-root":
+                                        theme.overrides.MuiOutlinedInput.root,
                                 }}
                                 label="Address"
                                 name="address"
-                                value={userData.address}
-                                onChange={handleInputChange}
+                                value={formik.values.address}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
                                 InputProps={{
                                     placeholder: "Address",
                                 }}
+                                error={
+                                    formik.touched.address &&
+                                    Boolean(formik.errors.address)
+                                }
+                                helperText={
+                                    formik.touched.address &&
+                                    formik.errors.address
+                                }
+                                {...formik.getFieldProps("address")}
                             />
+                            {/* City */}
                             <TextField
                                 sx={{
                                     bgcolor: "#fff",
-
-                                    "& label": {
-                                        "&.Mui-focused": {
-                                            color: "#090759",
-                                        },
-                                    },
-
-                                    "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                            borderColor: "#DFF8D6",
-                                        },
-                                        "&:hover fieldset": {
-                                            borderColor: "#00367D",
-                                        },
-                                        "&.Mui-focused fieldset": {
-                                            borderColor: "#00367D",
-                                        },
-                                    },
+                                    "& .MuiInputLabel-root.Mui-focused":
+                                        theme.overrides.MuiInputLabel.root[
+                                            "&.Mui-focused"
+                                        ],
+                                    "& .MuiOutlinedInput-root":
+                                        theme.overrides.MuiOutlinedInput.root,
                                 }}
                                 size="small"
                                 label="City"
                                 name="city"
-                                value={userData.city}
-                                onChange={handleInputChange}
+                                value={formik.values.city}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
                                 InputProps={{
                                     placeholder: "City",
                                 }}
+                                error={
+                                    formik.touched.city &&
+                                    Boolean(formik.errors.city)
+                                }
+                                helperText={
+                                    formik.touched.city && formik.errors.city
+                                }
+                                {...formik.getFieldProps("city")}
                             />
+                            {/* State */}
                             <TextField
                                 sx={{
                                     bgcolor: "#fff",
-
-                                    "& label": {
-                                        "&.Mui-focused": {
-                                            color: "#090759",
-                                        },
-                                    },
-
-                                    "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                            borderColor: "#DFF8D6",
-                                        },
-                                        "&:hover fieldset": {
-                                            borderColor: "#00367D",
-                                        },
-                                        "&.Mui-focused fieldset": {
-                                            borderColor: "#00367D",
-                                        },
-                                    },
+                                    "& .MuiInputLabel-root.Mui-focused":
+                                        theme.overrides.MuiInputLabel.root[
+                                            "&.Mui-focused"
+                                        ],
+                                    "& .MuiOutlinedInput-root":
+                                        theme.overrides.MuiOutlinedInput.root,
                                 }}
                                 size="small"
                                 label="State"
                                 name="state"
-                                value={userData.state}
-                                onChange={handleInputChange}
+                                value={formik.values.state}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
                                 InputProps={{
                                     placeholder: "State",
                                 }}
+                                error={
+                                    formik.touched.state &&
+                                    Boolean(formik.errors.state)
+                                }
+                                helperText={
+                                    formik.touched.state && formik.errors.state
+                                }
+                                {...formik.getFieldProps("state")}
                             />
+                            {/* Zip Code */}
                             <TextField
                                 sx={{
                                     bgcolor: "#fff",
-                                    "& label": {
-                                        "&.Mui-focused": {
-                                            color: "#090759",
-                                        },
-                                    },
-
-                                    "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                            borderColor: "#DFF8D6",
-                                        },
-                                        "&:hover fieldset": {
-                                            borderColor: "#00367D",
-                                        },
-                                        "&.Mui-focused fieldset": {
-                                            borderColor: "#00367D",
-                                        },
-                                    },
+                                    "& .MuiInputLabel-root.Mui-focused":
+                                        theme.overrides.MuiInputLabel.root[
+                                            "&.Mui-focused"
+                                        ],
+                                    "& .MuiOutlinedInput-root":
+                                        theme.overrides.MuiOutlinedInput.root,
                                 }}
                                 size="small"
                                 label="Zip Code"
-                                name="zipCode"
-                                id="outlined"
-                                variant="outlined"
-                                value={userData.zipCode}
+                                name="ZipCode"
+                                value={formik.values.zipCode}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
                                 InputProps={{
                                     placeholder: "Zip Code",
                                 }}
-                                onChange={handleInputChange}
+                                error={
+                                    formik.touched.zipCode &&
+                                    Boolean(formik.errors.zipCode)
+                                }
+                                helperText={
+                                    formik.touched.zipCode &&
+                                    formik.errors.zipCode
+                                }
+                                {...formik.getFieldProps("zipCode")}
                             />
+                            {/* Experience */}
                             <InputLabel
                                 sx={{
                                     fontSize: 14,
@@ -286,48 +320,51 @@ const ProfileForm = () => {
                                 }}
                                 size="small"
                                 name="experienceLevel"
-                                value={userData.experienceLevel}
-                                onChange={handleInputChange}
+                                value={formik.values.experienceLevel}
+                                onChange={handleChange}
                                 aria-label="Experience Level"
+                                error={
+                                    formik.touched.experienceLevel &&
+                                    Boolean(formik.errors.experienceLevel)
+                                }
+                                {...formik.getFieldProps("experienceLevel")}
                             >
-                                <MenuItem sx={{}} value="Beginner">
-                                    {" "}
-                                    Beginner
-                                </MenuItem>
-                                <MenuItem value="Intermediate">
-                                    Intermediate
-                                </MenuItem>
-                                <MenuItem value="Advanced">Advanced</MenuItem>
+                                {experienceLevel.map((level) => (
+                                    <MenuItem key={level} value={level}>
+                                        {level}
+                                    </MenuItem>
+                                ))}
                             </Select>
                             <Box
                                 display="flex"
                                 flexDirection={"row"}
                                 alignItems={"center"}
                             >
+                                {/* Save  Button */}
                                 <Button
                                     variant="contained"
                                     type="submit"
                                     color="primary"
                                     sx={{
-                                        ...commonButtonStyles,
+                                        ...theme.commonButtonStyles,
                                         width: 120,
                                     }}
-                                    onClick={handleSave}
+                                    onClick={handleSubmit}
                                     spacing={10}
                                 >
                                     Save
                                 </Button>
+                                {/* Cancel Button */}
                                 <Button
                                     variant="contained"
                                     type="submit"
                                     color="primary"
                                     sx={{
-                                        ...commonButtonStyles,
+                                        ...theme.commonButtonStyles,
                                         marginLeft: 2,
                                         width: 120,
                                     }}
                                     onClick={handleCancel}
-                                    
                                 >
                                     Cancel
                                 </Button>

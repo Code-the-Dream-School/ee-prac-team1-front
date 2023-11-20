@@ -46,7 +46,7 @@ const Navbar = () => {
                         }}
                         variant="text"
                     >
-                        My Games
+                        My Activities
                     </Button>
                     <Button
                         sx={{
@@ -58,7 +58,7 @@ const Navbar = () => {
                         }}
                         variant="text"
                     >
-                        Create a Game
+                        Create Activity
                     </Button>
 
                     {/* User Profile/log In/Sign Up Icon*/}
