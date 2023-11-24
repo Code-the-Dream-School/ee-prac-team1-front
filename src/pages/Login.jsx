@@ -11,6 +11,9 @@ import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { Link } from 'react-router-dom'
+//import Grid from '@mui/material/Grid' // Grid version 1
+
+import Grid from '@mui/material/Unstable_Grid2'
 
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -177,20 +180,43 @@ const Login = () => {
               >
                 Login
               </Button>
-              <Typography
-                variant="h7"
-                padding={3}
-                textAlign="center"
-                sx={{ color: theme.palette.primary.contrastText }}
+              <Grid
+                container
+                rowSpacing={1}
+                columnSpacing={{ xs: 1, sm: 3, md: 3 }}
               >
-                Don’t have an account?
-                <Link
-                  onClick={() => navigate('/register')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Sign up
-                </Link>
-              </Typography>
+                <Grid marginLeft={0} marginTop={3} marginBottom={50} xs={6}>
+                  <Typography
+                    variant="h7"
+                    padding={0}
+                    textAlign="center"
+                    sx={{ color: theme.palette.primary.contrastText }}
+                  >
+                    <span>Don’t have an account? </span>
+                    <Link
+                      onClick={() => navigate('/register')}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      Sign up
+                    </Link>
+                  </Typography>
+                </Grid>
+                <Grid marginTop={3} marginBottom={50} xs={6}>
+                  <Typography
+                    variant="h7"
+                    padding={3}
+                    textAlign="center"
+                    sx={{ color: theme.palette.primary.contrastText }}
+                  >
+                    <Link
+                      onClick={() => navigate('/register')}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      Forgot Password?
+                    </Link>
+                  </Typography>
+                </Grid>
+              </Grid>
             </Box>
           </form>
         </Box>
