@@ -1,4 +1,3 @@
-// import React, { useState } from 'react'
 import {
   Box,
   Button,
@@ -6,44 +5,64 @@ import {
   Typography,
   ThemeProvider,
 } from '@mui/material'
-import { useState } from 'react'
 import { theme } from '../utils/theme'
 import Logo from '../assets/logo70.png'
+import { useNavigate } from 'react-router-dom'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
+import { Link } from 'react-router-dom'
+//import Grid from '@mui/material/Grid' // Grid version 1
+
+import Grid from '@mui/material/Unstable_Grid2'
+
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+
+import { useState } from 'react'
+
+const validationSchema = yup.object({
+  email: yup
+    .string('Enter your email')
+    .email('Enter a valid email')
+    .required('Email is required'),
+  password: yup.string('Enter your password').required('Password is required'),
+})
+
 const Login = () => {
-  const [isSignup, setisSignup] = useState(false)
-  const [inputs, setInputs] = useState({
-    fname: '',
-    lname: '',
-    email: '',
-    password: '',
+  const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false)
+
+  const {
+    handleSubmit,
+    touched,
+    errors,
+    handleChange,
+    handleBlur,
+    values,
+  } = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log(values)
+      navigate('/')
+    },
   })
 
-  //////////////////////////////
-
-  const handleChange = (e) => {
-    setInputs((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }))
+  const handlePasswordVisibility = () => {
+    console.log('handlePasswordVisibility enter', showPassword)
+    setShowPassword(!showPassword)
   }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(inputs)
-
-    console.log(isSignup)
-  }
-  //handler to reset all the fields in form ON transition from login to signup
-  const resetState = () => {
-    setisSignup(!isSignup)
-    setInputs({ fname: '', lname: '', email: '', password: '' })
-  }
-  console.log(isSignup)
 
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Box sx={{ bgcolor: 'rgba(29,230,25,0.32)' }}>
+        <Box sx={{ bgcolor: theme.palette.background.main }}>
           <form onSubmit={handleSubmit}>
             <Box
               display="flex"
@@ -57,100 +76,147 @@ const Login = () => {
               borderRadius={5}
             >
               <img src={Logo} alt="Player Buddy Logo" />
-              {isSignup && (
-                <>
-                  <Typography variant="h4" padding={3} textAlign="center">
-                    <strong>Login</strong>
-                  </Typography>
-                  <Typography>
-                    <strong>Hi there! Nice to see you again.</strong>
-                  </Typography>
-                </>
-              )}
-              {!isSignup && (
-                <>
-                  <Typography variant="h4" padding={3} textAlign="center">
-                    <strong>Welcome</strong>
-                  </Typography>
-                  <Typography>
-                    <strong>Lets us help you to find your buddy</strong>
-                  </Typography>
-                </>
-              )}
-              {!isSignup && (
-                <TextField
-                  sx={{ bgcolor: '#fff' }}
-                  label="First Name"
-                  size="small"
-                  onChange={handleChange}
-                  value={inputs.fname}
-                  name="fname"
-                  margin="normal"
-                  type={'text'}
-                  fullWidth
-                  placeholder="Enter your first name"
-                  variant="outlined"
-                />
-              )}
-              {!isSignup && (
-                <TextField
-                  sx={{ bgcolor: '#fff' }}
-                  label="Last Name"
-                  size="small"
-                  onChange={handleChange}
-                  variant="outlined"
-                  bgcolor="#ffff"
-                  value={inputs.lname}
-                  name="lname"
-                  margin="normal"
-                  type={'text'}
-                  fullWidth
-                  placeholder="Enter your last name"
-                />
-              )}
+
+              <Typography
+                padding={3}
+                textAlign="center"
+                sx={{
+                  color: theme.palette.primary.contrastText,
+                  font: theme.typography.fontFamily,
+                  fontWeight: theme.typography.titleText.fontWeight,
+                  fontSize: theme.typography.titleText.fontSize,
+                }}
+              >
+                LOGIN
+              </Typography>
+              <Typography
+                padding={3}
+                textAlign="center"
+                sx={{
+                  color: theme.palette.primary.contrastText,
+                  font: theme.typography.fontFamily,
+                  fontWeight: theme.typography.subTitleText.fontWeight,
+                  fontSize: theme.typography.titleText.fontSize,
+                }}
+              >
+                Hi there! Nice to see you again.
+              </Typography>
+
               <TextField
-                sx={{ bgcolor: '#fff' }}
-                label="E-mail"
+                sx={{
+                  bgcolor: '#fff',
+                  '& .MuiInputLabel-root.Mui-focused':
+                    theme.overrides.MuiInputLabel.root['&.Mui-focused'],
+                  '& .MuiOutlinedInput-root':
+                    theme.overrides.MuiOutlinedInput.root,
+                }}
                 size="small"
-                fullWidth
-                onChange={handleChange}
-                value={inputs.email}
-                name="email"
                 margin="normal"
                 type={'text'}
                 placeholder="Enter your e-mail"
+                variant="outlined"
+                fullWidth
+                id="email"
+                name="email"
+                label="Email"
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.email && Boolean(errors.email)}
+                helperText={touched.email && errors.email}
               />
               <TextField
-                sx={{ bgcolor: '#fff' }}
-                label="Password"
+                sx={{
+                  bgcolor: '#fff',
+                  '& .MuiInputLabel-root.Mui-focused':
+                    theme.overrides.MuiInputLabel.root['&.Mui-focused'],
+                  '& .MuiOutlinedInput-root':
+                    theme.overrides.MuiOutlinedInput.root,
+                }}
                 size="small"
-                fullWidth
-                onChange={handleChange}
-                value={inputs.password}
-                name="password"
                 margin="normal"
-                type={'password'}
                 placeholder="Enter your password"
+                variant="outlined"
+                fullWidth
+                id="password"
+                name="password"
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                //type="password"
+                autoComplete="current-password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handlePasswordVisibility}
+                        aria-label="toggle password"
+                        edge="end"
+                      >
+                        {showPassword ? (
+                          <VisibilityOffIcon />
+                        ) : (
+                          <VisibilityIcon />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.password && Boolean(errors.password)}
+                helperText={touched.password && errors.password}
               />
-
               <Button
-                type="submit"
-                onClick={resetState}
-                fullWidth
-                sx={{ marginTop: 3, borderRadius: 3 }}
+                color="primary"
                 variant="contained"
-              >
-                {!isSignup ? 'Sign in' : 'Login'}
-              </Button>
-              <Button
-                onClick={resetState}
-                sx={{ marginTop: 3, borderRadius: 3 }}
                 fullWidth
+                type="submit"
+                sx={{
+                  ...theme.commonButtonStyles,
+                  marginLeft: 2,
+                  marginRight: 2,
+                }}
               >
-                {!isSignup
-                  ? 'Already have an account? Log in'
-                  : "Don't have an account? Sign in"}
+                Login
               </Button>
+              <Grid
+                container
+                rowSpacing={1}
+                columnSpacing={{ xs: 1, sm: 3, md: 3 }}
+              >
+                <Grid marginLeft={0} marginTop={3} marginBottom={50} xs={6}>
+                  <Typography
+                    variant="h7"
+                    padding={0}
+                    textAlign="center"
+                    sx={{ color: theme.palette.primary.contrastText }}
+                  >
+                    <span>Don’t have an account? </span>
+                    <Link
+                      onClick={() => navigate('/register')}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      Sign up
+                    </Link>
+                  </Typography>
+                </Grid>
+                <Grid marginTop={3} marginBottom={50} xs={6}>
+                  <Typography
+                    variant="h7"
+                    padding={3}
+                    textAlign="center"
+                    sx={{ color: theme.palette.primary.contrastText }}
+                  >
+                    <Link
+                      onClick={() => navigate('/register')}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      Forgot Password?
+                    </Link>
+                  </Typography>
+                </Grid>
+              </Grid>
             </Box>
           </form>
         </Box>
