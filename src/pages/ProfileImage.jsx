@@ -1,13 +1,15 @@
 import React from "react";
 // import {useState, useEffect } from "react";
-import { Avatar, Badge } from "@mui/material/";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import { Avatar, Badge, Box, TextField } from "@mui/material/";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 // import axios from "axios";
-
-const ProfileImage = () => {
+import { theme } from "../utils/theme";
+const ProfileImage = (event) => {
     // const [userData, setUserData] = useState({
     //     firstName: "",
     //     lastName: "",
+    //     email: "",
+
     // });
 
     // useEffect(() => {
@@ -23,6 +25,8 @@ const ProfileImage = () => {
     //     fetchData();
     // }, []);
 
+    // const fullName = `${userData.firstName} ${userData.lastName}`;
+
     // const getInitials = () => {
     //     const { firstName, lastName } = userData;
     //     const firstInitial = firstName ? firstName.charAt(0) : "";
@@ -31,34 +35,96 @@ const ProfileImage = () => {
     // };
 
     return (
-        <Badge
-            sx={{
-                paddingLeft: 8,
-                marginBottom: 2,
-            }}
-            overlap="circular"
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            badgeContent={
-                <AddAPhotoIcon
+        <>
+            <Box display="flex" flexDirection="row" alignItems="center">
+                <Badge
                     sx={{
-                        color: "#090759",
-                        marginLeft: 4,
-                        cursor: "pointer",
+                        // paddingLeft: 8,
+                        marginBottom: 2,
                     }}
-                />
-            }
-        >
-            <Avatar
-                // alt="User Profile Image"
-                sx={{
-                    bgcolor: "#1DE619",
-                    width: 100,
-                    height: 100,
-                }}
-            >
-                {/* {getInitials()} */}
-            </Avatar>
-        </Badge>
+                    overlap="circular"
+                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                    badgeContent={
+                        <AddBoxIcon
+                            sx={{
+                                color: "#090759",
+                                marginLeft: 1,
+                                marginTop: 2,
+                                cursor: "pointer",
+                            }}
+                        />
+                    }
+                >
+                    <Avatar
+                        // alt="User Profile Image"
+                        sx={{
+                            bgcolor: "#1DE619",
+                            width: 100,
+                            height: 100,
+                        }}
+                    >
+                        {/* {getInitials()} */}
+                    </Avatar>
+                </Badge>
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="flex-start"
+                    marginLeft={2}
+                >
+                    <TextField
+                        label="First Name"
+                        variant="outlined"
+                        size="small"
+                        // value={userData.firstName}
+                        sx={{
+                            marginBottom: 1,
+                            width: 150,
+                            font: 14,
+                            "& .MuiInputLabel-root.Mui-focused":
+                                theme.overrides.MuiInputLabel.root[
+                                    "&.Mui-focused"
+                                ],
+                            "& .MuiOutlinedInput-root":
+                                theme.overrides.MuiOutlinedInput.root,
+                        }}
+                    />
+                    <TextField
+                        label="Last Name"
+                        variant="outlined"
+                        size="small"
+                        // value={userData.lastName}
+                        sx={{
+                            marginBottom: 1,
+                            width: 150,
+                            font: 14,
+                            "& .MuiInputLabel-root.Mui-focused":
+                                theme.overrides.MuiInputLabel.root[
+                                    "&.Mui-focused"
+                                ],
+                            "& .MuiOutlinedInput-root":
+                                theme.overrides.MuiOutlinedInput.root,
+                        }}
+                    />
+                    <TextField
+                        label="Email"
+                        variant="outlined"
+                        size="small"
+                        // value={userData.email}
+                        sx={{
+                            width: 150,
+                            marginBottom: 2,
+                            "& .MuiInputLabel-root.Mui-focused":
+                                theme.overrides.MuiInputLabel.root[
+                                    "&.Mui-focused"
+                                ],
+                            "& .MuiOutlinedInput-root":
+                                theme.overrides.MuiOutlinedInput.root,
+                        }}
+                    />
+                </Box>
+            </Box>
+        </>
     );
 };
 
