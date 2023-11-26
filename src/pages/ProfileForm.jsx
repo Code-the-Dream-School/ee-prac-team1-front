@@ -401,13 +401,13 @@ const ProfileForm = () => {
                                     color="primary"
                                     sx={{
                                         ...theme.commonButtonStyles,
-                                        width: 120,
+                                        width: 200,
                                         marginTop: 2,
                                     }}
                                     onClick={handleUpdatePassword}
                                     spacing={10}
                                 >
-                                    UPDATE PASSWORD
+                                    UPDATE  PASSWORD
                                 </Button>
                             </Box>
                         </Box>
