@@ -9,6 +9,7 @@ import {
     InputLabel,
     ThemeProvider,
     Box,
+    FormControl
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
@@ -46,7 +47,7 @@ const ProfileForm = () => {
             city: "",
             state: "",
             zipCode: "",
-            experienceLevel: "Beginner",
+            experienceLevel: "",
         },
         validationSchema: validationSchema,
         onSubmit: async (values, helpers) => {
@@ -88,33 +89,43 @@ const ProfileForm = () => {
         navigate("/");
     };
 
+    const handleUpdatePassword = () => {
+        navigate("/updatepassword");
+    };
+
     return (
         <>
             <ThemeProvider theme={theme}>
-                <Box sx={{ bgcolor: theme.palette.background.main }}>
+                <Box
+                    sx={{
+                        minHeight: "100vh",
+                        bgcolor: theme.palette.background.main,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
                     <form onSubmit={formik.handleSubmit}>
                         <Box
                             display="flex"
-                            flexDirection={"column"}
-                            maxWidth={500}
+                            flexDirection="column"
                             alignItems={"start"}
-                            justifyContent={"center"}
+                            justifyContent="center"
                             margin={"auto"}
                             gap={1}
-                            padding={3}
+                            // padding={3}
                         >
                             <ProfileImage
-                                sx={{
-                                    paddingLeft: 10,
-                                }}
-                                // firstName={userData.firstName}
-                                // lastName={userData.lastName}
+                            // firstName={userData.firstName}
+                            // lastName={userData.lastName}
                             />
 
                             {/* Phone number */}
                             <TextField
                                 size="small"
                                 sx={{
+                                    width: 280,
                                     bgcolor: "#fff",
                                     // width: "200",
 
@@ -159,6 +170,7 @@ const ProfileForm = () => {
                             <TextField
                                 sx={{
                                     bgcolor: "#fff",
+                                    width: 280,
                                     "& .MuiInputLabel-root.Mui-focused":
                                         theme.overrides.MuiInputLabel.root[
                                             "&.Mui-focused"
@@ -189,6 +201,7 @@ const ProfileForm = () => {
                             <TextField
                                 sx={{
                                     bgcolor: "#fff",
+                                    width: 280,
                                     "& .MuiInputLabel-root.Mui-focused":
                                         theme.overrides.MuiInputLabel.root[
                                             "&.Mui-focused"
@@ -218,6 +231,7 @@ const ProfileForm = () => {
                             <TextField
                                 sx={{
                                     bgcolor: "#fff",
+                                    width: 280,
                                     "& .MuiInputLabel-root.Mui-focused":
                                         theme.overrides.MuiInputLabel.root[
                                             "&.Mui-focused"
@@ -247,6 +261,7 @@ const ProfileForm = () => {
                             <TextField
                                 sx={{
                                     bgcolor: "#fff",
+                                    width: 280,
                                     "& .MuiInputLabel-root.Mui-focused":
                                         theme.overrides.MuiInputLabel.root[
                                             "&.Mui-focused"
@@ -275,7 +290,9 @@ const ProfileForm = () => {
                             {/* Zip Code */}
                             <TextField
                                 sx={{
+                                    width: 280,
                                     bgcolor: "#fff",
+
                                     "& .MuiInputLabel-root.Mui-focused":
                                         theme.overrides.MuiInputLabel.root[
                                             "&.Mui-focused"
@@ -303,44 +320,81 @@ const ProfileForm = () => {
                                 {...formik.getFieldProps("zipCode")}
                             />
                             {/* Experience */}
-                            <InputLabel
+                            <FormControl
                                 sx={{
-                                    fontSize: 14,
-                                    fontFamily: "Poppins",
-                                    color: "#090759",
-                                    marginLeft: 1,
+                                    "& .MuiInputLabel-root.Mui-focused":
+                                        theme.overrides.MuiInputLabel.root[
+                                            "&.Mui-focused"
+                                        ],
+                                    "& .MuiOutlinedInput-root":
+                                        theme.overrides.MuiOutlinedInput.root,
+                                    width: 280,
                                 }}
                             >
-                                Experience
-                            </InputLabel>
-
-                            <Select
-                                sx={{
-                                    bgcolor: "#fff",
-                                }}
-                                size="small"
-                                name="experienceLevel"
-                                value={formik.values.experienceLevel}
-                                onChange={handleChange}
-                                aria-label="Experience Level"
-                                error={
-                                    formik.touched.experienceLevel &&
-                                    Boolean(formik.errors.experienceLevel)
-                                }
-                                {...formik.getFieldProps("experienceLevel")}
-                            >
-                                {experienceLevel.map((level) => (
-                                    <MenuItem key={level} value={level}>
-                                        {level}
-                                    </MenuItem>
-                                ))}
-                            </Select>
+                                <InputLabel>Experience</InputLabel>
+                                <Select
+                                    sx={{
+                                        bgcolor: "#fff",
+                                    }}
+                                    label="Experience"
+                                    name="experienceLevel"
+                                    value={formik.values.experienceLevel}
+                                    onChange={handleChange}
+                                    aria-label="Experience Level"
+                                    error={
+                                        formik.touched.experienceLevel &&
+                                        Boolean(formik.errors.experienceLevel)
+                                    }
+                                    {...formik.getFieldProps("experienceLevel")}
+                                >
+                                    {experienceLevel.map((level) => (
+                                        <MenuItem key={level} value={level}>
+                                            {level}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                             <Box
                                 display="flex"
-                                flexDirection={"row"}
-                                alignItems={"center"}
+                                flexDirection="column"
+                                alignItems="center"
+                                marginTop={5}
                             >
-                                {/* Save  Button */}
+                                <Box
+                                    display="flex"
+                                    flexDirection="row"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                >
+                                    {/* Cancel Button */}
+                                    <Button
+                                        variant="contained"
+                                        type="submit"
+                                        color="primary"
+                                        sx={{
+                                            ...theme.commonButtonStyles,
+                                            width: 120,
+                                        }}
+                                        onClick={handleCancel}
+                                        spacing={10}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    {/* Save Button */}
+                                    <Button
+                                        variant="contained"
+                                        type="submit"
+                                        color="primary"
+                                        sx={{
+                                            ...theme.commonButtonStyles,
+                                            marginLeft: 5,
+                                            width: 120,
+                                        }}
+                                        onClick={handleSubmit}
+                                    >
+                                        Save
+                                    </Button>
+                                </Box>
                                 <Button
                                     variant="contained"
                                     type="submit"
@@ -348,25 +402,12 @@ const ProfileForm = () => {
                                     sx={{
                                         ...theme.commonButtonStyles,
                                         width: 120,
+                                        marginTop: 2,
                                     }}
-                                    onClick={handleSubmit}
+                                    onClick={handleUpdatePassword}
                                     spacing={10}
                                 >
-                                    Save
-                                </Button>
-                                {/* Cancel Button */}
-                                <Button
-                                    variant="contained"
-                                    type="submit"
-                                    color="primary"
-                                    sx={{
-                                        ...theme.commonButtonStyles,
-                                        marginLeft: 2,
-                                        width: 120,
-                                    }}
-                                    onClick={handleCancel}
-                                >
-                                    Cancel
+                                    UPDATE PASSWORD
                                 </Button>
                             </Box>
                         </Box>
