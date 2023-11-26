@@ -22,8 +22,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 const validationSchema = Yup.object({
-    activity: Yup.string()
-        .required("Please select one of the activities"),
+    activity: Yup.string().required("Please select one of the activities"),
     date: Yup.date()
         .required("Date is required")
         .min(new Date(), "Date cannot be in the past"),
@@ -32,20 +31,34 @@ const validationSchema = Yup.object({
     city: Yup.string().required("City is required"),
     state: Yup.string()
         .required("State is required")
-        .length(2, "State must be 2 letters"),
+        .length(2, "State must be 2 characters"),
     zipCode: Yup.string()
         .required("Zip Code is required")
         .matches(/^\d{5}$/, "Invalid zip code."),
-    venue: Yup.string().required("Venue is required"),
-    experienceLevel: Yup.string().required("Experience Level is required"),
-    participants: Yup.number().required("Participants is required"),
-    fee: Yup.string().required("Fee is required"),
-    firstName: Yup.string().required("First Name is required"),
-    lastName: Yup.string().required("Last Name is required"),
+    venue: Yup.string()
+        .required("Venue is required")
+        .oneOf(["Indoor", "Outdoor", "Online"], "Please select a valid venue"),
+    experienceLevel: Yup.string()
+        .required("Experience Level is required")
+        .oneOf(
+            ["Beginner", "Intermediate", "Advanced"],
+            "Please select an experience level"),
+    participants: Yup.number()
+        .required("Participants is required")
+        .min(2, "At least 2 participants are required"),
+    fee: Yup.string(),
+    firstName: Yup.string()
+        .required("First Name is required")
+        .min(2, "First Name should be at least 2 characters"),
+    lastName: Yup.string()
+        .required("Last Name is required")
+        .min(2, "Last Name should be at least 2 characters"),
     phoneNumber: Yup.string()
-        .matches(/^\d{10}$/, "Phone number must be 10 digits, no dashes")
-        .required("Phone Number is required"),
-    email: Yup.string().email("Invalid email").required("Email is required"),
+        .required("Phone Number is required")
+        .matches(/^\d{10}$/, "Phone number must be 10 digits, no dashes"),
+    email: Yup.string()
+        .required("Email is required")
+        .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email format"),
     notes: Yup.string(),
 });
 
@@ -81,6 +94,13 @@ const CreateActivity = () => {
         },
     });
 
+    const handleChange = (e) => {
+        formik.setValues({
+            ...formik.values,
+            [e.target.name]: e.target.value,
+        });
+    };
+
     const handleCancel = () => {
         navigate("/");
     };
@@ -115,26 +135,27 @@ const CreateActivity = () => {
                                     theme.overrides.MuiOutlinedInput.root,
                             }}
                             fullWidth
+                            error={
+                                formik.touched.activity &&
+                                Boolean(formik.errors.activity)
+                            }
+                            helperText={
+                                formik.touched.activity &&
+                                formik.errors.activity
+                            }
+                            {...formik.getFieldProps("activity")}
                         >
                             <InputLabel>Activity</InputLabel>
                             <Select
                                 label="Activity"
                                 name="activity"
                                 value={formik.values.activity}
-                                onChange={formik.handleChange}
+                                onChange={handleChange}
                                 onBlur={formik.handleBlur}
-                                InputProps={{
-                                    placeholder: "Activity",
-                                }}
-                                error={
-                                    formik.touched.activity &&
-                                    Boolean(formik.errors.activity)
-                                }
-                                helperText={
-                                    formik.touched.activity &&
-                                    formik.errors.activity
-                                }
-                                {...formik.getFieldProps("activity")}
+                                // InputProps={{
+                                //     placeholder: "Activity",
+                                // }}
+
                                 sx={{
                                     width: "90%",
                                     marginBottom: 2,
@@ -250,9 +271,9 @@ const CreateActivity = () => {
                                 value={formik.values.address}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                InputProps={{
-                                    placeholder: "Address",
-                                }}
+                                // InputProps={{
+                                //     placeholder: "Address",
+                                // }}
                                 error={
                                     formik.touched.address &&
                                     Boolean(formik.errors.address)
@@ -273,9 +294,9 @@ const CreateActivity = () => {
                                 value={formik.values.city}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                InputProps={{
-                                    placeholder: "City",
-                                }}
+                                // InputProps={{
+                                //     placeholder: "City",
+                                // }}
                                 error={
                                     formik.touched.city &&
                                     Boolean(formik.errors.city)
@@ -295,9 +316,9 @@ const CreateActivity = () => {
                                 value={formik.values.state}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                InputProps={{
-                                    placeholder: "State",
-                                }}
+                                // InputProps={{
+                                //     placeholder: "State",
+                                // }}
                                 error={
                                     formik.touched.state &&
                                     Boolean(formik.errors.state)
@@ -317,9 +338,9 @@ const CreateActivity = () => {
                                 value={formik.values.zipCode}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                InputProps={{
-                                    placeholder: "Zip Code",
-                                }}
+                                // InputProps={{
+                                //     placeholder: "Zip Code",
+                                // }}
                                 error={
                                     formik.touched.zipCode &&
                                     Boolean(formik.errors.zipCode)
@@ -337,6 +358,14 @@ const CreateActivity = () => {
                     <Grid container spacing={2} width="100%" marginBottom={2}>
                         <Grid item xs={4}>
                             <FormControl
+                                error={
+                                    formik.touched.venue &&
+                                    Boolean(formik.errors.venue)
+                                }
+                                helperText={
+                                    formik.touched.venue && formik.errors.venue
+                                }
+                                {...formik.getFieldProps("venue")}
                                 sx={{
                                     "& .MuiInputLabel-root.Mui-focused":
                                         theme.overrides.MuiInputLabel.root[
@@ -356,6 +385,10 @@ const CreateActivity = () => {
                                     name="venue"
                                     value={formik.values.venue}
                                     onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    // InputProps={{
+                                    //     placeholder: "Venue",
+                                    // }}
                                 >
                                     {venue.map((level) => (
                                         <MenuItem key={level} value={level}>
@@ -376,6 +409,15 @@ const CreateActivity = () => {
                                         theme.overrides.MuiOutlinedInput.root,
                                     width: "70%",
                                 }}
+                                error={
+                                    formik.touched.experienceLevel &&
+                                    Boolean(formik.errors.experienceLevel)
+                                }
+                                helperText={
+                                    formik.touched.experienceLevel &&
+                                    formik.errors.experienceLevel
+                                }
+                                {...formik.getFieldProps("experienceLevel")}
                             >
                                 <InputLabel>Experience</InputLabel>
                                 <Select
@@ -385,13 +427,8 @@ const CreateActivity = () => {
                                     label="Experience"
                                     name="experienceLevel"
                                     value={formik.values.experienceLevel}
-                                    // onChange={handleChange}
+                                    onChange={formik.handleChange}
                                     aria-label="Experience Level"
-                                    // error={
-                                    //     formik.touched.experienceLevel &&
-                                    //     Boolean(formik.errors.experienceLevel)
-                                    // }
-                                    // {...formik.getFieldProps("experienceLevel")}
                                 >
                                     {experienceLevel.map((level) => (
                                         <MenuItem key={level} value={level}>
@@ -413,6 +450,15 @@ const CreateActivity = () => {
                                     width: "100%",
                                 }}
                                 fullWidth
+                                error={
+                                    formik.touched.participants &&
+                                    Boolean(formik.errors.participants)
+                                }
+                                helperText={
+                                    formik.touched.participants &&
+                                    formik.errors.participants
+                                }
+                                {...formik.getFieldProps("participants")}
                             >
                                 <InputLabel>Participants</InputLabel>
                                 <Select
@@ -439,42 +485,6 @@ const CreateActivity = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        {/* <Grid item xs={7}>
-                            <FormControl
-                                sx={{
-                                    "& .MuiInputLabel-root.Mui-focused":
-                                        theme.overrides.MuiInputLabel.root[
-                                            "&.Mui-focused"
-                                        ],
-                                    "& .MuiOutlinedInput-root":
-                                        theme.overrides.MuiOutlinedInput.root,
-                                    width: "70%",
-                                }}
-                            >
-                                <InputLabel>Experience</InputLabel>
-                                <Select
-                                    sx={{
-                                        bgcolor: "#fff",
-                                    }}
-                                    label="Experience"
-                                    name="experienceLevel"
-                                    value={formik.values.experienceLevel}
-                                    // onChange={handleChange}
-                                    aria-label="Experience Level"
-                                    // error={
-                                    //     formik.touched.experienceLevel &&
-                                    //     Boolean(formik.errors.experienceLevel)
-                                    // }
-                                    // {...formik.getFieldProps("experienceLevel")}
-                                >
-                                    {experienceLevel.map((level) => (
-                                        <MenuItem key={level} value={level}>
-                                            {level}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid> */}
                         <Grid item xs={4}>
                             <Box
                                 display="flex"
@@ -526,7 +536,6 @@ const CreateActivity = () => {
                             marginBottom={3}
                             marginLeft={5}
                         >
-                            {/* Regular TextFields */}
                             <TextField
                                 label="First Name"
                                 name="firstName"
@@ -534,6 +543,15 @@ const CreateActivity = () => {
                                 fullWidth
                                 value={formik.values.firstName}
                                 onChange={formik.handleChange}
+                                error={
+                                    formik.touched.firstName &&
+                                    Boolean(formik.errors.firstName)
+                                }
+                                helperText={
+                                    formik.touched.firstName &&
+                                    formik.errors.firstName
+                                }
+                                {...formik.getFieldProps("firstName")}
                             />
                             <TextField
                                 label="Last Name"
@@ -542,6 +560,15 @@ const CreateActivity = () => {
                                 fullWidth
                                 value={formik.values.lastName}
                                 onChange={formik.handleChange}
+                                error={
+                                    formik.touched.lastName &&
+                                    Boolean(formik.errors.lastName)
+                                }
+                                helperText={
+                                    formik.touched.lastName &&
+                                    formik.errors.lastName
+                                }
+                                {...formik.getFieldProps("lastName")}
                             />
                             <TextField
                                 label="Phone Number"
@@ -568,6 +595,14 @@ const CreateActivity = () => {
                                 fullWidth
                                 value={formik.values.email}
                                 onChange={formik.handleChange}
+                                error={
+                                    formik.touched.email &&
+                                    Boolean(formik.errors.email)
+                                }
+                                helperText={
+                                    formik.touched.email && formik.errors.email
+                                }
+                                {...formik.getFieldProps("email")}
                             />
                         </Box>
                     </Accordion>
