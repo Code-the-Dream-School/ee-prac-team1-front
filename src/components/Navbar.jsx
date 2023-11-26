@@ -5,19 +5,26 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
 import Logo from "../assets/logo70.png";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { theme } from "../utils/theme";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+    const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const handleLogout = () => {
         setIsLoggedIn(false);
     };
 
+    const handleCreateActivity = () => {
+        navigate("/createactivity");
+    };
+
     return (
         <AppBar
             position="static"
             sx={{
-                bgcolor: "#caf2c9",
+                bgcolor: theme.palette.background.main,
                 boxShadow: "none",
             }}
         >
@@ -31,18 +38,14 @@ const Navbar = () => {
                 <Stack
                     direction="row"
                     sx={{
-                        color: "#090759",
+                        color: theme.palette.primary.contastText,
                         justifyContent: "flex-end",
                     }}
                 >
                     {/* Menu Buttons:  My games and Create a game */}
                     <Button
                         sx={{
-                            fontSize: 14,
-                            fontWeight: "bold",
-                            fontFamily: "Poppins",
-                            color: "#090759",
-                            cursor: "pointer",
+                            ...theme.navbarButtonStyles,
                         }}
                         variant="text"
                     >
@@ -50,13 +53,10 @@ const Navbar = () => {
                     </Button>
                     <Button
                         sx={{
-                            fontSize: 14,
-                            fontWeight: "bold",
-                            fontFamily: "Poppins",
-                            color: "#090759",
-                            cursor: "pointer",
+                            ...theme.navbarButtonStyles,
                         }}
                         variant="text"
+                        onClick={handleCreateActivity}
                     >
                         Create Activity
                     </Button>
