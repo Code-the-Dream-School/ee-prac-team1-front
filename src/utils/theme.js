@@ -10,12 +10,12 @@ export const theme = createTheme({
             contrastText: "#090759",
         },
         background: {
-            main: "#DFF8D6",
+            main: "#caf2c9",
         },
     },
     typography: {
         color: "#090759",
-        fontFamily: "'Poppins'",
+        fontFamily: "Poppins",
         titleText: {
             fontWeight: 900,
             fontSize: 20,
