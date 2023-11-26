@@ -22,8 +22,32 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 const validationSchema = Yup.object({
+    activity: Yup.string()
+        .required("Please select one of the activities"),
+    date: Yup.date()
+        .required("Date is required")
+        .min(new Date(), "Date cannot be in the past"),
+    time: Yup.string().required("Time is required"),
+    address: Yup.string().required("Address is required"),
+    city: Yup.string().required("City is required"),
+    state: Yup.string()
+        .required("State is required")
+        .length(2, "State must be 2 letters"),
+    zipCode: Yup.string()
+        .required("Zip Code is required")
+        .matches(/^\d{5}$/, "Invalid zip code."),
+    venue: Yup.string().required("Venue is required"),
+    experienceLevel: Yup.string().required("Experience Level is required"),
+    participants: Yup.number().required("Participants is required"),
+    fee: Yup.string().required("Fee is required"),
+    firstName: Yup.string().required("First Name is required"),
+    lastName: Yup.string().required("Last Name is required"),
+    phoneNumber: Yup.string()
+        .matches(/^\d{10}$/, "Phone number must be 10 digits, no dashes")
+        .required("Phone Number is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    notes: Yup.string(),
 });
-
 
 const CreateActivity = () => {
     const navigate = useNavigate();
@@ -33,7 +57,24 @@ const CreateActivity = () => {
 
     const formik = useFormik({
         initialValues: {
+            activity: "",
+            date: "",
+            time: "",
+            address: "",
+            city: "",
+            state: "",
+            zipCode: "",
+            venue: "",
+            experienceLevel: "",
+            participants: "",
+            fee: "",
+            firstName: "",
+            lastName: "",
+            phoneNumber: "",
+            email: "",
+            notes: "",
         },
+
         validationSchema: validationSchema,
         onSubmit: (values) => {
             console.log("Form submitted:", values);
@@ -81,9 +122,21 @@ const CreateActivity = () => {
                                 name="activity"
                                 value={formik.values.activity}
                                 onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                InputProps={{
+                                    placeholder: "Activity",
+                                }}
+                                error={
+                                    formik.touched.activity &&
+                                    Boolean(formik.errors.activity)
+                                }
+                                helperText={
+                                    formik.touched.activity &&
+                                    formik.errors.activity
+                                }
+                                {...formik.getFieldProps("activity")}
                                 sx={{
                                     width: "90%",
-
                                     marginBottom: 2,
                                     bgcolor: "#fff",
                                 }}
@@ -119,9 +172,18 @@ const CreateActivity = () => {
                                 name="date"
                                 variant="outlined"
                                 InputLabelProps={{ shrink: true }}
+                                marginRight={2}
                                 value={formik.values.date}
                                 onChange={formik.handleChange}
-                                marginRight={2}
+                                onBlur={formik.handleBlur}
+                                error={
+                                    formik.touched.date &&
+                                    Boolean(formik.errors.date)
+                                }
+                                helperText={
+                                    formik.touched.date && formik.errors.date
+                                }
+                                {...formik.getFieldProps("date")}
                             />
 
                             {/* Time */}
@@ -138,11 +200,20 @@ const CreateActivity = () => {
                                 }}
                                 label="Time"
                                 type="time"
-                                name="timeField"
+                                name="time"
                                 variant="outlined"
                                 InputLabelProps={{ shrink: true }}
-                                value={formik.values.timeField}
+                                value={formik.values.time}
                                 onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={
+                                    formik.touched.time &&
+                                    Boolean(formik.errors.time)
+                                }
+                                helperText={
+                                    formik.touched.time && formik.errors.time
+                                }
+                                {...formik.getFieldProps("time")}
                             />
                         </Box>
                     </Box>
@@ -178,6 +249,19 @@ const CreateActivity = () => {
                                 size="small"
                                 value={formik.values.address}
                                 onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                InputProps={{
+                                    placeholder: "Address",
+                                }}
+                                error={
+                                    formik.touched.address &&
+                                    Boolean(formik.errors.address)
+                                }
+                                helperText={
+                                    formik.touched.address &&
+                                    formik.errors.address
+                                }
+                                {...formik.getFieldProps("address")}
                             />
                             {/* City */}
                             <TextField
@@ -188,6 +272,18 @@ const CreateActivity = () => {
                                 size="small"
                                 value={formik.values.city}
                                 onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                InputProps={{
+                                    placeholder: "City",
+                                }}
+                                error={
+                                    formik.touched.city &&
+                                    Boolean(formik.errors.city)
+                                }
+                                helperText={
+                                    formik.touched.city && formik.errors.city
+                                }
+                                {...formik.getFieldProps("city")}
                             />
                             {/* State */}
                             <TextField
@@ -198,6 +294,18 @@ const CreateActivity = () => {
                                 size="small"
                                 value={formik.values.state}
                                 onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                InputProps={{
+                                    placeholder: "State",
+                                }}
+                                error={
+                                    formik.touched.state &&
+                                    Boolean(formik.errors.state)
+                                }
+                                helperText={
+                                    formik.touched.state && formik.errors.state
+                                }
+                                {...formik.getFieldProps("state")}
                             />
                             {/* ZipCode */}
                             <TextField
@@ -208,6 +316,19 @@ const CreateActivity = () => {
                                 size="small"
                                 value={formik.values.zipCode}
                                 onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                InputProps={{
+                                    placeholder: "Zip Code",
+                                }}
+                                error={
+                                    formik.touched.zipCode &&
+                                    Boolean(formik.errors.zipCode)
+                                }
+                                helperText={
+                                    formik.touched.zipCode &&
+                                    formik.errors.zipCode
+                                }
+                                {...formik.getFieldProps("zipCode")}
                             />
                         </Box>
                     </Accordion>
@@ -429,6 +550,16 @@ const CreateActivity = () => {
                                 fullWidth
                                 value={formik.values.phoneNumber}
                                 onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={
+                                    formik.touched.phoneNumber &&
+                                    Boolean(formik.errors.phoneNumber)
+                                }
+                                helperText={
+                                    formik.touched.phoneNumber &&
+                                    formik.errors.phoneNumber
+                                }
+                                {...formik.getFieldProps("phoneNumber")}
                             />
                             <TextField
                                 label="Email"
