@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Avatar,
   AvatarGroup,
@@ -5,115 +6,108 @@ import {
   Card,
   IconButton,
   Typography,
-} from '@mui/material';
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import InfoIcon from '@mui/icons-material/Info';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import SportsTennisIcon from '@mui/icons-material/SportsTennis';
-import { useState } from 'react';
-const players = [
-  { id: 1, name: 'Remy Sharp', img: '../../pictures/1.jpg' },
-  { id: 2, name: 'Remy Sharp', img: '../../pictures/2.jpg' },
-  { id: 3, name: 'Remy Sharp', img: '../../pictures/3.jpg' },
-];
+} from "@mui/material";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import InfoIcon from "@mui/icons-material/Info";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import SportsTennisIcon from "@mui/icons-material/SportsTennis";
 
-const ActivityCard = () => {
+
+const ActivityCard = ({ activity }) => {
   const [isAdded, setIsAdded] = useState(false);
-  return (
-    <>
-      <Card
-        elevation={4}
+
+
+  const formattedDate = new Date(activity.date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+
+   return (
+    <Card
+      elevation={4}
+      sx={{
+        minHeight: { xs: 94, sm: 94, md: 94 },
+        maxWidth: { xs: 500, sm: 500, md: 500 }, // Adjusted maxWidth for a wider card
+        borderRadius: "14px",
+        display: "flex",
+        margin: "auto",
+        paddingTop: 1,
+      }}
+    >
+      <Box
         sx={{
-          minHeight: { xs: 94, sm: 94, md: 94 },
-          maxWidth: { xs: 378, sm: 378, md: 378 },
-          borderRadius: '14px',
-          display: 'flex',
-          margin: 'auto',
-          paddingTop: 1,
+          margin: "auto",
         }}
       >
+        <Box>
+          <Typography variant="body1" color="text.primary">
+          <SportsTennisIcon sx={{ marginRight: 1 }} />
+          <strong>{activity.activityType}</strong>
+          <CalendarMonthIcon sx={{ marginLeft: 4 }} />
+          <strong>{formattedDate}</strong>
+          <AccessTimeIcon sx={{ marginLeft: 2 }} />
+          <strong>{activity.time}</strong>
+        </Typography>
+        </Box>
+        <Box sx={{ marginBottom: 0 }}>
+          <Typography
+            variant="subtitle2"
+            color="text.primary"
+            sx={{ marginBottom: 0 }}
+          >
+            {`${activity.location.address}, ${activity.location.townOrCity}, ${activity.location.state} ${activity.location.zipCode}`}
+          </Typography>
+        </Box>
+
         <Box
           sx={{
-            margin: 'auto',
+            display: "flex",
+            flexDirection: "raw",
+            justifyContent: "space-between",
           }}
         >
-          <Box>
-            <Typography
-              variant="body1"
-              color="text.primary"
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginRight: 2,
-              }}
-            >
-              <SportsTennisIcon sx={{ marginRight: 1 }} />
-              <strong>Pickleball </strong>
-              <CalendarMonthIcon sx={{ marginLeft: 4 }} />
-              <strong>11/5/2023</strong>
-              <AccessTimeIcon sx={{ marginLeft: 2 }} />
-              <strong>9:00AM</strong>
-            </Typography>
-          </Box>
-          <Box sx={{ marginBottom: 0 }}>
-            <Typography
-              variant="subtitle2"
-              color="text.primary"
-              sx={{ marginBottom: 0 }}
-            >
-              201 W Main St STE 100, Durham, NC 27701
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'raw',
-              justifyContent: 'space-between',
-            }}
-          >
-            <AvatarGroup max={4}>
-              {players.map(({ id, name, img }) => {
-                return (
-                  <Avatar
-                    key={id}
-                    sx={{ width: 32, height: 32 }}
-                    alt={name}
-                    src={img}
-                  />
-                );
-              })}
+          <AvatarGroup max={4}>
+            {activity.players.map(({ id, name, img }) => (
+              <Avatar
+                key={id}
+                sx={{ width: 32, height: 32 }}
+                alt={name}
+                src={img}
+              />
+            ))}
 
+            {isAdded ? (
+              <Avatar
+                sx={{ width: 32, height: 32 }}
+                alt={activity.creator.name}
+                src={activity.creator.img}
+              />
+            ) : (
+              <Avatar sx={{ width: 32, height: 32 }}>+1</Avatar>
+            )}
+          </AvatarGroup>
+          <span>
+            <IconButton
+              sx={{ marginTop: -1 }}
+              onClick={() => setIsAdded(!isAdded)}
+            >
               {isAdded ? (
-                <Avatar
-                  sx={{ width: 32, height: 32 }}
-                  alt="Remy Sharp"
-                  src="./../pictures/1.jpg"
-                />
+                <PersonRemoveIcon fontSize="large" sx={{ color: "red" }} />
               ) : (
-                <Avatar sx={{ width: 32, height: 32 }}>+1</Avatar>
+                <PersonAddAlt1Icon fontSize="large" sx={{ color: "green" }} />
               )}
-            </AvatarGroup>
-            <span>
-              <IconButton
-                sx={{ marginTop: -1 }}
-                onClick={() => setIsAdded(!isAdded)}
-              >
-                {isAdded ? (
-                  <PersonRemoveIcon fontSize="large" sx={{ color: 'red' }} />
-                ) : (
-                  <PersonAddAlt1Icon fontSize="large" sx={{ color: 'green' }} />
-                )}
-              </IconButton>
-              <IconButton sx={{ marginTop: -1 }}>
-                <InfoIcon fontSize="large" sx={{ color: 'orange' }} />
-              </IconButton>
-            </span>
-          </Box>
+            </IconButton>
+            <IconButton sx={{ marginTop: -1 }}>
+              <InfoIcon fontSize="large" sx={{ color: "orange" }} />
+            </IconButton>
+          </span>
         </Box>
-      </Card>
-    </>
+      </Box>
+    </Card>
   );
 };
 

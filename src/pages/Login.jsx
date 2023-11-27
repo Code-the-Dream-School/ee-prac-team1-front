@@ -1,26 +1,24 @@
+import React, { useState } from 'react';
 import {
   Box,
   Button,
   TextField,
   Typography,
   ThemeProvider,
-} from '@mui/material'
-import { theme } from '../utils/theme'
-import Logo from '../assets/logo70.png'
-import { useNavigate } from 'react-router-dom'
-import { useFormik } from 'formik'
-import * as yup from 'yup'
-import { Link } from 'react-router-dom'
-//import Grid from '@mui/material/Grid' // Grid version 1
+} from '@mui/material';
+import { theme } from '../utils/theme';
+import { useNavigate, Link } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import Grid from '@mui/material/Unstable_Grid2';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { toast, ToastContainer } from 'react-toastify'; // Add this import
+import 'react-toastify/dist/ReactToastify.css'; // Add this import
 
-import Grid from '@mui/material/Unstable_Grid2'
-
-import IconButton from '@mui/material/IconButton'
-import InputAdornment from '@mui/material/InputAdornment'
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
-
-import { useState } from 'react'
+import Logo from '../assets/logo70.png';
 
 const validationSchema = yup.object({
   email: yup
@@ -28,11 +26,11 @@ const validationSchema = yup.object({
     .email('Enter a valid email')
     .required('Email is required'),
   password: yup.string('Enter your password').required('Password is required'),
-})
+});
 
 const Login = () => {
-  const navigate = useNavigate()
-  const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     handleSubmit,
@@ -48,16 +46,57 @@ const Login = () => {
     },
 
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values)
-      navigate('/')
+    onSubmit: async (values) => {
+      try {
+        const response = await fetch('http://localhost:8000/api/v1/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        });
+
+        if (!response.ok) {
+          throw new Error('Login failed. Please check your credentials.');
+        }
+
+        const data = await response.json();
+        const { token } = data;
+
+        // Save token to localStorage
+        localStorage.setItem('jwtToken', token);
+
+        // Show success message
+        toast.success('Login successful!', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+
+        // Redirect to the main page
+        navigate('/');
+      } catch (error) {
+        console.error('Error during login:', error);
+
+        // Show error message
+        toast.error(error.message || 'Login failed. Please check your credentials.', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      }
     },
-  })
+  });
 
   const handlePasswordVisibility = () => {
-    console.log('handlePasswordVisibility enter', showPassword)
-    setShowPassword(!showPassword)
-  }
+    setShowPassword(!showPassword);
+  };
 
   return (
     <>
@@ -142,7 +181,6 @@ const Login = () => {
                 name="password"
                 label="Password"
                 type={showPassword ? 'text' : 'password'}
-                //type="password"
                 autoComplete="current-password"
                 InputProps={{
                   endAdornment: (
@@ -221,8 +259,20 @@ const Login = () => {
           </form>
         </Box>
       </ThemeProvider>
+      {/* Add the ToastContainer */}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
