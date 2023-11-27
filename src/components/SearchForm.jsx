@@ -19,6 +19,7 @@ const validationSchema = Yup.object({
   zipCode: Yup.string().matches(/^\d{5}$/, 'Invalid ZIP'),
 });
 
+
 const SearchForm = () => {
   // const navigate = useNavigate();
   const formik = useFormik({

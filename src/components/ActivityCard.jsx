@@ -25,7 +25,6 @@ const ActivityCard = ({ activity }) => {
     day: "numeric",
   });
 
-
    return (
     <Card
       elevation={4}

@@ -21,6 +21,7 @@ const ActivitiesContainer = () => {
           console.error('Invalid data structure. Expected an array.');
         }
 
+
         // Set loading to false when data is fetched
         setLoading(false);
       } catch (error) {
