@@ -267,7 +267,7 @@ const CreateActivity = () => {
                                 name="address"
                                 variant="outlined"
                                 fullWidth
-                                size="small"
+                                // size="small"
                                 value={formik.values.address}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
@@ -290,7 +290,7 @@ const CreateActivity = () => {
                                 name="city"
                                 variant="outlined"
                                 fullWidth
-                                size="small"
+                                // size="small"
                                 value={formik.values.city}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
@@ -312,7 +312,7 @@ const CreateActivity = () => {
                                 name="state"
                                 variant="outlined"
                                 fullWidth
-                                size="small"
+                                // size="small"
                                 value={formik.values.state}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
@@ -334,7 +334,7 @@ const CreateActivity = () => {
                                 name="zipCode"
                                 variant="outlined"
                                 fullWidth
-                                size="small"
+                                // size="small"
                                 value={formik.values.zipCode}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
