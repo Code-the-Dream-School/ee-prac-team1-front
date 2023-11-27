@@ -340,10 +340,17 @@ const ProfileForm = () => {
                                     name="experienceLevel"
                                     value={formik.values.experienceLevel}
                                     onChange={handleChange}
-                                    aria-label="Experience Level"
+                                    onBlur={formik.handleBlur}
+                                    InputProps={{
+                                        placeholder: "Experience",
+                                    }}
                                     error={
                                         formik.touched.experienceLevel &&
                                         Boolean(formik.errors.experienceLevel)
+                                    }
+                                    helperText={
+                                        formik.touched.experienceLevel &&
+                                        formik.errors.experienceLevel
                                     }
                                     {...formik.getFieldProps("experienceLevel")}
                                 >
@@ -401,7 +408,7 @@ const ProfileForm = () => {
                                     color="primary"
                                     sx={{
                                         ...theme.commonButtonStyles,
-                                        width: 120,
+                                        width: 200,
                                         marginTop: 2,
                                     }}
                                     onClick={handleUpdatePassword}

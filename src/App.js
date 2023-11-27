@@ -1,22 +1,26 @@
-import { Dashboard, Login, ProfileForm, Register } from "./pages";
+import { Dashboard, Login, ProfileForm, Register, CreateActivity } from "./pages";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
     {
-        path: '/',
+        path: "/",
         element: <Dashboard />,
     },
     {
-        path: 'register',
+        path: "register",
         element: <Register />,
     },
     {
-        path: 'login',
+        path: "login",
         element: <Login />,
     },
     {
-        path: 'profileform',
+        path: "profileform",
         element: <ProfileForm />,
+    },
+    {
+        path: "createactivity",
+        element: <CreateActivity />,
     },
 ]);
 
