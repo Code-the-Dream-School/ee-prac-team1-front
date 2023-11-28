@@ -20,7 +20,11 @@ import InputAdornment from '@mui/material/InputAdornment'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
+import { toast, ToastContainer } from 'react-toastify' // Add this import
+import 'react-toastify/dist/ReactToastify.css' // Add this import
+
 import { useState } from 'react'
+import axios from 'axios'
 
 const validationSchema = yup.object({
   email: yup
@@ -49,8 +53,44 @@ const Login = () => {
 
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values)
-      navigate('/')
+      const login = async () => {
+        try {
+          const response = await axios.post(
+            'http://localhost:8000/api/v1/auth/login',
+            {
+              password: values.password,
+              email: values.email,
+            },
+          )
+          const { data, statusText } = response
+          console.log(data)
+          if (statusText !== 'OK') {
+            throw new Error('Login failed')
+          }
+          navigate('/')
+          const { token, user } = data
+          const { userId } = user
+          // Save token and userId to localStorage
+          localStorage.setItem('jwtToken', token)
+          localStorage.setItem('userId', userId)
+        } catch (error) {
+          // Show error message
+          toast.error(
+            error.message || 'Login failed. Please check your credentials.',
+            {
+              position: 'top-center',
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            },
+          )
+          console.error('Error logging in:', error)
+        }
+      }
+
+      login()
     },
   })
 
@@ -62,7 +102,9 @@ const Login = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Box sx={{ bgcolor: theme.palette.background.main }}>
+        <Box
+          sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
+        >
           <form onSubmit={handleSubmit}>
             <Box
               display="flex"
@@ -185,7 +227,7 @@ const Login = () => {
                 rowSpacing={1}
                 columnSpacing={{ xs: 1, sm: 3, md: 3 }}
               >
-                <Grid marginLeft={0} marginTop={3} marginBottom={50} xs={6}>
+                <Grid marginLeft={0} marginTop={3} xs={6}>
                   <Typography
                     variant="h7"
                     padding={0}
@@ -201,7 +243,7 @@ const Login = () => {
                     </Link>
                   </Typography>
                 </Grid>
-                <Grid marginTop={3} marginBottom={50} xs={6}>
+                <Grid marginTop={3} xs={6}>
                   <Typography
                     variant="h7"
                     padding={3}
@@ -209,7 +251,7 @@ const Login = () => {
                     sx={{ color: theme.palette.primary.contrastText }}
                   >
                     <Link
-                      onClick={() => navigate('/register')}
+                      onClick={() => navigate('/forgotpassword')}
                       style={{ cursor: 'pointer' }}
                     >
                       Forgot Password?
@@ -221,6 +263,18 @@ const Login = () => {
           </form>
         </Box>
       </ThemeProvider>
+      {/* Add the ToastContainer */}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   )
 }
