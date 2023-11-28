@@ -19,6 +19,11 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
 import { useState } from 'react'
 
+import { toast, ToastContainer } from 'react-toastify' // Add this import
+import 'react-toastify/dist/ReactToastify.css' // Add this import
+
+import axios from 'axios'
+
 const validationSchema = yup.object({
   firstName: yup
     .string('Enter first name')
@@ -36,9 +41,10 @@ const validationSchema = yup.object({
     .required('Email is required'),
   password: yup
     .string('Enter your password')
-    .min(2, 'Password should be of minimum 8 characters length')
-    // TBD
-    // .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/, 'Password must contain at least one lowercase letter, one uppercase letter, and one number'),
+    .matches(
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
+      'Password must be at least 8 characters long, contain a lowercase letter, an uppercase letter, and a number or special character.',
+    )
     .required('Password is required'),
   confirmPassword: yup
     .string()
@@ -67,8 +73,41 @@ const Register = () => {
 
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values)
-      navigate('/profileform')
+      const register = async () => {
+        try {
+          const response = await axios.post(
+            'http://localhost:8000/api/v1/auth/register',
+            {
+              firstName: values.firstName,
+              lastName: values.lastName,
+              password: values.password,
+              email: values.email,
+            },
+          )
+          const { data, statusText } = response
+          console.log(data)
+          if (statusText !== 'Created') {
+            throw new Error('Register failed')
+          }
+          navigate('/profileForm')
+          const { token } = data
+          // Save token to localStorage
+          localStorage.setItem('jwtToken', token)
+        } catch (error) {
+          // Show error message
+          toast.error('Registration failed. Please try again', {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          })
+          console.error('Error registration:', error)
+        }
+      }
+
+      register()
     },
   })
 
@@ -80,7 +119,9 @@ const Register = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Box sx={{ bgcolor: theme.palette.background.main }}>
+        <Box
+          sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
+        >
           <form onSubmit={handleSubmit}>
             <Box
               display="flex"
@@ -193,7 +234,6 @@ const Register = () => {
                 name="password"
                 label="Password"
                 type={showPassword ? 'text' : 'password'}
-                //type="password"
                 autoComplete="current-password"
                 InputProps={{
                   endAdornment: (
@@ -273,6 +313,18 @@ const Register = () => {
           </form>
         </Box>
       </ThemeProvider>
+      {/* Add the ToastContainer */}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   )
 }
