@@ -1,38 +1,36 @@
 import React from "react";
-// import {useState, useEffect } from "react";
+import {useState, useEffect } from "react";
 import { Avatar, Badge, Box, TextField } from "@mui/material/";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-// import axios from "axios";
+import axios from "axios";
 import { theme } from "../utils/theme";
 const ProfileImage = (event) => {
-    // const [userData, setUserData] = useState({
-    //     firstName: "",
-    //     lastName: "",
-    //     email: "",
+    const [userData, setUserData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
 
-    // });
+    });
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const response = await axios.get("api/v1/user");
-    //             setUserData(res.data);
-    //         } catch (error) {
-    //             console.error("Error fetching user data:", error);
-    //         }
-    //     };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await axios.get("http://localhost:8000/api/v1/users/current-user");
+                setUserData(res.data);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
 
-    //     fetchData();
-    // }, []);
+        fetchData();
+    }, []);
 
-    // const fullName = `${userData.firstName} ${userData.lastName}`;
-
-    // const getInitials = () => {
-    //     const { firstName, lastName } = userData;
-    //     const firstInitial = firstName ? firstName.charAt(0) : "";
-    //     const lastInitial = lastName ? lastName.charAt(0) : "";
-    //     return firstInitial + lastInitial;
-    // };
+    const getInitials = () => {
+        const { firstName, lastName } = userData;
+        const firstInitial = firstName ? firstName.charAt(0) : "";
+        const lastInitial = lastName ? lastName.charAt(0) : "";
+        return firstInitial + lastInitial;
+    };
 
     return (
         <>
@@ -63,7 +61,7 @@ const ProfileImage = (event) => {
                             height: 100,
                         }}
                     >
-                        {/* {getInitials()} */}
+                        {getInitials()}
                     </Avatar>
                 </Badge>
                 <Box
@@ -76,7 +74,7 @@ const ProfileImage = (event) => {
                         label="First Name"
                         variant="outlined"
                         size="small"
-                        // value={userData.firstName}
+                        value={userData.firstName}
                         sx={{
                             marginBottom: 1,
                             width: 150,
@@ -93,7 +91,7 @@ const ProfileImage = (event) => {
                         label="Last Name"
                         variant="outlined"
                         size="small"
-                        // value={userData.lastName}
+                        value={userData.lastName}
                         sx={{
                             marginBottom: 1,
                             width: 150,
@@ -110,7 +108,7 @@ const ProfileImage = (event) => {
                         label="Email"
                         variant="outlined"
                         size="small"
-                        // value={userData.email}
+                        value={userData.email}
                         sx={{
                             width: 150,
                             marginBottom: 2,

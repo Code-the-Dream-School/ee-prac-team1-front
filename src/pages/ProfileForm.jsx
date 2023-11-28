@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -15,6 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { theme } from "../utils/theme";
 import ProfileImage from "./ProfileImage";
+import axios from 'axios';
 
 const validationSchema = Yup.object({
     phoneNumber: Yup.string().matches(
@@ -50,11 +51,42 @@ const ProfileForm = () => {
             experienceLevel: "",
         },
         validationSchema: validationSchema,
-        onSubmit: async (values, helpers) => {
+        onSubmit: async (values) => {
+            
             console.log("Saved:", values);
         },
     });
+    
+useEffect(() => {
+    const fetchUserData = async () => {
+        try {
+            const userId = localStorage.getItem("userId");
+            const getUser = `https://localhost:8000/api/v1/users/${userId}`;
+            const res = await axios.get(getUser);
 
+            if (res.data) {
+                const userData = res.data;
+
+                const mappedValues = {
+                    phoneNumber: userData.phoneNumber || "",
+                    dateOfBirth: userData.dateOfBirth || "",
+                    address: userData.address || "",
+                    city: userData.city || "",
+                    state: userData.state || "",
+                    zipCode: userData.zipCode || "",
+                    experienceLevel: userData.experienceLevel || "",
+                };
+
+                formik.setValues(mappedValues);
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    };
+
+    fetchUserData();
+}, [formik]);
+    
     const handleChange = (e) => {
         formik.setValues({
             ...formik.values,
@@ -62,28 +94,43 @@ const ProfileForm = () => {
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // const convertedDateOfBirth = formik.values.dateOfBirth
-        //    ? new Date(formik.values.dateOfBirth).toISOString()
-        //     : ""null"";
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    const userId = localStorage.getItem("userId");
 
-        // formik.setValues({
-        //     ...formik.values,
-        //     dateOfBirth: convertedDateOfBirth,
-        // });
+    const dateOfBirth = formik.values.dateOfBirth;
+    let convertedDateOfBirth = null;
 
-        // const endpoint = "/api/v1/user";
-        //     axios
-        //         .post(endpoint, formik.values)
-        //         .then((response) => {
-        //             console.log("Saved successfully:", response.data);
-        //             navigate("/");
-        //         })
-        //         .catch((error) => {
-        //             console.error("Error:", error);
-        //         });
-    };
+    if (dateOfBirth) {
+        const dateObject = new Date(dateOfBirth);
+
+        const year = dateObject.getFullYear();
+        const month = String(dateObject.getMonth() + 1).padStart(2, "0");
+        const day = String(dateObject.getDate()).padStart(2, "0");
+
+        convertedDateOfBirth = `${year}-${month}-${day}`;
+    }
+
+    formik.setValues({
+        ...formik.values,
+        dateOfBirth: convertedDateOfBirth,
+    });
+
+
+    try {
+        const getUser = `http://localhost:8000/api/v1/users/current-user`;
+        const userData = await axios.get(getUser);
+        console.log("User Data:", userData);
+
+        const updateUser = `https://localhost:8000/api/v1/users/${userId}`;
+        const res = await axios.patch(updateUser, formik.values);
+
+        console.log("Saved successfully:", res.data);
+        navigate("/");
+    } catch (error) {
+        console.error("Error:", error);
+    }
+};
 
     const handleCancel = () => {
         navigate("/");
