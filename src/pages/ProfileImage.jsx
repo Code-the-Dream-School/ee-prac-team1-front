@@ -1,5 +1,5 @@
 import React from "react";
-import {useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Avatar, Badge, Box, TextField } from "@mui/material/";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import axios from "axios";
@@ -9,19 +9,27 @@ const ProfileImage = (event) => {
         firstName: "",
         lastName: "",
         email: "",
-
     });
 
     useEffect(() => {
         const fetchData = async () => {
+            const token = localStorage.getItem("jwtToken");
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            };
             try {
-                const res = await axios.get("http://localhost:8000/api/v1/users/current-user");
-                setUserData(res.data);
+                const res = await axios.get(
+                    `${process.env.REACT_APP_BASE_URL}/users/current-user`,
+                    config
+                );
+                setUserData(res.data.user);
+                
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
         };
-
         fetchData();
     }, []);
 
@@ -77,7 +85,7 @@ const ProfileImage = (event) => {
                         value={userData.firstName}
                         sx={{
                             marginBottom: 1,
-                            width: 150,
+                            width: 180,
                             font: 14,
                             "& .MuiInputLabel-root.Mui-focused":
                                 theme.overrides.MuiInputLabel.root[
@@ -94,7 +102,7 @@ const ProfileImage = (event) => {
                         value={userData.lastName}
                         sx={{
                             marginBottom: 1,
-                            width: 150,
+                            width: 180,
                             font: 14,
                             "& .MuiInputLabel-root.Mui-focused":
                                 theme.overrides.MuiInputLabel.root[
@@ -110,7 +118,7 @@ const ProfileImage = (event) => {
                         size="small"
                         value={userData.email}
                         sx={{
-                            width: 150,
+                            width: 180,
                             marginBottom: 2,
                             "& .MuiInputLabel-root.Mui-focused":
                                 theme.overrides.MuiInputLabel.root[
