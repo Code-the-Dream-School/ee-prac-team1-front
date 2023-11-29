@@ -5,20 +5,26 @@ import {
   TextField,
   Typography,
   ThemeProvider,
-} from "@mui/material";
-import { theme } from "../utils/theme";
-import { useNavigate, Link } from "react-router-dom";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import Grid from "@mui/material/Unstable_Grid2";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { toast, ToastContainer } from "react-toastify"; // Add this import
-import "react-toastify/dist/ReactToastify.css"; // Add this import
-import Logo from "../assets/logo70.png";
-import axios from 'axios';
+} from '@mui/material'
+import { theme } from '../utils/theme'
+import Logo from '../assets/logo70.png'
+import { useNavigate } from 'react-router-dom'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
+import { Link } from 'react-router-dom'
+//import Grid from '@mui/material/Grid' // Grid version 1
+
+import Grid from '@mui/material/Unstable_Grid2'
+
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+
+import { toast, ToastContainer } from 'react-toastify' // Add this import
+import 'react-toastify/dist/ReactToastify.css' // Add this import
+
+import axios from 'axios'
 
 const validationSchema = yup.object({
   email: yup
@@ -39,59 +45,48 @@ const Login = () => {
         password: "",
       },
 
-      validationSchema: validationSchema,
-      onSubmit: async (values) => {
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      const login = async () => {
         try {
-          const response = await axios.post(
-            "http://localhost:8000/api/v1/auth/login",
-            values,
+          const response = await axios.post(            
+            `${process.env.REACT_APP_BASE_URL}/api/v1/auth/login`,
             {
-              headers: {
-                "Content-Type": "application/json",
-              },
+              password: values.password,
+              email: values.email,
             },
-          );
-
-          if (!response.ok) {
-            throw new Error("Login failed. Please check your credentials.");
+          )
+          const { data, statusText } = response
+          console.log(data)
+          if (statusText !== 'OK') {
+            throw new Error('Login failed')
           }
-
-          const data = await response.json();
-          const { token } = data;
-
-          // Save token to localStorage
-          localStorage.setItem("jwtToken", token);
-
-          // Show success message
-          toast.success("Login successful!", {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
-
-          // Redirect to the main page
-          navigate("/");
+          navigate('/')
+          const { token, user } = data
+          const { userId } = user
+          // Save token and userId to localStorage
+          localStorage.setItem('jwtToken', token)
+          localStorage.setItem('userId', userId)
         } catch (error) {
-          console.error("Error during login:", error);
-
           // Show error message
           toast.error(
-            error.message || "Login failed. Please check your credentials.",
+            error.message || 'Login failed. Please check your credentials.',
             {
-              position: "top-center",
+              position: 'top-center',
               autoClose: 3000,
               hideProgressBar: true,
               closeOnClick: true,
               pauseOnHover: true,
               draggable: true,
             },
-          );
+          )
+          console.error('Error logging in:', error)
         }
-      },
-    });
+      }
+
+      login()
+    },
+  })
 
   const handlePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -100,7 +95,9 @@ const Login = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Box sx={{ bgcolor: theme.palette.background.main }}>
+        <Box
+          sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
+        >
           <form onSubmit={handleSubmit}>
             <Box
               display="flex"
@@ -222,7 +219,7 @@ const Login = () => {
                 rowSpacing={1}
                 columnSpacing={{ xs: 1, sm: 3, md: 3 }}
               >
-                <Grid marginLeft={0} marginTop={3} marginBottom={50} xs={6}>
+                <Grid marginLeft={0} marginTop={3} xs={6}>
                   <Typography
                     variant="h7"
                     padding={0}
@@ -238,7 +235,7 @@ const Login = () => {
                     </Link>
                   </Typography>
                 </Grid>
-                <Grid marginTop={3} marginBottom={50} xs={6}>
+                <Grid marginTop={3} xs={6}>
                   <Typography
                     variant="h7"
                     padding={3}
@@ -246,8 +243,8 @@ const Login = () => {
                     sx={{ color: theme.palette.primary.contrastText }}
                   >
                     <Link
-                      onClick={() => navigate("/register")}
-                      style={{ cursor: "pointer" }}
+                      onClick={() => navigate('/forgotpassword')}
+                      style={{ cursor: 'pointer' }}
                     >
                       Forgot Password?
                     </Link>
@@ -258,6 +255,18 @@ const Login = () => {
           </form>
         </Box>
       </ThemeProvider>
+      {/* Add the ToastContainer */}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       {/* Add the ToastContainer */}
       <ToastContainer
         position="top-center"
