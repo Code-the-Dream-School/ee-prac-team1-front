@@ -39,23 +39,29 @@ const validationSchema = yup.object({
     .string('Enter your email')
     .email('Enter a valid email')
     .required('Email is required'),
-  password: yup
-    .string('Enter your password')
+  oldPassword: yup
+    .string('Enter your Current password')
+    .required('Current Password is required'),
+  newPassword: yup
+    .string('Enter your New password')
     .matches(
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
       'Password must be at least 8 characters long, contain a lowercase letter, an uppercase letter, and a number or special character.',
     )
-    .required('Password is required'),
+    .required('New Password is required'),
   confirmPassword: yup
     .string()
-    .required('Confirm password is required')
-    .oneOf([yup.ref('password')], 'Confirm password must match password'),
+    .required('Confirm your new password is required')
+    .oneOf(
+      [yup.ref('newPassword')],
+      'Confirm password must match new password',
+    ),
 })
 
-const Register = () => {
+const UpdatePassword = () => {
   const navigate = useNavigate()
-  const [showPassword, setShowPassword] = useState(false)
-
+  const [showoldPassword, setShowoldPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
   const {
     handleSubmit,
     touched,
@@ -65,29 +71,26 @@ const Register = () => {
     values,
   } = useFormik({
     initialValues: {
-      lastName: '',
-      firstName: '',
-      email: '',
-      password: '',
+      oldPassword: '',
+      newPassword: '',
+      confirmPassword: '',
     },
 
     validationSchema: validationSchema,
     onSubmit: (values) => {
       const register = async () => {
         try {
-          const response = await axios.post(
-            'http://localhost:8000/api/v1/auth/register',
+          const response = await axios.patch(
+            `${process.env.REACT_APP_BASE_URL}/api/v1/users/updateUserPassword`,
             {
-              firstName: values.firstName,
-              lastName: values.lastName,
-              password: values.password,
+              oldPassword: values.oldPassword,
               email: values.email,
             },
           )
           const { data, statusText } = response
           console.log(data)
           if (statusText !== 'Created') {
-            throw new Error('Register failed')
+            throw new Error('Password Change failed')
           }
           navigate('/profileForm')
           const { token } = data
@@ -112,9 +115,13 @@ const Register = () => {
     },
   })
 
-  const handlePasswordVisibility = () => {
-    console.log('handlePasswordVisibility enter', showPassword)
-    setShowPassword(!showPassword)
+  const handleoldPasswordVisibility = () => {
+    console.log('handleoldPasswordVisibility enter', showoldPassword)
+    setShowoldPassword(!showoldPassword)
+  }
+  const handleNewPasswordVisibility = () => {
+    console.log('handleNewPasswordVisibility enter', showNewPassword)
+    setShowNewPassword(!showNewPassword)
   }
 
   return (
@@ -147,8 +154,9 @@ const Register = () => {
                   fontSize: theme.typography.titleText.fontSize,
                 }}
               >
-                CREATE ACCOUNT
+                UPDATE PASSWORD
               </Typography>
+              {/* current password field */}
               <TextField
                 sx={{
                   bgcolor: '#fff',
@@ -159,92 +167,23 @@ const Register = () => {
                 }}
                 size="small"
                 margin="normal"
-                type={'text'}
-                placeholder="Enter your first name"
+                placeholder="Enter your current password"
                 variant="outlined"
                 fullWidth
-                id="FirstName"
-                name="firstName"
-                label="First Name"
-                value={values.firstName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.firstName && Boolean(errors.firstName)}
-                helperText={touched.firstName && errors.firstName}
-              />
-              <TextField
-                sx={{
-                  bgcolor: '#fff',
-                  '& .MuiInputLabel-root.Mui-focused':
-                    theme.overrides.MuiInputLabel.root['&.Mui-focused'],
-                  '& .MuiOutlinedInput-root':
-                    theme.overrides.MuiOutlinedInput.root,
-                }}
-                size="small"
-                margin="normal"
-                type={'text'}
-                placeholder="Enter your last name"
-                variant="outlined"
-                fullWidth
-                id="LastName"
-                name="lastName"
-                label="Last Name"
-                value={values.lastName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.lastName && Boolean(errors.lastName)}
-                helperText={touched.lastName && errors.lastName}
-              />
-              <TextField
-                sx={{
-                  bgcolor: '#fff',
-                  '& .MuiInputLabel-root.Mui-focused':
-                    theme.overrides.MuiInputLabel.root['&.Mui-focused'],
-                  '& .MuiOutlinedInput-root':
-                    theme.overrides.MuiOutlinedInput.root,
-                }}
-                size="small"
-                margin="normal"
-                type={'text'}
-                placeholder="Enter your e-mail"
-                variant="outlined"
-                fullWidth
-                id="email"
-                name="email"
-                label="Email"
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.email && Boolean(errors.email)}
-                helperText={touched.email && errors.email}
-              />
-              <TextField
-                sx={{
-                  bgcolor: '#fff',
-                  '& .MuiInputLabel-root.Mui-focused':
-                    theme.overrides.MuiInputLabel.root['&.Mui-focused'],
-                  '& .MuiOutlinedInput-root':
-                    theme.overrides.MuiOutlinedInput.root,
-                }}
-                size="small"
-                margin="normal"
-                placeholder="Enter your password"
-                variant="outlined"
-                fullWidth
-                id="password"
-                name="password"
-                label="Password"
-                type={showPassword ? 'text' : 'password'}
+                id="oldPassword"
+                name="oldPassword"
+                label="Current Password"
+                type={showoldPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
-                        onClick={handlePasswordVisibility}
+                        onClick={handleoldPasswordVisibility}
                         aria-label="toggle password"
                         edge="end"
                       >
-                        {showPassword ? (
+                        {showoldPassword ? (
                           <VisibilityOffIcon />
                         ) : (
                           <VisibilityIcon />
@@ -253,12 +192,57 @@ const Register = () => {
                     </InputAdornment>
                   ),
                 }}
-                value={values.password}
+                value={values.oldPassword}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={touched.password && Boolean(errors.password)}
-                helperText={touched.password && errors.password}
+                helperText={touched.oldPassword && errors.oldPassword}
               />
+
+              {/* new password field */}
+              <TextField
+                sx={{
+                  bgcolor: '#fff',
+                  '& .MuiInputLabel-root.Mui-focused':
+                    theme.overrides.MuiInputLabel.root['&.Mui-focused'],
+                  '& .MuiOutlinedInput-root':
+                    theme.overrides.MuiOutlinedInput.root,
+                }}
+                size="small"
+                margin="normal"
+                placeholder="Enter your new password"
+                variant="outlined"
+                fullWidth
+                id="newPassword"
+                name="newPassword"
+                label="New Password"
+                type={showNewPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleNewPasswordVisibility}
+                        aria-label="toggle password"
+                        edge="end"
+                      >
+                        {showNewPassword ? (
+                          <VisibilityOffIcon />
+                        ) : (
+                          <VisibilityIcon />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                value={values.NewPassword}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.newPassword && Boolean(errors.newPassword)}
+                helperText={touched.newPassword && errors.newPassword}
+              />
+
+              {/* confirm new password field */}
               <TextField
                 sx={{
                   bgcolor: '#fff',
@@ -294,7 +278,7 @@ const Register = () => {
                   marginRight: 2,
                 }}
               >
-                Continue
+                Update
               </Button>
               <Typography
                 variant="h7"
@@ -302,12 +286,11 @@ const Register = () => {
                 textAlign="center"
                 sx={{ color: theme.palette.primary.contrastText }}
               >
-                Already have an account?
                 <Link
-                  onClick={() => navigate('/login')}
+                  onClick={() => navigate('/forgotpassword')}
                   style={{ cursor: 'pointer' }}
                 >
-                  Login
+                  Forgot Password?
                 </Link>
               </Typography>
             </Box>
@@ -330,4 +313,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default UpdatePassword
