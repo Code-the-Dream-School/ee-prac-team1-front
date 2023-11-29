@@ -3,24 +3,25 @@ import * as Yup from 'yup';
 import {
   TextField,
   Button,
-  MenuItem,
-  Select,
-  InputLabel,
+  // MenuItem,
+  // Select,
+  // InputLabel,
   ThemeProvider,
   Box,
   Typography,
 } from '@mui/material';
 
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { theme } from '../utils/theme';
-import { bottom } from '@popperjs/core';
+// import { bottom } from '@popperjs/core';
 
 const validationSchema = Yup.object({
   zipCode: Yup.string().matches(/^\d{5}$/, 'Invalid ZIP'),
 });
 
+
 const SearchForm = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       zipCode: '',
@@ -31,12 +32,12 @@ const SearchForm = () => {
     },
   });
 
-  const handleChange = (e) => {
-    formik.setValues({
-      ...formik.values,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handleChange = (e) => {
+  //   formik.setValues({
+  //     ...formik.values,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
