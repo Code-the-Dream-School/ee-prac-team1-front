@@ -88,7 +88,7 @@ const Register = () => {
 
             const { token, user } = data;
             const { userId } = user;
-            setUserData({ ...userData, ...data });
+            setUserData({ ...data });
             // Save token to localStorage
             localStorage.setItem('jwtToken', token);
             localStorage.setItem('userId', userId);
