@@ -9,13 +9,13 @@ import {
     InputLabel,
     ThemeProvider,
     Box,
-    FormControl
+    FormControl,
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
 import { theme } from "../utils/theme";
 import ProfileImage from "./ProfileImage";
-import axios from 'axios';
+import axios from "axios";
 
 const validationSchema = Yup.object({
     phoneNumber: Yup.string().matches(
@@ -52,11 +52,11 @@ const ProfileForm = () => {
         },
         validationSchema: validationSchema,
         // onSubmit: async (values) => {
-            
+
         //     console.log("Saved:", values);
         // },
     });
-    
+
     useEffect(() => {
         const fetchUserData = async () => {
             const token = localStorage.getItem("jwtToken");
@@ -70,44 +70,44 @@ const ProfileForm = () => {
                     `${process.env.REACT_APP_BASE_URL}/api/v1/users/current-user`,
                     config
                 );
-            if (res.data) {
-        formik.setValues(res.data);
-        } 
-        // const fetchUserData = async () => {
-        //     try {
-        //         if (props.userData) {
-        //             const mappedValues = {
-        //                 phoneNumber: props.userData.phoneNumber || "",
-        //                 dateOfBirth: props.userData.dateOfBirth || "",
-        //                 address: props.userData.address || "",
-        //                 city: props.userData.city || "",
-        //                 state: props.userData.state || "",
-        //                 zipCode: props.userData.zipCode || "",
-        //                 experienceLevel: props.userData.experienceLevel || "",
-        //             };
+                if (res.data) {
+                    formik.setValues(res.data.user);
+                }
+                // const fetchUserData = async () => {
+                //     try {
+                //         if (props.userData) {
+                //             const mappedValues = {
+                //                 phoneNumber: props.userData.phoneNumber || "",
+                //                 dateOfBirth: props.userData.dateOfBirth || "",
+                //                 address: props.userData.address || "",
+                //                 city: props.userData.city || "",
+                //                 state: props.userData.state || "",
+                //                 zipCode: props.userData.zipCode || "",
+                //                 experienceLevel: props.userData.experienceLevel || "",
+                //             };
 
-        //             formik.setValues(mappedValues);
-        //         } else {
-        //             const userId = localStorage.getItem("userId");
-        //             const getUser = `https://localhost:8000/api/v1/users/${userId}`;
-        //             const res = await axios.get(getUser);
+                //             formik.setValues(mappedValues);
+                //         } else {
+                //             const userId = localStorage.getItem("userId");
+                //             const getUser = `https://localhost:8000/api/v1/users/${userId}`;
+                //             const res = await axios.get(getUser);
 
-        //             if (res.data) {
-        //                 const userData = res.data;
+                //             if (res.data) {
+                //                 const userData = res.data;
 
-        //                 const mappedValues = {
-        //                     phoneNumber: userData.phoneNumber || "",
-        //                     dateOfBirth: userData.dateOfBirth || "",
-        //                     address: userData.address || "",
-        //                     city: userData.city || "",
-        //                     state: userData.state || "",
-        //                     zipCode: userData.zipCode || "",
-        //                     experienceLevel: userData.experienceLevel || "",
-        //                 };
+                //                 const mappedValues = {
+                //                     phoneNumber: userData.phoneNumber || "",
+                //                     dateOfBirth: userData.dateOfBirth || "",
+                //                     address: userData.address || "",
+                //                     city: userData.city || "",
+                //                     state: userData.state || "",
+                //                     zipCode: userData.zipCode || "",
+                //                     experienceLevel: userData.experienceLevel || "",
+                //                 };
 
-        //                 formik.setValues(mappedValues);
-        //             }
-        //         }
+                //                 formik.setValues(mappedValues);
+                //             }
+                //         }
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
@@ -123,43 +123,42 @@ const ProfileForm = () => {
         });
     };
 
-const handleSubmit = async (e) => {
-    e.preventDefault();
-    const userId = localStorage.getItem("userId");
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const userId = localStorage.getItem("userId");
 
-    const dateOfBirth = formik.values.dateOfBirth;
-    let convertedDateOfBirth = null;
+        const dateOfBirth = formik.values.dateOfBirth;
+        let convertedDateOfBirth = null;
 
-    if (dateOfBirth) {
-        const dateObject = new Date(dateOfBirth);
+        if (dateOfBirth) {
+            const dateObject = new Date(dateOfBirth);
 
-        const year = dateObject.getFullYear();
-        const month = String(dateObject.getMonth() + 1).padStart(2, "0");
-        const day = String(dateObject.getDate()).padStart(2, "0");
+            const year = dateObject.getFullYear();
+            const month = String(dateObject.getMonth() + 1).padStart(2, "0");
+            const day = String(dateObject.getDate()).padStart(2, "0");
 
-        convertedDateOfBirth = `${year}-${month}-${day}`;
-    }
+            convertedDateOfBirth = `${year}-${month}-${day}`;
+        }
 
-    formik.setValues({
-        ...formik.values,
-        dateOfBirth: convertedDateOfBirth,
-    });
+        formik.setValues({
+            ...formik.values,
+            dateOfBirth: convertedDateOfBirth,
+        });
 
+        try {
+            // const getUser = `http://localhost:8000/api/v1/users/current-user`;
+            // const userData = await axios.get(getUser);
+            // console.log("User Data:", userData);
 
-    try {
-        // const getUser = `http://localhost:8000/api/v1/users/current-user`;
-        // const userData = await axios.get(getUser);
-        // console.log("User Data:", userData);
+            const updateUser = `${process.env.REACT_APP_BASE_URL}/api/v1/users/${userId}`;
+            const res = await axios.patch(updateUser, formik.values);
 
-        const updateUser = `https://localhost:8000/api/v1/users/${userId}`;
-        const res = await axios.patch(updateUser, formik.values);
-
-        console.log("Saved successfully:", res.data);
-        navigate("/");
-    } catch (error) {
-        console.error("Error:", error);
-    }
-};
+            console.log("Saved successfully:", res.data);
+            navigate("/");
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
 
     const handleCancel = () => {
         navigate("/");
