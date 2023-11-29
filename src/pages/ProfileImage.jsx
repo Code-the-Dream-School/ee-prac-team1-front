@@ -21,7 +21,7 @@ const ProfileImage = (event) => {
             };
             try {
                 const res = await axios.get(
-                    `${process.env.REACT_APP_BASE_URL}/users/current-user`,
+                    `${process.env.REACT_APP_BASE_URL}/api/v1/users/current-user`,
                     config
                 );
                 setUserData(res.data.user);

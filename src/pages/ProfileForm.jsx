@@ -51,42 +51,71 @@ const ProfileForm = () => {
             experienceLevel: "",
         },
         validationSchema: validationSchema,
-        onSubmit: async (values) => {
+        // onSubmit: async (values) => {
             
-            console.log("Saved:", values);
-        },
+        //     console.log("Saved:", values);
+        // },
     });
     
-useEffect(() => {
-    const fetchUserData = async () => {
-        try {
-            const userId = localStorage.getItem("userId");
-            const getUser = `https://localhost:8000/api/v1/users/${userId}`;
-            const res = await axios.get(getUser);
-
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const token = localStorage.getItem("jwtToken");
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            };
+            try {
+                const res = await axios.get(
+                    `${process.env.REACT_APP_BASE_URL}/api/v1/users/current-user`,
+                    config
+                );
             if (res.data) {
-                const userData = res.data;
+        formik.setValues(res.data);
+        } 
+        // const fetchUserData = async () => {
+        //     try {
+        //         if (props.userData) {
+        //             const mappedValues = {
+        //                 phoneNumber: props.userData.phoneNumber || "",
+        //                 dateOfBirth: props.userData.dateOfBirth || "",
+        //                 address: props.userData.address || "",
+        //                 city: props.userData.city || "",
+        //                 state: props.userData.state || "",
+        //                 zipCode: props.userData.zipCode || "",
+        //                 experienceLevel: props.userData.experienceLevel || "",
+        //             };
 
-                const mappedValues = {
-                    phoneNumber: userData.phoneNumber || "",
-                    dateOfBirth: userData.dateOfBirth || "",
-                    address: userData.address || "",
-                    city: userData.city || "",
-                    state: userData.state || "",
-                    zipCode: userData.zipCode || "",
-                    experienceLevel: userData.experienceLevel || "",
-                };
+        //             formik.setValues(mappedValues);
+        //         } else {
+        //             const userId = localStorage.getItem("userId");
+        //             const getUser = `https://localhost:8000/api/v1/users/${userId}`;
+        //             const res = await axios.get(getUser);
 
-                formik.setValues(mappedValues);
+        //             if (res.data) {
+        //                 const userData = res.data;
+
+        //                 const mappedValues = {
+        //                     phoneNumber: userData.phoneNumber || "",
+        //                     dateOfBirth: userData.dateOfBirth || "",
+        //                     address: userData.address || "",
+        //                     city: userData.city || "",
+        //                     state: userData.state || "",
+        //                     zipCode: userData.zipCode || "",
+        //                     experienceLevel: userData.experienceLevel || "",
+        //                 };
+
+        //                 formik.setValues(mappedValues);
+        //             }
+        //         }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
             }
-        } catch (error) {
-            console.error("Error fetching user data:", error);
-        }
-    };
+        };
 
-    fetchUserData();
-}, [formik]);
-    
+        fetchUserData();
+    }, [formik]);
+
     const handleChange = (e) => {
         formik.setValues({
             ...formik.values,
@@ -118,9 +147,9 @@ const handleSubmit = async (e) => {
 
 
     try {
-        const getUser = `http://localhost:8000/api/v1/users/current-user`;
-        const userData = await axios.get(getUser);
-        console.log("User Data:", userData);
+        // const getUser = `http://localhost:8000/api/v1/users/current-user`;
+        // const userData = await axios.get(getUser);
+        // console.log("User Data:", userData);
 
         const updateUser = `https://localhost:8000/api/v1/users/${userId}`;
         const res = await axios.patch(updateUser, formik.values);
@@ -164,8 +193,9 @@ const handleSubmit = async (e) => {
                             // padding={3}
                         >
                             <ProfileImage
-                            // firstName={userData.firstName}
-                            // lastName={userData.lastName}
+                                userData={formik.values}
+                                // firstName={userData.firstName}
+                                // lastName={userData.lastName}
                             />
 
                             {/* Phone number */}
