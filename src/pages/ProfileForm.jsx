@@ -73,48 +73,13 @@ const ProfileForm = () => {
                 if (res.data) {
                     formik.setValues(res.data.user);
                 }
-                // const fetchUserData = async () => {
-                //     try {
-                //         if (props.userData) {
-                //             const mappedValues = {
-                //                 phoneNumber: props.userData.phoneNumber || "",
-                //                 dateOfBirth: props.userData.dateOfBirth || "",
-                //                 address: props.userData.address || "",
-                //                 city: props.userData.city || "",
-                //                 state: props.userData.state || "",
-                //                 zipCode: props.userData.zipCode || "",
-                //                 experienceLevel: props.userData.experienceLevel || "",
-                //             };
-
-                //             formik.setValues(mappedValues);
-                //         } else {
-                //             const userId = localStorage.getItem("userId");
-                //             const getUser = `https://localhost:8000/api/v1/users/${userId}`;
-                //             const res = await axios.get(getUser);
-
-                //             if (res.data) {
-                //                 const userData = res.data;
-
-                //                 const mappedValues = {
-                //                     phoneNumber: userData.phoneNumber || "",
-                //                     dateOfBirth: userData.dateOfBirth || "",
-                //                     address: userData.address || "",
-                //                     city: userData.city || "",
-                //                     state: userData.state || "",
-                //                     zipCode: userData.zipCode || "",
-                //                     experienceLevel: userData.experienceLevel || "",
-                //                 };
-
-                //                 formik.setValues(mappedValues);
-                //             }
-                //         }
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
         };
 
         fetchUserData();
-    }, [formik]);
+    }, []);
 
     const handleChange = (e) => {
         formik.setValues({
@@ -125,6 +90,12 @@ const ProfileForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const token = localStorage.getItem("jwtToken");
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
         const userId = localStorage.getItem("userId");
 
         const dateOfBirth = formik.values.dateOfBirth;
@@ -146,12 +117,8 @@ const ProfileForm = () => {
         });
 
         try {
-            // const getUser = `http://localhost:8000/api/v1/users/current-user`;
-            // const userData = await axios.get(getUser);
-            // console.log("User Data:", userData);
-
             const updateUser = `${process.env.REACT_APP_BASE_URL}/api/v1/users/${userId}`;
-            const res = await axios.patch(updateUser, formik.values);
+            const res = await axios.put(updateUser, formik.values, config);
 
             console.log("Saved successfully:", res.data);
             navigate("/");
