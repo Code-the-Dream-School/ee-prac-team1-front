@@ -23,7 +23,6 @@ const ActivityCard = ({ activity }) => {
   const [isAdded, setIsAdded] = useState(false);
 
   let players= activity.players;
-  console.log(players)
 
   let formattedDate = "";
   let formattedTime = "";
@@ -32,8 +31,8 @@ const ActivityCard = ({ activity }) => {
 
   if (dateObject instanceof Date && !isNaN(dateObject)) {
     formattedDate = `${
-      dateObject.getMonth() + 1
-    }/${dateObject.getDate() + 1}/${dateObject.getFullYear()}`;
+  (dateObject.getMonth() + 1).toString().padStart(2, '0')
+}/${(dateObject.getDate()+1).toString().padStart(2, '0')}/${dateObject.getFullYear()}`;
     
     // Format the time
     const timeString = activity.time; // "16:30:00"
@@ -98,16 +97,14 @@ const ActivityCard = ({ activity }) => {
             }}
           >
             <AvatarGroup max={4}>
-              {players.map(({ id, name, img }) => {
-                return (
-                  <Avatar
-                    key={id}
-                    sx={{ width: 32, height: 32 }}
-                    alt={name}
-                    src={img}
-                  />
-                );
-              })}
+  {players
+    .filter(playerId => playerId && playerId !== "0")  // Filter out players with "0" as the ID
+    .map(playerId => (
+      <Avatar
+        key={playerId}  // Use playerId as the key
+        sx={{ width: 32, height: 32 }}
+      />
+    ))}
 
               {/*{isAdded ? (
                 <Avatar
