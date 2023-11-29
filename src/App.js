@@ -3,30 +3,40 @@ import {
   Login,
   ProfileForm,
   Register,
+  UpdatePassword,
+  ForgotPassword,
   CreateActivity,
-} from './pages';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+} from "./pages";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Dashboard />,
   },
   {
-    path: 'register',
+    path: "register",
     element: <Register />,
   },
   {
-    path: 'login',
+    path: "login",
     element: <Login />,
   },
   {
-    path: 'profileform',
+    path: "profileform",
     element: <ProfileForm />,
   },
   {
-    path: 'createactivity',
+    path: "createactivity",
     element: <CreateActivity />,
+  },
+  {
+    path: "updatepassword",
+    element: <UpdatePassword />,
+  },
+  {
+    path: "forgotpassword",
+    element: <ForgotPassword />,
   },
 ]);
 
