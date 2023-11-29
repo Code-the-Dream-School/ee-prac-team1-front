@@ -13,14 +13,17 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SportsTennisIcon from "@mui/icons-material/SportsTennis";
 import { useState } from "react";
-const players = [
-  { id: 1, name: "Remy Sharp", img: "../../pictures/1.jpg" },
-  { id: 2, name: "Remy Sharp", img: "../../pictures/2.jpg" },
-  { id: 3, name: "Remy Sharp", img: "../../pictures/3.jpg" },
-];
+// const players = [
+//   { id: 1, name: "Remy Sharp", img: "../../pictures/1.jpg" },
+//   { id: 2, name: "Remy Sharp", img: "../../pictures/2.jpg" },
+//   { id: 3, name: "Remy Sharp", img: "../../pictures/3.jpg" },
+// ];
 
 const ActivityCard = ({ activity }) => {
   const [isAdded, setIsAdded] = useState(false);
+
+  let players= activity.players;
+  console.log(players)
 
   let formattedDate = "";
   let formattedTime = "";
@@ -106,7 +109,7 @@ const ActivityCard = ({ activity }) => {
                 );
               })}
 
-              {isAdded ? (
+              {/*{isAdded ? (
                 <Avatar
                   sx={{ width: 32, height: 32 }}
                   alt="Remy Sharp"
@@ -114,7 +117,7 @@ const ActivityCard = ({ activity }) => {
                 />
               ) : (
                 <Avatar sx={{ width: 32, height: 32 }}>+1</Avatar>
-              )}
+              )}*/}
             </AvatarGroup>
             <span>
               <IconButton
