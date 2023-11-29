@@ -76,7 +76,7 @@ const Register = () => {
       const register = async () => {
         try {
           const response = await axios.post(
-            'http://localhost:8000/api/v1/auth/register',
+            `${process.env.REACT_APP_BASE_URL}/api/v1/auth/register`,
             {
               firstName: values.firstName,
               lastName: values.lastName,

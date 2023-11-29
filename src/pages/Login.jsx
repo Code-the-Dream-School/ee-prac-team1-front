@@ -24,7 +24,6 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { toast, ToastContainer } from 'react-toastify' // Add this import
 import 'react-toastify/dist/ReactToastify.css' // Add this import
 
-import { useState } from 'react'
 import axios from 'axios'
 
 const validationSchema = yup.object({
@@ -50,8 +49,8 @@ const Login = () => {
     onSubmit: (values) => {
       const login = async () => {
         try {
-          const response = await axios.post(
-            'http://localhost:8000/api/v1/auth/login',
+          const response = await axios.post(            
+            `${process.env.REACT_APP_BASE_URL}/api/v1/auth/login`,
             {
               password: values.password,
               email: values.email,
