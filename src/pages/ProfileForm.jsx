@@ -125,7 +125,7 @@ const ProfileForm = () => {
                 Authorization: `Bearer ${token}`,
             },
         };
-        const userId = localStorage.getItem("userId");
+        // const userId = localStorage.getItem("userId");
 
         const dateOfBirth = formik.values.dateOfBirth;
         let convertedDateOfBirth = null;
@@ -144,7 +144,7 @@ dateOfBirth: convertedDateOfBirth,
 });
 
         try {
-            const updateUser = `${process.env.REACT_APP_BASE_URL}/api/v1/users/${userId}`;
+            const updateUser = `${process.env.REACT_APP_BASE_URL}/api/v1/users/updateUser`;
             const res = await axios.patch(
                 updateUser,
                 {
