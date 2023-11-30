@@ -271,18 +271,6 @@ const Login = () => {
         draggable
         pauseOnHover
       />
-      {/* Add the ToastContainer */}
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </>
   );
 };
