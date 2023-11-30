@@ -1,92 +1,96 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from 'react';
 import {
   Box,
   Button,
   TextField,
   Typography,
   ThemeProvider,
-} from '@mui/material'
-import { theme } from '../utils/theme'
-import Logo from '../assets/logo70.png'
-import { useNavigate } from 'react-router-dom'
-import { useFormik } from 'formik'
-import * as yup from 'yup'
-import { Link } from 'react-router-dom'
+} from '@mui/material';
+import { theme } from '../utils/theme';
+import Logo from '../assets/logo70.png';
+import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { Link } from 'react-router-dom';
 //import Grid from '@mui/material/Grid' // Grid version 1
 
-import Grid from '@mui/material/Unstable_Grid2'
+import Grid from '@mui/material/Unstable_Grid2';
 
-import IconButton from '@mui/material/IconButton'
-import InputAdornment from '@mui/material/InputAdornment'
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import { toast, ToastContainer } from 'react-toastify' // Add this import
-import 'react-toastify/dist/ReactToastify.css' // Add this import
+import { toast, ToastContainer } from 'react-toastify'; // Add this import
+import 'react-toastify/dist/ReactToastify.css'; // Add this import
 
-import axios from 'axios'
+import axios from 'axios';
+import { userDataContext } from '../context/userContext';
 
 const validationSchema = yup.object({
   email: yup
-    .string("Enter your email")
-    .email("Enter a valid email")
-    .required("Email is required"),
-  password: yup.string("Enter your password").required("Password is required"),
+    .string('Enter your email')
+    .email('Enter a valid email')
+    .required('Email is required'),
+  password: yup.string('Enter your password').required('Password is required'),
 });
 
 const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const { userData, setUserData } = useContext(userDataContext);
 
   const { handleSubmit, touched, errors, handleChange, handleBlur, values } =
     useFormik({
       initialValues: {
-        email: "",
-        password: "",
+        email: '',
+        password: '',
       },
 
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      const login = async () => {
-        try {
-          const response = await axios.post(            
-            `${process.env.REACT_APP_BASE_URL}/api/v1/auth/login`,
-            {
-              password: values.password,
-              email: values.email,
-            },
-          )
-          const { data, statusText } = response
-          console.log(data)
-          if (statusText !== 'OK') {
-            throw new Error('Login failed')
-          }
-          navigate('/')
-          const { token, user } = data
-          const { userId } = user
-          // Save token and userId to localStorage
-          localStorage.setItem('jwtToken', token)
-          localStorage.setItem('userId', userId)
-        } catch (error) {
-          // Show error message
-          toast.error(
-            error.message || 'Login failed. Please check your credentials.',
-            {
-              position: 'top-center',
-              autoClose: 3000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-            },
-          )
-          console.error('Error logging in:', error)
-        }
-      }
+      validationSchema: validationSchema,
+      onSubmit: (values) => {
+        const login = async () => {
+          try {
+            const response = await axios.post(
+              `${process.env.REACT_APP_BASE_URL}/api/v1/auth/login`,
+              {
+                password: values.password,
+                email: values.email,
+              }
+            );
+            const { data, statusText } = response;
 
-      login()
-    },
-  })
+            if (statusText !== 'OK') {
+              throw new Error('Login failed');
+            }
+
+            const { token, user } = data;
+            const { userId } = user;
+            setUserData({ ...data });
+            // Save token and userId to localStorage
+            localStorage.setItem('jwtToken', token);
+            localStorage.setItem('userId', userId);
+          } catch (error) {
+            // Show error message
+            toast.error(
+              error.message || 'Login failed. Please check your credentials.',
+              {
+                position: 'top-center',
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+              }
+            );
+            console.error('Error logging in:', error);
+          }
+          navigate('/');
+        };
+
+        login();
+      },
+    });
 
   const handlePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -101,10 +105,10 @@ const Login = () => {
           <form onSubmit={handleSubmit}>
             <Box
               display="flex"
-              flexDirection={"column"}
+              flexDirection={'column'}
               maxWidth={500}
               alignItems="center"
-              justifyContent={"center"}
+              justifyContent={'center'}
               margin="auto"
               marginTop={3}
               padding={3}
@@ -139,15 +143,15 @@ const Login = () => {
 
               <TextField
                 sx={{
-                  bgcolor: "#fff",
-                  "& .MuiInputLabel-root.Mui-focused":
-                    theme.overrides.MuiInputLabel.root["&.Mui-focused"],
-                  "& .MuiOutlinedInput-root":
+                  bgcolor: '#fff',
+                  '& .MuiInputLabel-root.Mui-focused':
+                    theme.overrides.MuiInputLabel.root['&.Mui-focused'],
+                  '& .MuiOutlinedInput-root':
                     theme.overrides.MuiOutlinedInput.root,
                 }}
                 size="small"
                 margin="normal"
-                type={"text"}
+                type={'text'}
                 placeholder="Enter your e-mail"
                 variant="outlined"
                 fullWidth
@@ -162,10 +166,10 @@ const Login = () => {
               />
               <TextField
                 sx={{
-                  bgcolor: "#fff",
-                  "& .MuiInputLabel-root.Mui-focused":
-                    theme.overrides.MuiInputLabel.root["&.Mui-focused"],
-                  "& .MuiOutlinedInput-root":
+                  bgcolor: '#fff',
+                  '& .MuiInputLabel-root.Mui-focused':
+                    theme.overrides.MuiInputLabel.root['&.Mui-focused'],
+                  '& .MuiOutlinedInput-root':
                     theme.overrides.MuiOutlinedInput.root,
                 }}
                 size="small"
@@ -176,7 +180,7 @@ const Login = () => {
                 id="password"
                 name="password"
                 label="Password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 InputProps={{
                   endAdornment: (
@@ -228,8 +232,8 @@ const Login = () => {
                   >
                     <span>Don’t have an account? </span>
                     <Link
-                      onClick={() => navigate("/register")}
-                      style={{ cursor: "pointer" }}
+                      onClick={() => navigate('/register')}
+                      style={{ cursor: 'pointer' }}
                     >
                       Sign up
                     </Link>

@@ -1,7 +1,7 @@
 // ActivitiesContainer.js
 import { Grid, CircularProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
-import axios from 'axios';  // Import Axios library
+import axios from 'axios'; // Import Axios library
 import ActivityCard from './ActivityCard';
 
 const ActivitiesContainer = () => {
@@ -11,7 +11,9 @@ const ActivitiesContainer = () => {
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/v1/activities');
+        const response = await axios.get(
+          'http://localhost:8000/api/v1/activities'
+        );
         const data = response.data;
 
         // Check if data.activities is an array before setting state
