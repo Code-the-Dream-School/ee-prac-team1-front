@@ -10,7 +10,6 @@ import Logo from '../assets/logo70.png'
 import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import { Link } from 'react-router-dom'
 
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -25,20 +24,6 @@ import 'react-toastify/dist/ReactToastify.css' // Add this import
 import axios from 'axios'
 
 const validationSchema = yup.object({
-  firstName: yup
-    .string('Enter first name')
-    .required('First name is required')
-    .min(2, 'First name must be at least 2 characters long')
-    .max(50, 'First name cannot be more than 50 characters long'),
-  lastName: yup
-    .string('Enter last name')
-    .required('Last name is required')
-    .min(2, 'Last name must be at least 2 characters long')
-    .max(50, 'Last name cannot be more than 50 characters long'),
-  email: yup
-    .string('Enter your email')
-    .email('Enter a valid email')
-    .required('Email is required'),
   oldPassword: yup
     .string('Enter your Current password')
     .required('Current Password is required'),
@@ -78,7 +63,14 @@ const UpdatePassword = () => {
 
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      const register = async () => {
+const token = localStorage.getItem('jwtToken')
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+
+      }
+      const updatePassword = async () => {
         try {
           const response = await axios.patch(
             `${process.env.REACT_APP_BASE_URL}/api/v1/users/updateUserPassword`,
@@ -86,12 +78,21 @@ const UpdatePassword = () => {
               oldPassword: values.oldPassword,
               newPassword: values.newPassword,
             },
+            config
           )
           const { data, statusText } = response
           console.log(data)
-          if (statusText !== 'Created') {
+          if (statusText !== 'OK') {
             throw new Error('Password Change failed')
           }
+          toast.success('Password Updated Successfuly', {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          })
           navigate('/profileForm')
           const { token } = data
           // Save token to localStorage
@@ -111,7 +112,7 @@ const UpdatePassword = () => {
         }
       }
 
-      register()
+      updatePassword()
     },
   })
 
@@ -280,19 +281,6 @@ const UpdatePassword = () => {
               >
                 Update
               </Button>
-              <Typography
-                variant="h7"
-                padding={3}
-                textAlign="center"
-                sx={{ color: theme.palette.primary.contrastText }}
-              >
-                <Link
-                  onClick={() => navigate('/forgotpassword')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Forgot Password?
-                </Link>
-              </Typography>
             </Box>
           </form>
         </Box>
