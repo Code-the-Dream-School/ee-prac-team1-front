@@ -84,7 +84,7 @@ const UpdatePassword = () => {
             `${process.env.REACT_APP_BASE_URL}/api/v1/users/updateUserPassword`,
             {
               oldPassword: values.oldPassword,
-              email: values.email,
+              newPassword: values.newPassword,
             },
           )
           const { data, statusText } = response
@@ -99,7 +99,7 @@ const UpdatePassword = () => {
           console.log(token)
         } catch (error) {
           // Show error message
-          toast.error('Registration failed. Please try again', {
+          toast.error('Update password failed. Please try again', {
             position: 'top-center',
             autoClose: 3000,
             hideProgressBar: true,
