@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { theme } from "../utils/theme";
 import ProfileImage from "./ProfileImage";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const validationSchema = Yup.object({
     phoneNumber: Yup.string().matches(
@@ -25,10 +27,12 @@ const validationSchema = Yup.object({
     dateOfBirth: Yup.date()
         .nullable()
         .max(new Date(), "Date of birth must be in the past"),
-    address: Yup.string(),
-    city: Yup.string(),
-    zipCode: Yup.string().matches(/^\d{5}$/, "Invalid zip code."),
-    state: Yup.string().length(2, "State must be 2 letters"),
+    residentialAddress: Yup.object().shape({
+        address: Yup.string(),
+        city: Yup.string(),
+        zipCode: Yup.string().matches(/^\d{5}$/, "Invalid zip code."),
+        state: Yup.string().length(2, "State must be 2 letters"),
+    }),
     experienceLevel: Yup.string().oneOf([
         "Beginner",
         "Intermediate",
@@ -44,10 +48,16 @@ const ProfileForm = () => {
         initialValues: {
             phoneNumber: "",
             dateOfBirth: "",
-            address: "",
-            city: "",
-            state: "",
-            zipCode: "",
+            residentialAddress: {
+                address: "",
+                city: "",
+                state: "",
+                zipCode: "",
+            },
+            // address: "",
+            // city: "",
+            // state: "",
+            // zipCode: "",
             experienceLevel: "",
         },
         validationSchema: validationSchema,
@@ -70,9 +80,28 @@ const ProfileForm = () => {
                     `${process.env.REACT_APP_BASE_URL}/api/v1/users/current-user`,
                     config
                 );
-                if (res.data) {
-                    formik.setValues(res.data.user);
+                
+                if (res.data && res.data.user) {
+                    const user = res.data.user;
+
+                    const dateOfBirth = user.dateOfBirth
+                        ? new Date(user.dateOfBirth)
+                        : null;
+
+                    formik.setValues({
+                        ...user,
+                        dateOfBirth: dateOfBirth
+                            ? dateOfBirth.toISOString().split("T")[0]
+                            : "",
+                        residentialAddress: {
+                            address: user.residentialAddress?.address || "",
+                            city: user.residentialAddress?.city || "",
+                            state: user.residentialAddress?.state || "",
+                            zipCode: user.residentialAddress?.zipCode || "",
+                        },
+                    });
                 }
+                
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
@@ -101,29 +130,47 @@ const ProfileForm = () => {
         const dateOfBirth = formik.values.dateOfBirth;
         let convertedDateOfBirth = null;
 
-        if (dateOfBirth) {
+            if (dateOfBirth) {
             const dateObject = new Date(dateOfBirth);
+                const year = dateObject.getFullYear();
+                const month = String(dateObject.getMonth() + 1).padStart(2, "0");
+                const day = String(dateObject.getDate()).padStart(2, "0");
+                convertedDateOfBirth = `${year}-${month}-${day}`;
+            }
 
-            const year = dateObject.getFullYear();
-            const month = String(dateObject.getMonth() + 1).padStart(2, "0");
-            const day = String(dateObject.getDate()).padStart(2, "0");
-
-            convertedDateOfBirth = `${year}-${month}-${day}`;
-        }
-
-        formik.setValues({
-            ...formik.values,
-            dateOfBirth: convertedDateOfBirth,
-        });
+formik.setValues({
+    ...formik.values,
+dateOfBirth: convertedDateOfBirth,
+});
 
         try {
             const updateUser = `${process.env.REACT_APP_BASE_URL}/api/v1/users/${userId}`;
-            const res = await axios.put(updateUser, formik.values, config);
-
+            const res = await axios.patch(
+                updateUser,
+                {
+                    ...formik.values,
+                    residentialAddress: { ...formik.values.residentialAddress },
+                },
+                config
+            );
+            // const { data, statusText } = res
+            // console.log(data)
+            // if (statusText !== "Created") {
+            //     throw new Error("Update User failed")
+            //     }
             console.log("Saved successfully:", res.data);
             navigate("/");
+
         } catch (error) {
-            console.error("Error:", error);
+        toast.error("Update User failed. Please try again", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+})
+    console.error("Error update user:", error)
         }
     };
 
@@ -253,23 +300,24 @@ const ProfileForm = () => {
                                         theme.overrides.MuiOutlinedInput.root,
                                 }}
                                 label="Address"
-                                name="address"
-                                value={formik.values.address}
+                                name="residentialAddress.address"  
+                                value={formik.values.residentialAddress.address}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 InputProps={{
-                                    placeholder: "Address",
+                                placeholder: "Address",
                                 }}
                                 error={
-                                    formik.touched.address &&
-                                    Boolean(formik.errors.address)
+                                formik.touched.residentialAddress?.address &&  
+                                Boolean(formik.errors.residentialAddress?.address) 
                                 }
                                 helperText={
-                                    formik.touched.address &&
-                                    formik.errors.address
+                                formik.touched.residentialAddress?.address && 
+                                formik.errors.residentialAddress?.address  
                                 }
-                                {...formik.getFieldProps("address")}
+                                {...formik.getFieldProps("residentialAddress.address")}  
                             />
+
                             {/* City */}
                             <TextField
                                 sx={{
@@ -284,21 +332,22 @@ const ProfileForm = () => {
                                 }}
                                 size="small"
                                 label="City"
-                                name="city"
-                                value={formik.values.city}
+                                name="residentialAddress.city"  
+                                value={formik.values.residentialAddress.city}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 InputProps={{
-                                    placeholder: "City",
+                                placeholder: "City",
                                 }}
                                 error={
-                                    formik.touched.city &&
-                                    Boolean(formik.errors.city)
+                                formik.touched.residentialAddress?.city &&  
+                                Boolean(formik.errors.residentialAddress?.city) 
                                 }
                                 helperText={
-                                    formik.touched.city && formik.errors.city
+                                formik.touched.residentialAddress?.city && 
+                                formik.errors.residentialAddress?.city  
                                 }
-                                {...formik.getFieldProps("city")}
+                                {...formik.getFieldProps("residentialAddress.city")}  
                             />
                             {/* State */}
                             <TextField
@@ -314,21 +363,22 @@ const ProfileForm = () => {
                                 }}
                                 size="small"
                                 label="State"
-                                name="state"
-                                value={formik.values.state}
+                                name="residentialAddress.state"  
+                                value={formik.values.residentialAddress.state}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 InputProps={{
-                                    placeholder: "State",
+                                placeholder: "State",
                                 }}
                                 error={
-                                    formik.touched.state &&
-                                    Boolean(formik.errors.state)
+                                formik.touched.residentialAddress?.state &&  
+                                Boolean(formik.errors.residentialAddress?.state) 
                                 }
                                 helperText={
-                                    formik.touched.state && formik.errors.state
+                                formik.touched.residentialAddress?.state && 
+                                formik.errors.residentialAddress?.state  
                                 }
-                                {...formik.getFieldProps("state")}
+                                {...formik.getFieldProps("residentialAddress.state")}  
                             />
                             {/* Zip Code */}
                             <TextField
@@ -345,23 +395,23 @@ const ProfileForm = () => {
                                 }}
                                 size="small"
                                 label="Zip Code"
-                                name="ZipCode"
-                                value={formik.values.zipCode}
+                                name="residentialAddress.zipCode"  
+                                value={formik.values.residentialAddress.zipCode}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 InputProps={{
-                                    placeholder: "Zip Code",
+                                placeholder: "Zip Code",
                                 }}
                                 error={
-                                    formik.touched.zipCode &&
-                                    Boolean(formik.errors.zipCode)
+                                formik.touched.residentialAddress?.zipCode &&  
+                                Boolean(formik.errors.residentialAddress?.zipCode) 
                                 }
                                 helperText={
-                                    formik.touched.zipCode &&
-                                    formik.errors.zipCode
+                                formik.touched.residentialAddress?.zipCode && 
+                                formik.errors.residentialAddress?.zipCode  
                                 }
-                                {...formik.getFieldProps("zipCode")}
-                            />
+                                {...formik.getFieldProps("residentialAddress.zipCode")}  
+                                />
                             {/* Experience */}
                             <FormControl
                                 sx={{
@@ -464,6 +514,17 @@ const ProfileForm = () => {
                     </form>
                 </Box>
             </ThemeProvider>
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </>
     );
 };
