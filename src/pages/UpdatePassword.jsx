@@ -63,12 +63,11 @@ const UpdatePassword = () => {
 
     validationSchema: validationSchema,
     onSubmit: (values) => {
-const token = localStorage.getItem('jwtToken')
+      const token = localStorage.getItem('jwtToken')
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-
       }
       const updatePassword = async () => {
         try {
@@ -78,14 +77,13 @@ const token = localStorage.getItem('jwtToken')
               oldPassword: values.oldPassword,
               newPassword: values.newPassword,
             },
-            config
+            config,
           )
           const { data, statusText } = response
-          console.log(data)
           if (statusText !== 'OK') {
             throw new Error('Password Change failed')
           }
-          toast.success('Password Updated Successfuly', {
+          toast.success(`${data.message}`, {
             position: 'top-center',
             autoClose: 3000,
             hideProgressBar: true,
@@ -93,13 +91,7 @@ const token = localStorage.getItem('jwtToken')
             pauseOnHover: true,
             draggable: true,
           })
-          navigate('/profileForm')
-          const { token } = data
-          // Save token to localStorage
-          localStorage.setItem('jwtToken', token)
-          console.log(token)
         } catch (error) {
-          // Show error message
           toast.error('Update password failed. Please try again', {
             position: 'top-center',
             autoClose: 3000,
@@ -113,6 +105,8 @@ const token = localStorage.getItem('jwtToken')
       }
 
       updatePassword()
+
+      navigate('/profileForm')
     },
   })
 
