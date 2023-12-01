@@ -1,90 +1,149 @@
-import { AppBar, Button, IconButton, Stack, Toolbar } from "@mui/material";
-import { React, useState } from "react";
+import {
+  AppBar,
+  Button,
+  IconButton,
+  Stack,
+  Toolbar,
+  Avatar,
+} from '@mui/material'
+import { React, useContext } from 'react'
 
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Link } from "react-router-dom";
-import Logo from "../assets/logo70.png";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { theme } from "../utils/theme";
-import { useNavigate } from "react-router-dom";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import { Link } from 'react-router-dom'
+import Logo from '../assets/logo70.png'
+import LogoutIcon from '@mui/icons-material/Logout'
+import { theme } from '../utils/theme'
+import { useNavigate } from 'react-router-dom'
+import { userDataContext } from '../context/userContext'
+import { toast, ToastContainer } from 'react-toastify'
 
+import axios from 'axios'
 const Navbar = () => {
-    const navigate = useNavigate();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate()
+  const { userData, setUserData } = useContext(userDataContext)
 
-    const handleLogout = () => {
-        setIsLoggedIn(false);
-    };
+  const handleLogout = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/auth/logout`,
+      )
+      if (res.status === 200) {
+        localStorage.removeItem('jwtToken')
+        localStorage.removeItem('userId')
+        setUserData({ isLoggedIn: false })
+        toast.success('Logout successful')
+        navigate('/')
+      } else {
+        console.error('Logout failed:', res.data)
+        console.log(res.data)
+        toast.error('Logout failed. Please try again.')
+      }
+    } catch (error) {
+      console.error('Logout error:', error.message)
+      toast.error('Logout failed. Please try again', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      })
+    }
+  }
+  const handleCreateActivity = () => {
+    navigate('/createactivity')
+  }
 
-    const handleCreateActivity = () => {
-        navigate("/createactivity");
-    };
+  const { isLoggedIn, user } = userData
 
-    return (
-        <AppBar
-            position="static"
-            sx={{
-                bgcolor: theme.palette.background.main,
-                boxShadow: "none",
-            }}
+  const { firstName, lastName } = user || { firstName: '', lastName: '' }
+
+  const getInitials = () => {
+    const firstInitial = firstName ? firstName.charAt(0) : ''
+    const lastInitial = lastName ? lastName.charAt(0) : ''
+    return `${firstInitial}${lastInitial}`
+  }
+
+  return (
+    <AppBar
+      position="static"
+      sx={{
+        bgcolor: theme.palette.background.main,
+        boxShadow: 'none',
+      }}
+    >
+      <Toolbar
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+        }}
+      >
+        <img src={Logo} alt="Player Buddy Logo" />
+        <Stack
+          direction="row"
+          sx={{
+            color: theme.palette.primary.contastText,
+            justifyContent: 'flex-end',
+          }}
         >
-            <Toolbar
+          {/* Menu Buttons:  My games and Create a game */}
+          <Button
+            sx={{
+              ...theme.navbarButtonStyles,
+            }}
+            variant="text"
+          >
+            My Activities
+          </Button>
+          <Button
+            sx={{
+              ...theme.navbarButtonStyles,
+            }}
+            variant="text"
+            onClick={handleCreateActivity}
+          >
+            Create Activity
+          </Button>
+
+          {/* User Profile/log In/Sign Up Icon*/}
+          <IconButton
+            aria-label="login"
+            component={Link}
+            to="/login"
+            sx={{
+              color: '#090759',
+            }}
+          >
+            {isLoggedIn ? (
+              <Avatar
+                // alt="User Profile Image"
                 sx={{
-                    display: "flex",
-                    flexDirection: "row",
+                  bgcolor: '#1DE619',
+                  width: 35,
+                  height: 35,
                 }}
-            >
-                <img src={Logo} alt="Player Buddy Logo" />
-                <Stack
-                    direction="row"
-                    sx={{
-                        color: theme.palette.primary.contastText,
-                        justifyContent: "flex-end",
-                    }}
-                >
-                    {/* Menu Buttons:  My games and Create a game */}
-                    <Button
-                        sx={{
-                            ...theme.navbarButtonStyles,
-                        }}
-                        variant="text"
-                    >
-                        My Activities
-                    </Button>
-                    <Button
-                        sx={{
-                            ...theme.navbarButtonStyles,
-                        }}
-                        variant="text"
-                        onClick={handleCreateActivity}
-                    >
-                        Create Activity
-                    </Button>
+                component={Link}
+                to="/profileform"
+              >
+                {getInitials()}
+              </Avatar>
+            ) : (
+              <AccountCircleIcon />
+            )}
+          </IconButton>
 
-                    {/* User Profile/log In/Sign Up Icon*/}
-                    <IconButton
-                        aria-label="login"
-                        component={Link}
-                        to="/login"
-                        sx={{
-                            color: "#090759",
-                        }}
-                    >
-                        <AccountCircleIcon />
-                    </IconButton>
+          {/* Logout Icon */}
+          <IconButton
+            aria-label="logout"
+            sx={{ color: '#090759' }}
+            onClick={handleLogout}
+          >
+            {isLoggedIn ? <LogoutIcon /> : null}
+          </IconButton>
+        </Stack>
+      </Toolbar>
+    </AppBar>
+  )
+}
 
-                    {/* Logout Icon */}
-                    <IconButton
-                        aria-label="logout"
-                        sx={{ color: "#090759" }}
-                        onClick={handleLogout}
-                    >
-                        {isLoggedIn ? <LogoutIcon /> : null}
-                    </IconButton>
-                </Stack>
-            </Toolbar>
-        </AppBar>
-    );
-};
-
-export default Navbar;
+export default Navbar
