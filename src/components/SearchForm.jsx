@@ -1,72 +1,76 @@
 import { useFormik } from 'formik';
+import axios from 'axios';
 import * as Yup from 'yup';
 import {
   TextField,
   Button,
-  // MenuItem,
-  // Select,
-  // InputLabel,
   ThemeProvider,
   Box,
   Typography,
 } from '@mui/material';
+import { toast, ToastContainer } from 'react-toastify';
 
-// import { useNavigate } from 'react-router-dom';
 import { theme } from '../utils/theme';
-// import { bottom } from '@popperjs/core';
 
 const validationSchema = Yup.object({
   zipCode: Yup.string().matches(/^\d{5}$/, 'Invalid ZIP'),
 });
 
-
-const SearchForm = () => {
-  // const navigate = useNavigate();
-  const formik = useFormik({
+const SearchForm = ({ setActivitiesByZip }) => {
+  const {
+    handleSubmit,
+    touched,
+    errors,
+    handleChange,
+    handleBlur,
+    values,
+    getFieldProps,
+    setFieldValue,
+  } = useFormik({
     initialValues: {
       zipCode: '',
     },
+
     validationSchema: validationSchema,
-    onSubmit: async (values, helpers) => {
-      console.log('Saved:', values);
+    onSubmit: (values) => {
+      console.log(values);
+      const token = localStorage.getItem('jwtToken');
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const fetchActivitiesByZip = async () => {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_BASE_URL}/api/v1/nearBy-activities/search/${values.zipCode}`,
+            config
+          );
+          const { data } = response;
+          setActivitiesByZip(data.activities);
+          setFieldValue('zipCode', '');
+        } catch (error) {
+          toast.error('Invalid ZIP code', {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        }
+      };
+
+      fetchActivitiesByZip();
     },
   });
-
-  // const handleChange = (e) => {
-  //   formik.setValues({
-  //     ...formik.values,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // const convertedDateOfBirth = formik.values.dateOfBirth
-    //    ? new Date(formik.values.dateOfBirth).toISOString()
-    //     : ""null"";
-
-    // formik.setValues({
-    //     ...formik.values,
-    //     dateOfBirth: convertedDateOfBirth,
-    // });
-
-    // const endpoint = "/api/v1/user";
-    //     axios
-    //         .post(endpoint, formik.values)
-    //         .then((response) => {
-    //             console.log("Saved successfully:", response.data);
-    //             navigate("/");
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error:", error);
-    //         });
-  };
 
   return (
     <>
       <ThemeProvider theme={theme}>
         <Box sx={{ bgcolor: '#caf2c9' }}>
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <Box
               display="flex"
               flexDirection={'row'}
@@ -101,26 +105,22 @@ const SearchForm = () => {
                   width: 100,
                 }}
                 size="small"
-                label={
-                  Boolean(formik.errors.zipCode)
-                    ? formik.errors.zipCode
-                    : 'Zip Code'
-                }
+                label={Boolean(errors.zipCode) ? errors.zipCode : 'Zip Code'}
                 InputLabelProps={
-                  Boolean(formik.errors.zipCode)
+                  Boolean(errors.zipCode)
                     ? { style: { color: 'red' } }
                     : { style: { color: 'black' } }
                 }
                 name="ZipCode"
-                value={formik.values.zipCode}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
+                value={values.zipCode}
+                onChange={handleChange}
+                onBlur={handleBlur}
                 InputProps={{
                   placeholder: 'Zip Code',
                 }}
-                error={formik.touched.zipCode && Boolean(formik.errors.zipCode)}
+                error={touched.zipCode && Boolean(errors.zipCode)}
                 // helperText={formik.touched.zipCode && formik.errors.zipCode}
-                {...formik.getFieldProps('zipCode')}
+                {...getFieldProps('zipCode')}
               />
 
               {/* Search  Button */}
@@ -141,6 +141,17 @@ const SearchForm = () => {
           </form>
         </Box>
       </ThemeProvider>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 };

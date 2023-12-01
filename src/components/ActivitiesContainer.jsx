@@ -1,10 +1,10 @@
 // ActivitiesContainer.js
-import { Grid, CircularProgress } from '@mui/material';
+import { Grid, CircularProgress, Typography, Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import axios from 'axios'; // Import Axios library
 import ActivityCard from './ActivityCard';
 
-const ActivitiesContainer = () => {
+const ActivitiesContainer = ({ activitiesByZip }) => {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -12,7 +12,7 @@ const ActivitiesContainer = () => {
     const fetchActivities = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:8000/api/v1/activities'
+          `${process.env.REACT_APP_BASE_URL}/api/v1/activities`
         );
         const data = response.data;
 
@@ -37,6 +37,10 @@ const ActivitiesContainer = () => {
     fetchActivities();
   }, []);
 
+  useEffect(() => {
+    setActivities(activitiesByZip);
+  }, [activitiesByZip]);
+
   return (
     <Grid container spacing={1}>
       {loading ? (
@@ -44,13 +48,23 @@ const ActivitiesContainer = () => {
         <Grid item xs={12} style={{ textAlign: 'center' }}>
           <CircularProgress />
         </Grid>
-      ) : (
-        // Map through activities and render ActivityCard for each
-        activities.map((activity) => (
+      ) : // Map through activities and render ActivityCard for each
+      activities?.length > 0 ? (
+        activities?.map((activity) => (
           <Grid item xs={12} key={activity._id}>
             <ActivityCard activity={activity} />
           </Grid>
         ))
+      ) : (
+        <Box sx={{ margin: 'auto' }}>
+          <Typography
+            variant="h6"
+            align="center"
+            sx={{ marginTop: 5, marginLeft: 3, marginRight: 3 }}
+          >
+            We didn't find any activities for your ZIP code
+          </Typography>
+        </Box>
       )}
     </Grid>
   );
