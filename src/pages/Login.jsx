@@ -26,6 +26,7 @@ import 'react-toastify/dist/ReactToastify.css' // Add this import
 
 import axios from 'axios'
 import { userDataContext } from '../context/userContext'
+import Navbar from '../components/Navbar'
 
 const validationSchema = yup.object({
   email: yup
@@ -40,7 +41,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const { userData, setUserData } = useContext(userDataContext)
 
-console.warn("userData", userData)
+  console.warn('userData', userData)
   const {
     handleSubmit,
     touched,
@@ -65,12 +66,15 @@ console.warn("userData", userData)
               email: values.email,
             },
           )
+
+          console.log(response)
           const { data, statusText } = response
 
           if (statusText !== 'OK') {
             throw new Error('Login failed')
           }
-          toast.success('Login successful.', {
+
+          toast.success('Login successful', {
             position: 'top-center',
             autoClose: 3000,
             hideProgressBar: true,
@@ -80,17 +84,24 @@ console.warn("userData", userData)
           })
           const { token, user } = data
           const { userId } = user
+
+          //UserContext populated
           setUserData({ ...data, isLoggedIn: true })
+
           // Save token and userId to localStorage
           localStorage.setItem('jwtToken', token)
           localStorage.setItem('userId', userId)
+          navigate('/')
         } catch (err) {
-          const {response} = err
-          const {data} = response
-          const {error} = data
+          //diconstructuring error from server
+          const { response } = err
+          const { data } = response
+          const { error } = data
           // Show error message
           toast.error(
-            error || err.message || 'Login failed. Please check your credentials.',
+            error ||
+              err.message ||
+              'Login failed. Please check your credentials.',
             {
               position: 'top-center',
               autoClose: 3000,
@@ -102,9 +113,7 @@ console.warn("userData", userData)
           )
           console.error('Error logging in:', error)
         }
-        navigate('/')
       }
-
       login()
     },
   })
@@ -134,7 +143,7 @@ console.warn("userData", userData)
               <img src={Logo} alt="Player Buddy Logo" />
 
               <Typography
-                padding={3}
+                padding={0}
                 textAlign="center"
                 sx={{
                   color: theme.palette.primary.contrastText,

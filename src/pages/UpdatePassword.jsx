@@ -18,8 +18,8 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
 import { useState } from 'react'
 
-import { toast, ToastContainer } from 'react-toastify' // Add this import
-import 'react-toastify/dist/ReactToastify.css' // Add this import
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import axios from 'axios'
 
@@ -79,11 +79,12 @@ const UpdatePassword = () => {
             },
             config,
           )
+          console.log(response)
           const { data, statusText } = response
           if (statusText !== 'OK') {
             throw new Error('Password Change failed')
           }
-          toast.success(`${data.message}`, {
+          toast.success(`${data.msg}`, {
             position: 'top-center',
             autoClose: 3000,
             hideProgressBar: true,
