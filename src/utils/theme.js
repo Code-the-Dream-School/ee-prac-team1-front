@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material/styles";
+
 export const theme = createTheme({
     palette: {
         primary: {
@@ -10,7 +11,9 @@ export const theme = createTheme({
             contrastText: "#090759",
         },
         background: {
+            // gradient: "linear-gradient(to top, #caf2c9, #c9f0ff)",
             main: "#caf2c9",
+            secondary: "#c9f0ff",
         },
     },
     typography: {
@@ -23,6 +26,13 @@ export const theme = createTheme({
         subTitleText: {
             fontWeight: 100,
             fontSize: 16,
+        },
+        subTitleText2: {
+            fontWeight: 400,
+            fontFamily: "Poppins",
+            titleText: {
+                fontSize: 100,
+            },
         },
     },
     overrides: {
