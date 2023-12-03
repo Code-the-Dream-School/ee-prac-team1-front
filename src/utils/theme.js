@@ -11,7 +11,13 @@ export const theme = createTheme({
             contrastText: "#090759",
         },
         background: {
-            // gradient: "linear-gradient(to top, #caf2c9, #c9f0ff)",
+            gradient: "linear-gradient(to top, #caf2c9, #c9f0ff)",
+            main: "#caf2c9",
+            secondary: "#c9f0ff",
+        },
+        background2: {
+            gradient:
+                "linear-gradient(to bottom, #caf2c9, #c9f0ff)",
             main: "#caf2c9",
             secondary: "#c9f0ff",
         },

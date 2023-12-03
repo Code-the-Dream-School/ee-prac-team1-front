@@ -24,7 +24,8 @@ import React from "react";
 import axios from "axios";
 import { theme } from "../utils/theme";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+// import Footer from "../components/Footer";
 
 const validationSchema = Yup.object({
     activityType: Yup.string().required("Please select one of the activities"),
@@ -72,7 +73,7 @@ const validationSchema = Yup.object({
 });
 
 const CreateActivity = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const experienceLevel = ["Beginner", "Intermediate", "Advanced"];
     const venue = ["Indoor", "Outdoor", "Online"];
@@ -158,7 +159,7 @@ const CreateActivity = () => {
                     draggable: true,
                 });
             } catch (error) {
-                toast.error("Created activity was  failed. Please try again", {
+                toast.error("Created activity was failed. Please enter valid City, State, ZipCode. Try again.", {
                     position: "top-center",
                     autoClose: 3000,
                     hideProgressBar: true,
@@ -189,7 +190,7 @@ const CreateActivity = () => {
                 <Box
                     sx={{
                         minHeight: "100vh",
-                        bgcolor: theme.palette.background.main,
+                        backgroundImage: theme.palette.background2.gradient,
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
@@ -761,34 +762,35 @@ const CreateActivity = () => {
                                 >
                                     Cancel
                                 </Button> */}
-                            
+
                             {/* Create Button */}
                             <Button
                                 variant="contained"
                                 type="submit"
                                 color="primary"
+                                fullWidth
                                 sx={{
                                     ...theme.commonButtonStyles,
                                     // marginLeft: 5,
-                                    width: 200,
+                                    width: 300,
                                 }}
                             >
                                 Create
                             </Button>
                             {/* Update Activity Button */}
-                        <Button
-                            variant="contained"
-                            type="submit"
-                            color="primary"
-                            sx={{
-                                ...theme.commonButtonStyles,
-                                width: 200,
-                                marginTop: 2,
-                            }}
-                            // spacing={10}
-                        >
-                            Update Activity
-                        </Button>
+                            {/* <Button
+                                variant="contained"
+                                type="submit"
+                                color="primary"
+                                sx={{
+                                    ...theme.commonButtonStyles,
+                                    width: 200,
+                                    marginTop: 2,
+                                }}
+                                // spacing={10}
+                            >
+                                Update Activity
+                            </Button> */}
                         </Box>
                     </form>
                 </Box>
@@ -804,6 +806,7 @@ const CreateActivity = () => {
                 draggable
                 pauseOnHover
             />
+            {/* <Footer /> */}
         </>
     );
 };

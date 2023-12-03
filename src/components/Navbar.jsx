@@ -70,7 +70,8 @@ const Navbar = () => {
             <AppBar
                 position="static"
                 sx={{
-                    bgcolor: theme.palette.background.main,
+                    backgroundImage: theme.palette.background.gradient,
+                    // bgcolor: theme.palette.background.main,
                     boxShadow: "none",
                 }}
             >

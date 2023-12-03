@@ -192,7 +192,7 @@ dateOfBirth: convertedDateOfBirth,
                 <Box
                     sx={{
                         minHeight: "100vh",
-                        bgcolor: theme.palette.background.main,
+                        backgroundImage: theme.palette.background2.gradient,
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
