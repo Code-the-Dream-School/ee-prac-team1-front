@@ -11,6 +11,12 @@ import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
+import { toast, ToastContainer } from 'react-toastify' // Add this import
+import 'react-toastify/dist/ReactToastify.css' // Add this import
+
+import axios from 'axios'
+import { userDataContext } from '../context/userContext'
+
 const validationSchema = yup.object({
   email: yup
     .string('Enter your email')
@@ -19,8 +25,8 @@ const validationSchema = yup.object({
 })
 
 const ForgotPassword = () => {
-  const navigate = useNavigate()
 
+  const navigate = useNavigate()
   const {
     handleSubmit,
     touched,
@@ -35,8 +41,46 @@ const ForgotPassword = () => {
 
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values)
-      navigate('/login')
+      const forgotPassword = async () => {
+        try {
+          const response = await axios.post(
+            `${process.env.REACT_APP_BASE_URL}/api/v1/auth/forgotpassword`,
+            {
+              email: values.email,
+            },
+          )
+
+          console.log(response)
+          const { statusText } = response
+
+          if (statusText !== 'OK') {
+            throw new Error('Email sending failed')
+          }
+
+          navigate('/login')
+        } catch (err) {
+          //diconstructuring error from server//
+          const { response } = err
+          const { data } = response
+          const { error } = data
+          // Show error message//
+          toast.error(
+            error ||
+              err.message ||
+              'Please resent an email',
+            {
+              position: 'top-center',
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            },
+          )
+          console.error('Error sending email', error)
+        }
+      }
+      forgotPassword()
     },
   })
 
