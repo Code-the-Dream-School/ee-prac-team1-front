@@ -59,7 +59,22 @@ const ForgotPassword = () => {
 
           navigate('/login')
         } catch (err) {
-          //diconstructuring error from server//
+          const { code } = err
+          if (code === 'ERR_NETWORK') {
+            // Show error message
+            toast.error(
+              'Operation failed. Please check your network connection',
+              {
+                position: 'top-center',
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+              },
+            )
+            return
+          }
           const { response } = err
           const { data } = response
           const { error } = data

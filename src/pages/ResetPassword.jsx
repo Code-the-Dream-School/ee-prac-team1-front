@@ -87,8 +87,24 @@ const ResetPassword = () => {
             pauseOnHover: true,
             draggable: true,
           })
-        } catch (error) {
-          toast.error('Reset password failed. Please try again', {
+        } catch (err) {
+          const { code } = err
+          if (code === 'ERR_NETWORK') {
+            // Show error message
+            toast.error(
+              'Operation failed. Please check your network connection',
+              {
+                position: 'top-center',
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+              },
+            )
+            return
+          }
+          toast.err('Reset password failed. Please try again', {
             position: 'top-center',
             autoClose: 3000,
             hideProgressBar: true,
@@ -96,16 +112,15 @@ const ResetPassword = () => {
             pauseOnHover: true,
             draggable: true,
           })
-          console.error('Error registration:', error)
+          console.error('Error registration:', err)
         }
       }
 
       resetPassword()
 
-      navigate('/login')
+      navigate('/resetpassword')
     },
   })
-
 
   const handleNewPasswordVisibility = () => {
     console.log('handleNewPasswordVisibility enter', showNewPassword)

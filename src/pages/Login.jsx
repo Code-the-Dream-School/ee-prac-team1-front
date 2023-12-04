@@ -26,7 +26,7 @@ import 'react-toastify/dist/ReactToastify.css' // Add this import
 
 import axios from 'axios'
 import { userDataContext } from '../context/userContext'
-import Navbar from '../components/Navbar'
+//import Navbar from '../components/Navbar'
 
 const validationSchema = yup.object({
   email: yup
@@ -93,7 +93,19 @@ const Login = () => {
           localStorage.setItem('userId', userId)
           navigate('/')
         } catch (err) {
-          //diconstructuring error from server
+          const { code } = err
+          if (code === 'ERR_NETWORK') {
+            // Show error message
+            toast.error('Login failed. Please check your network connection', {
+              position: 'top-center',
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            })
+            return
+          }
           const { response } = err
           const { data } = response
           const { error } = data
