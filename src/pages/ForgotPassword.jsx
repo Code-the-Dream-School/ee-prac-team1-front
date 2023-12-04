@@ -57,7 +57,7 @@ const ForgotPassword = () => {
             throw new Error('Email sending failed')
           }
 
-          navigate('/login')
+          navigate('/reset')
         } catch (err) {
           //diconstructuring error from server//
           const { response } = err
