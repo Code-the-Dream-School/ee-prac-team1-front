@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
-// import { toast, ToastContainer } from 'react-toastify' // Add this import
+import { toast } from 'react-toastify' // Add this import
 import 'react-toastify/dist/ReactToastify.css' // Add this import
 
 import axios from 'axios'
@@ -25,7 +25,6 @@ const validationSchema = yup.object({
 })
 
 const ForgotPassword = () => {
-
   const navigate = useNavigate()
   const {
     handleSubmit,
@@ -64,19 +63,14 @@ const ForgotPassword = () => {
           const { data } = response
           const { error } = data
           // Show error message//
-          toast.error(
-            error ||
-              err.message ||
-              'Please resent an email',
-            {
-              position: 'top-center',
-              autoClose: 3000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-            },
-          )
+          toast.error(error || err.message || 'Please resent an email', {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          })
           console.error('Error sending email', error)
         }
       }
