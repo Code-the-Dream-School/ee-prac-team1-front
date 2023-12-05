@@ -14,6 +14,7 @@ import * as yup from 'yup'
 import { toast, ToastContainer } from 'react-toastify' // Add this import
 import 'react-toastify/dist/ReactToastify.css' // Add this import
 
+import Navbar from '../components/Navbar'
 import axios from 'axios'
 import { userDataContext } from '../context/userContext'
 
@@ -117,9 +118,10 @@ const ForgotPassword = () => {
               padding={3}
               borderRadius={5}
             >
-              <img src={Logo} alt="Player Buddy Logo" />
+              
+              <Navbar />
               <Typography
-                padding={3}
+                padding={12}
                 textAlign="center"
                 sx={{
                   color: theme.palette.primary.contrastText,

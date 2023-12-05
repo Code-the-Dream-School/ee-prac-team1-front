@@ -16,6 +16,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
+import Navbar from '../components/Navbar'
 import { useState } from 'react'
 
 import { toast, ToastContainer } from 'react-toastify'
@@ -145,10 +146,10 @@ const ResetPassword = () => {
               padding={3}
               borderRadius={5}
             >
-              <img src={Logo} alt="Player Buddy Logo" />
+              < Navbar />
 
               <Typography
-                padding={3}
+                padding={10}
                 textAlign="center"
                 sx={{
                   color: theme.palette.primary.contrastText,
