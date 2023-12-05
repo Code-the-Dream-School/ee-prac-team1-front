@@ -6,6 +6,7 @@ import {
   UpdatePassword,
   ForgotPassword,
   CreateActivity,
+  ResetPassword,
 } from "./pages";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: "forgotpassword",
     element: <ForgotPassword />,
+  },
+  {
+    path: "resetpassword",
+    element: <ResetPassword />,
   },
 ]);
 

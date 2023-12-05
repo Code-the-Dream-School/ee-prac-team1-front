@@ -3,24 +3,23 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 
 import {
-    Box,
-    Button,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-    ThemeProvider,
-} from "@mui/material";
-import React, { useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
+  TextField,
+  Button,
+  MenuItem,
+  Select,
+  InputLabel,
+  ThemeProvider,
+  Box,
+  FormControl,
+} from '@mui/material'
 
-import Navbar from "../components/Navbar";
-import ProfileImage from "./ProfileImage";
-import axios from "axios";
-import { theme } from "../utils/theme";
-import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
+import { theme } from '../utils/theme'
+import ProfileImage from './ProfileImage'
+import axios from 'axios'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import Navbar from '../components/Navbar'
 
 const validationSchema = Yup.object({
     phoneNumber: Yup.string().matches(
@@ -191,35 +190,35 @@ dateOfBirth: convertedDateOfBirth,
         navigate("/updatepassword");
     };
 
-    return (
-        <>
-            <ThemeProvider theme={theme}>
-                <Navbar />
-                <Box
-                    sx={{
-                        minHeight: "100vh",
-                        backgroundImage: theme.palette.background2.gradient,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <form onSubmit={formik.handleSubmit}>
-                        <Box
-                            display="flex"
-                            flexDirection="column"
-                            alignItems={"start"}
-                            justifyContent="center"
-                            margin={"auto"}
-                            gap={1}
-                            // padding={3}
-                        >
-                            <ProfileImage
-                                userData={formik.values}
-                                // firstName={userData.firstName}
-                                // lastName={userData.lastName}
-                            />
+  return (
+    <>
+      <Navbar />
+      <ThemeProvider theme={theme}>
+        <Box
+          sx={{
+            minHeight: '100vh',
+            bgcolor: theme.palette.background.main,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <form onSubmit={formik.handleSubmit}>
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems={'start'}
+              justifyContent="center"
+              margin={'auto'}
+              gap={1}
+              // padding={3}
+            >
+              <ProfileImage
+                userData={formik.values}
+                // firstName={userData.firstName}
+                // lastName={userData.lastName}
+              />
 
                             {/* Phone number */}
                             <TextField
