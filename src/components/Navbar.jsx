@@ -1,22 +1,25 @@
 import {
     AppBar,
+    Avatar,
+    Box,
     Button,
     IconButton,
     Stack,
     Toolbar,
-    Avatar,
+    Typography,
 } from "@mui/material";
 import { React, useContext } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
-import Logo from "../assets/logo70.png";
+import Logo from "../assets/logo90.png";
 import LogoutIcon from "@mui/icons-material/Logout";
+import axios from "axios";
 import { theme } from "../utils/theme";
 import { useNavigate } from "react-router-dom";
 import { userDataContext } from "../context/userContext";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -25,6 +28,17 @@ const Navbar = () => {
     const { firstName, lastName } = user || { firstName: "", lastName: "" };
 
     const handleCreateActivity = () => {
+        if (!isLoggedIn) {
+            toast.warning("Please register or login to create activity", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            return;
+        }
         navigate("/createactivity");
     };
 
@@ -68,7 +82,8 @@ const Navbar = () => {
             <AppBar
                 position="static"
                 sx={{
-                    bgcolor: theme.palette.background.main,
+                    backgroundImage: theme.palette.background.gradient,
+                    // bgcolor: theme.palette.background.main,
                     boxShadow: "none",
                 }}
             >
@@ -76,9 +91,16 @@ const Navbar = () => {
                     sx={{
                         display: "flex",
                         flexDirection: "row",
+                        justifyContent: "space-between",
                     }}
                 >
-                    <img src={Logo} alt="Player Buddy Logo" />
+                    <Box
+                        sx={{
+                        marginTop: "10px"
+                        }}
+                    >
+                        <img src={Logo} alt="Player Buddy Logo" />
+                    </Box>
                     <Stack
                         direction="row"
                         sx={{
@@ -86,25 +108,18 @@ const Navbar = () => {
                             justifyContent: "flex-end",
                         }}
                     >
-                        {/* Menu Buttons:  My activities and Create activity */}
-                        <Button
-                            sx={{
-                                ...theme.navbarButtonStyles,
-                            }}
-                            variant="text"
-                        >
-                            My Activities
-                        </Button>
+                        {/* Menu Buttons: Create activity */}
+                        {/* </Button> */}
                         <Button
                             sx={{
                                 ...theme.navbarButtonStyles,
                             }}
                             variant="text"
                             onClick={handleCreateActivity}
+                            // disabled={!isLoggedIn}
                         >
                             Create Activity
                         </Button>
-
                         {/* User Profile/log In/Sign Up Icon*/}
                         <IconButton
                             aria-label="login"
@@ -114,6 +129,17 @@ const Navbar = () => {
                                 color: "#090759",
                             }}
                         >
+                            {/* Welcome message */}
+                            {isLoggedIn && (
+                                <Typography
+                                    sx={{
+                                        paddingRight: "2px",
+                                        ...theme.subTitleText2,
+                                    }}
+                                >
+                                    Hello,
+                                </Typography>
+                            )}
                             {isLoggedIn ? (
                                 <Avatar
                                     // alt="User Profile Image"
@@ -133,7 +159,17 @@ const Navbar = () => {
                                 <AccountCircleIcon />
                             )}
                         </IconButton>
-
+                        {/* Home Icon */}
+                        <IconButton
+                            aria-label="home"
+                            component={Link}
+                            to="/"
+                            sx={{
+                                color: "#090759",
+                            }}
+                        >
+                            <HomeIcon />
+                        </IconButton>
                         {/* Logout Icon */}
                         <IconButton
                             aria-label="logout"
