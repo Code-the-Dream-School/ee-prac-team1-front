@@ -11,11 +11,12 @@ import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
-import { toast } from 'react-toastify' // Add this import
+import { toast, ToastContainer } from 'react-toastify' // Add this import
 import 'react-toastify/dist/ReactToastify.css' // Add this import
 
+import Navbar from '../components/Navbar'
 import axios from 'axios'
-// import { userDataContext } from '../context/userContext'
+import { userDataContext } from '../context/userContext'
 
 const validationSchema = yup.object({
   email: yup
@@ -25,6 +26,7 @@ const validationSchema = yup.object({
 })
 
 const ForgotPassword = () => {
+
   const navigate = useNavigate()
   const {
     handleSubmit,
@@ -56,21 +58,41 @@ const ForgotPassword = () => {
             throw new Error('Email sending failed')
           }
 
-          navigate('/reset')
+          navigate('/login')
         } catch (err) {
-          //diconstructuring error from server//
+          const { code } = err
+          if (code === 'ERR_NETWORK') {
+            // Show error message
+            toast.error(
+              'Operation failed. Please check your network connection',
+              {
+                position: 'top-center',
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+              },
+            )
+            return
+          }
           const { response } = err
           const { data } = response
           const { error } = data
           // Show error message//
-          toast.error(error || err.message || 'Please resent an email', {
-            position: 'top-center',
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          })
+          toast.error(
+            error ||
+              err.message ||
+              'Please resent an email',
+            {
+              position: 'top-center',
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            },
+          )
           console.error('Error sending email', error)
         }
       }
@@ -96,9 +118,10 @@ const ForgotPassword = () => {
               padding={3}
               borderRadius={5}
             >
-              <img src={Logo} alt="Player Buddy Logo" />
+              
+              <Navbar />
               <Typography
-                padding={3}
+                padding={12}
                 textAlign="center"
                 sx={{
                   color: theme.palette.primary.contrastText,

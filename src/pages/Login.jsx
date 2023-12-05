@@ -7,7 +7,7 @@ import {
   ThemeProvider,
 } from '@mui/material'
 import { theme } from '../utils/theme'
-import Logo from '../assets/logo70.png'
+//import Logo from '../assets/logo70.png'
 import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
@@ -93,11 +93,21 @@ const Login = () => {
           localStorage.setItem('userId', userId)
           navigate('/')
         } catch (err) {
-          //diconstructuring error from server
+          const { code } = err
+          if (code === 'ERR_NETWORK') {
+            toast.error('Login failed. Please check your network connection', {
+              position: 'top-center',
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            })
+            return
+          }
           const { response } = err
           const { data } = response
           const { error } = data
-          // Show error message
           toast.error(
             error ||
               err.message ||
@@ -140,10 +150,10 @@ const Login = () => {
               padding={3}
               borderRadius={5}
             >
-              <img src={Logo} alt="Player Buddy Logo" />
+              <Navbar />
 
               <Typography
-                padding={0}
+                padding={10}
                 textAlign="center"
                 sx={{
                   color: theme.palette.primary.contrastText,

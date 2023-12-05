@@ -12,6 +12,8 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Link } from 'react-router-dom';
 
+import Navbar from '../components/Navbar'
+
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -134,10 +136,11 @@ const Register = () => {
               padding={3}
               borderRadius={5}
             >
-              <img src={Logo} alt="Player Buddy Logo" />
+              
+              <Navbar />
 
               <Typography
-                padding={3}
+                padding={10}
                 textAlign="center"
                 sx={{
                   color: theme.palette.primary.contrastText,

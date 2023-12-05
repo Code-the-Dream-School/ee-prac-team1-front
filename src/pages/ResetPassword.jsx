@@ -16,6 +16,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
+import Navbar from '../components/Navbar'
 import { useState } from 'react'
 
 import { toast, ToastContainer } from 'react-toastify'
@@ -87,8 +88,24 @@ const ResetPassword = () => {
             pauseOnHover: true,
             draggable: true,
           })
-        } catch (error) {
-          toast.error('Reset password failed. Please try again', {
+        } catch (err) {
+          const { code } = err
+          if (code === 'ERR_NETWORK') {
+            // Show error message
+            toast.error(
+              'Operation failed. Please check your network connection',
+              {
+                position: 'top-center',
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+              },
+            )
+            return
+          }
+          toast.err('Reset password failed. Please try again', {
             position: 'top-center',
             autoClose: 3000,
             hideProgressBar: true,
@@ -96,16 +113,15 @@ const ResetPassword = () => {
             pauseOnHover: true,
             draggable: true,
           })
-          console.error('Error registration:', error)
+          console.error('Error registration:', err)
         }
       }
 
       resetPassword()
 
-      navigate('/login')
+      navigate('/resetpassword')
     },
   })
-
 
   const handleNewPasswordVisibility = () => {
     console.log('handleNewPasswordVisibility enter', showNewPassword)
@@ -130,10 +146,10 @@ const ResetPassword = () => {
               padding={3}
               borderRadius={5}
             >
-              <img src={Logo} alt="Player Buddy Logo" />
+              < Navbar />
 
               <Typography
-                padding={3}
+                padding={10}
                 textAlign="center"
                 sx={{
                   color: theme.palette.primary.contrastText,

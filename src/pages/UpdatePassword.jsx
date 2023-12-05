@@ -17,7 +17,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
 import { useState } from 'react'
-
+import { Navbar } from '../components'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -122,6 +122,7 @@ const UpdatePassword = () => {
 
   return (
     <>
+
       <ThemeProvider theme={theme}>
         <Box
           sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
@@ -138,10 +139,10 @@ const UpdatePassword = () => {
               padding={3}
               borderRadius={5}
             >
-              <img src={Logo} alt="Player Buddy Logo" />
+               <Navbar />
 
               <Typography
-                padding={3}
+                padding={10}
                 textAlign="center"
                 sx={{
                   color: theme.palette.primary.contrastText,
