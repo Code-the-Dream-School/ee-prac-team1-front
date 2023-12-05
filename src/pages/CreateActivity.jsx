@@ -7,7 +7,6 @@ import {
     Box,
     Button,
     FormControl,
-    Grid,
     InputLabel,
     MenuItem,
     Select,
@@ -33,7 +32,9 @@ const validationSchema = Yup.object({
         .required("Date is required")
         .min(new Date(), "Date cannot be in the past"),
     time: Yup.string().required("Time is required"),
-
+    maxPlayers: Yup.number()
+        .required("Maximum of players is required")
+        .min(2, "At least 2 participants are required"),
     location: Yup.object().shape({
         address: Yup.string().required("Address is required"),
         city: Yup.string().required("City is required"),
@@ -53,9 +54,6 @@ const validationSchema = Yup.object({
             ["Beginner", "Intermediate", "Advanced"],
             "Please select an experience level"
         ),
-    maxPlayers: Yup.number()
-        .required("Participants is required")
-        .min(2, "At least 2 participants are required"),
     fees: Yup.string(),
     firstName: Yup.string()
         .required("First Name is required")
@@ -83,6 +81,7 @@ const CreateActivity = () => {
             activityType: "Pickleball",
             date: "",
             time: "",
+            maxPlayers: "2",
             location: {
                 address: "",
                 city: "",
@@ -92,13 +91,12 @@ const CreateActivity = () => {
             // Coordinates: " lat: 42.4547874, lng: -71.06546999999999 ",
             venue: "Indoor",
             experienceLevel: "Beginner",
-            maxPlayers: "2",
-            fees: "",
             firstName: "",
             lastName: "",
             contactPhoneNum: "",
             contactEmail: "",
             notes: "",
+            fees: "",
         },
 
         validationSchema: validationSchema,
@@ -127,14 +125,14 @@ const CreateActivity = () => {
                         activityType: values.activityType,
                         date: convertedDate,
                         time: values.time,
+                        maxPlayers: values.maxPlayers,
                         location: {
-                            address: values.location.address,
-                            city: values.location.city,
-                            state: values.location.state,
-                            zipCode: values.location.zipCode,
+                            address: values.location.address.toUpperCase(),
+                            city: values.location.city.toUpperCase(),
+                            state: values.location.state.toUpperCase(),
+                            zipCode: values.location.zipCode.toUpperCase(),
                         },
                         venue: values.venue.toLowerCase(),
-                        maxPlayers: values.maxPlayers,
                         experienceLevel: values.experienceLevel,
                         contactName: `${values.firstName} ${values.lastName}`,
                         contactPhoneNum: values.contactPhoneNum,
@@ -150,23 +148,29 @@ const CreateActivity = () => {
                     }
                 );
                 console.log("Activity was successfully created:", res.data);
-                toast.success("Your activity was successfully created.", {
+                toast.success("Your activity was successfully created!", {
                     position: "top-center",
                     autoClose: 3000,
                     hideProgressBar: true,
                     closeOnClick: true,
                     pauseOnHover: true,
                     draggable: true,
+                    onClose: () => {
+                        window.location.href = '/';
+                    }
                 });
             } catch (error) {
-                toast.error("Created activity was failed. Please enter valid City, State, ZipCode. Try again.", {
-                    position: "top-center",
-                    autoClose: 3000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                });
+                toast.error(
+                    "Create activity was failed. Please enter valid data and try again.",
+                    {
+                        position: "top-center",
+                        autoClose: 3000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                    }
+                );
                 console.error("Error:", error.message);
             }
         },
@@ -191,6 +195,7 @@ const CreateActivity = () => {
                     sx={{
                         minHeight: "100vh",
                         backgroundImage: theme.palette.background2.gradient,
+                        backgroundSize: "cover",
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
@@ -198,68 +203,68 @@ const CreateActivity = () => {
                     }}
                 >
                     <form onSubmit={formik.handleSubmit}>
-                        {/* Box 1 -  Activity, Date, Time*/}
+                        {/* Box 1 -  Activity*/}
+                        <FormControl
+                            sx={{
+                                "& .MuiInputLabel-root.Mui-focused":
+                                    theme.overrides.MuiInputLabel.root[
+                                        "&.Mui-focused"
+                                    ],
+                                "& .MuiOutlinedInput-root":
+                                    theme.overrides.MuiOutlinedInput.root,
+                            }}
+                            fullWidth
+                            error={
+                                formik.touched.activityType &&
+                                Boolean(formik.errors.activityType)
+                            }
+                            helperText={
+                                formik.touched.activityType &&
+                                formik.errors.activityType
+                            }
+                            {...formik.getFieldProps("activityType")}
+                        >
+                            <InputLabel>Activity</InputLabel>
+
+                            <Select
+                                label="Activity"
+                                name="activityType"
+                                value={formik.values.activityType}
+                                onChange={handleChange}
+                                onBlur={formik.handleBlur}
+                                // InputProps={{
+                                //     placeholder: "Activity",
+                                // }}
+
+                                sx={{
+                                    width: "90%",
+                                    marginBottom: 2,
+                                    bgcolor: "#fff",
+                                }}
+                            >
+                                <MenuItem value="Pickleball">
+                                    Pickleball
+                                </MenuItem>
+                                <MenuItem value="Tennis">Tennis</MenuItem>
+                            </Select>
+                        </FormControl>
                         <Box
                             display="flex"
                             flexDirection="column"
                             alignItems="start"
                             marginBottom={3}
                         >
-                            <FormControl
-                                sx={{
-                                    "& .MuiInputLabel-root.Mui-focused":
-                                        theme.overrides.MuiInputLabel.root[
-                                            "&.Mui-focused"
-                                        ],
-                                    "& .MuiOutlinedInput-root":
-                                        theme.overrides.MuiOutlinedInput.root,
-                                }}
-                                fullWidth
-                                error={
-                                    formik.touched.activityType &&
-                                    Boolean(formik.errors.activityType)
-                                }
-                                helperText={
-                                    formik.touched.activityType &&
-                                    formik.errors.activityType
-                                }
-                                {...formik.getFieldProps("activityType")}
-                            >
-                                <InputLabel>Activity</InputLabel>
-
-                                <Select
-                                    label="Activity"
-                                    name="activityType"
-                                    value={formik.values.activityType}
-                                    onChange={handleChange}
-                                    onBlur={formik.handleBlur}
-                                    // InputProps={{
-                                    //     placeholder: "Activity",
-                                    // }}
-
-                                    sx={{
-                                        width: "90%",
-                                        marginBottom: 2,
-                                        bgcolor: "#fff",
-                                    }}
-                                >
-                                    <MenuItem value="Pickleball">
-                                        Pickleball
-                                    </MenuItem>
-                                    <MenuItem value="Tennis">Tennis</MenuItem>
-                                </Select>
-                            </FormControl>
-
-                            {/* Date and Time */}
+                            {/* Box 2 - Date, Time, Players */}
                             <Box
                                 display="flex"
                                 flexDirection="row"
-                                justifyContent="start"
-                                gap={5}
-                                width="100%"
+                                justifyContent="space-between"
+                                gap={3}
+                                width="75%"
                             >
                                 {/* Date */}
                                 <TextField
+                                    fullWidth
                                     sx={{
                                         bgcolor: "#fff",
                                         "& .MuiInputLabel-root.Mui-focused":
@@ -269,7 +274,7 @@ const CreateActivity = () => {
                                         "& .MuiOutlinedInput-root":
                                             theme.overrides.MuiOutlinedInput
                                                 .root,
-                                        width: "auto",
+                                        // width: "auto",
                                     }}
                                     label="Date"
                                     type="date"
@@ -293,6 +298,7 @@ const CreateActivity = () => {
 
                                 {/* Time */}
                                 <TextField
+                                    fullWidth
                                     sx={{
                                         bgcolor: "#fff",
                                         "& .MuiInputLabel-root.Mui-focused":
@@ -302,7 +308,7 @@ const CreateActivity = () => {
                                         "& .MuiOutlinedInput-root":
                                             theme.overrides.MuiOutlinedInput
                                                 .root,
-                                        width: "auto",
+                                        width: "70%",
                                     }}
                                     label="Time"
                                     type="time"
@@ -322,15 +328,62 @@ const CreateActivity = () => {
                                     }
                                     {...formik.getFieldProps("time")}
                                 />
+                                {/* Players */}
+                                <FormControl
+                                    sx={{
+                                        "& .MuiInputLabel-root.Mui-focused":
+                                            theme.overrides.MuiInputLabel.root[
+                                                "&.Mui-focused"
+                                            ],
+                                        "& .MuiOutlinedInput-root":
+                                            theme.overrides.MuiOutlinedInput
+                                                .root,
+                                        width: "40%",
+                                    }}
+                                    error={
+                                        formik.touched.maxPlayers &&
+                                        Boolean(formik.errors.maxPlayers)
+                                    }
+                                    helperText={
+                                        formik.touched.maxPlayers &&
+                                        formik.errors.maxPlayers
+                                    }
+                                    {...formik.getFieldProps("maxPlayers")}
+                                >
+                                    <InputLabel>Players</InputLabel>
+                                    <Select
+                                        sx={{
+                                            bgcolor: "#fff",
+                                            width: "220%",
+                                        }}
+                                        label="Players"
+                                        name="maxPlayers"
+                                        value={formik.values.maxPlayers}
+                                        onChange={formik.handleChange}
+                                        inputProps={{
+                                            min: 2,
+                                            max: 20,
+                                        }}
+                                    >
+                                        {Array.from(
+                                            { length: 19 },
+                                            (_, index) => index + 2
+                                        ).map((value) => (
+                                            <MenuItem key={value} value={value}>
+                                                {value}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </Box>
                         </Box>
 
-                        {/* Box 2 - Accordion - Address, City, State, ZipCode*/}
+                        {/* Box 3 - Accordion - Address, City, State, ZipCode*/}
                         <Accordion sx={{ width: "90%", marginBottom: 3 }}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel-content"
-                                id="panel-header"
+                                // aria-controls="panel-content"
+                                // id="panel-header"
                             >
                                 <Typography>Location</Typography>
                             </AccordionSummary>
@@ -446,25 +499,112 @@ const CreateActivity = () => {
                             </Box>
                         </Accordion>
 
-                        {/* Box 3 - Venue, Participants, Experience, Fee  */}
-                        <Grid
-                            container
-                            spacing={2}
-                            width="100%"
-                            marginBottom={2}
+                        {/* Box 4 - Venue, Experience, Fee  */}
+                        <Box
+                            display="flex"
+                            flexDirection="row"
+                            justifyContent="end"
+                            marginBottom={3}
+                            gap={5}
+                            width="75%"
                         >
-                            <Grid item xs={4}>
-                                <FormControl
-                                    error={
-                                        formik.touched.venue &&
-                                        Boolean(formik.errors.venue)
-                                    }
-                                    helperText={
-                                        formik.touched.venue &&
-                                        formik.errors.venue
-                                    }
-                                    {...formik.getFieldProps("venue")}
+                            {/* Venue */}
+                            <FormControl
+                                fullWidth
+                                sx={{
+                                    // width: "90%",
+                                    "& .MuiInputLabel-root.Mui-focused":
+                                        theme.overrides.MuiInputLabel.root[
+                                            "&.Mui-focused"
+                                        ],
+                                    "& .MuiOutlinedInput-root":
+                                        theme.overrides.MuiOutlinedInput.root,
+                                }}
+                                error={
+                                    formik.touched.venue &&
+                                    Boolean(formik.errors.venue)
+                                }
+                                helperText={
+                                    formik.touched.venue && formik.errors.venue
+                                }
+                                {...formik.getFieldProps("venue")}
+                            >
+                                <InputLabel>Venue</InputLabel>
+                                <Select
                                     sx={{
+                                        bgcolor: "#fff",
+                                    }}
+                                    label="Venue"
+                                    name="venue"
+                                    value={formik.values.venue}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    // InputProps={{
+                                    //     placeholder: "Venue",
+                                    // }}
+                                >
+                                    {venue.map((level) => (
+                                        <MenuItem key={level} value={level}>
+                                            {level}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            {/* Experience */}
+                            <FormControl
+                                // fullWidth
+                                sx={{
+                                    width: "120%",
+                                    "& .MuiInputLabel-root.Mui-focused":
+                                        theme.overrides.MuiInputLabel.root[
+                                            "&.Mui-focused"
+                                        ],
+                                    "& .MuiOutlinedInput-root":
+                                        theme.overrides.MuiOutlinedInput.root,
+                                }}
+                                error={
+                                    formik.touched.experienceLevel &&
+                                    Boolean(formik.errors.experienceLevel)
+                                }
+                                helperText={
+                                    formik.touched.experienceLevel &&
+                                    formik.errors.experienceLevel
+                                }
+                                {...formik.getFieldProps("experienceLevel")}
+                            >
+                                <InputLabel>Experience</InputLabel>
+                                <Select
+                                    sx={{
+                                        bgcolor: "#fff",
+                                    }}
+                                    label="Experience"
+                                    name="experienceLevel"
+                                    value={formik.values.experienceLevel}
+                                    onChange={formik.handleChange}
+                                    aria-label="Experience Level"
+                                >
+                                    {experienceLevel.map((level) => (
+                                        <MenuItem key={level} value={level}>
+                                            {level}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            {/* Fee */}
+
+                            <Box
+                                display="flex"
+                                flexDirection="row"
+                                alignItems="center"
+                                justifyContent="end"
+                                // gap={1}
+                                width="70%"
+                            >
+                                <AttachMoneyIcon sx={{ color: "#090759" }} />
+                                <TextField
+                                    sx={{
+                                        bgcolor: "#fff",
+                                        // width: "130%",
                                         "& .MuiInputLabel-root.Mui-focused":
                                             theme.overrides.MuiInputLabel.root[
                                                 "&.Mui-focused"
@@ -473,154 +613,20 @@ const CreateActivity = () => {
                                             theme.overrides.MuiOutlinedInput
                                                 .root,
                                     }}
-                                    fullWidth
-                                >
-                                    <InputLabel>Venue</InputLabel>
-                                    <Select
-                                        sx={{
-                                            bgcolor: "#fff",
-                                        }}
-                                        label="Venue"
-                                        name="venue"
-                                        value={formik.values.venue}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        // InputProps={{
-                                        //     placeholder: "Venue",
-                                        // }}
-                                    >
-                                        {venue.map((level) => (
-                                            <MenuItem key={level} value={level}>
-                                                {level}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid item xs={7}>
-                                <FormControl
-                                    sx={{
-                                        "& .MuiInputLabel-root.Mui-focused":
-                                            theme.overrides.MuiInputLabel.root[
-                                                "&.Mui-focused"
-                                            ],
-                                        "& .MuiOutlinedInput-root":
-                                            theme.overrides.MuiOutlinedInput
-                                                .root,
-                                        width: "70%",
-                                    }}
-                                    error={
-                                        formik.touched.experienceLevel &&
-                                        Boolean(formik.errors.experienceLevel)
-                                    }
-                                    helperText={
-                                        formik.touched.experienceLevel &&
-                                        formik.errors.experienceLevel
-                                    }
-                                    {...formik.getFieldProps("experienceLevel")}
-                                >
-                                    <InputLabel>Experience</InputLabel>
-                                    <Select
-                                        sx={{
-                                            bgcolor: "#fff",
-                                        }}
-                                        label="Experience"
-                                        name="experienceLevel"
-                                        value={formik.values.experienceLevel}
-                                        onChange={formik.handleChange}
-                                        aria-label="Experience Level"
-                                    >
-                                        {experienceLevel.map((level) => (
-                                            <MenuItem key={level} value={level}>
-                                                {level}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid item xs={5}>
-                                <FormControl
-                                    sx={{
-                                        "& .MuiInputLabel-root.Mui-focused":
-                                            theme.overrides.MuiInputLabel.root[
-                                                "&.Mui-focused"
-                                            ],
-                                        "& .MuiOutlinedInput-root":
-                                            theme.overrides.MuiOutlinedInput
-                                                .root,
-                                        width: "100%",
-                                    }}
-                                    fullWidth
-                                    error={
-                                        formik.touched.maxPlayers &&
-                                        Boolean(formik.errors.maxPlayers)
-                                    }
-                                    helperText={
-                                        formik.touched.maxPlayers &&
-                                        formik.errors.maxPlayers
-                                    }
-                                    {...formik.getFieldProps("maxPlayers")}
-                                >
-                                    <InputLabel>Participants</InputLabel>
-                                    <Select
-                                        sx={{
-                                            bgcolor: "#fff",
-                                        }}
-                                        label="Participants"
-                                        name="maxPlayers"
-                                        value={formik.values.maxPlayers}
-                                        onChange={formik.handleChange}
-                                        inputProps={{
-                                            min: 2,
-                                            max: 20,
-                                        }}
-                                    >
-                                        {Array.from(
-                                            { length: 19 },
-                                            (_, index) => index + 2
-                                        ).map((value) => (
-                                            <MenuItem key={value} value={value}>
-                                                {value}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid item xs={4}>
-                                <Box
-                                    display="flex"
-                                    flexDirection="row"
-                                    alignItems="center"
-                                >
-                                    <AttachMoneyIcon
-                                        sx={{ color: "#090759" }}
-                                    />
-                                    <TextField
-                                        sx={{
-                                            bgcolor: "#fff",
-                                            "& .MuiInputLabel-root.Mui-focused":
-                                                theme.overrides.MuiInputLabel
-                                                    .root["&.Mui-focused"],
-                                            "& .MuiOutlinedInput-root":
-                                                theme.overrides.MuiOutlinedInput
-                                                    .root,
-                                        }}
-                                        label="Fee"
-                                        name="fees"
-                                        variant="outlined"
-                                        fullWidth
-                                        value={formik.values.fees}
-                                        onChange={formik.handleChange}
-                                    />
-                                </Box>
-                            </Grid>
-                        </Grid>
-                        {/* Box 4 -Accordion - First Name, Last Name, Phone Number, Email*/}
+                                    label="Fee"
+                                    name="fees"
+                                    variant="outlined"
+                                    // fullWidth
+                                    value={formik.values.fees}
+                                    onChange={formik.handleChange}
+                                />
+                            </Box>
+                        </Box>
+
+                        {/* Box 5 -Accordion - First Name, Last Name, Phone Number, Email*/}
                         <Accordion sx={{ width: "90%", marginBottom: 3 }}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
-                                // aria-controls="panel2-content"
-                                // id="panel2-header"
                             >
                                 <Typography>Contact</Typography>
                             </AccordionSummary>
@@ -733,52 +739,23 @@ const CreateActivity = () => {
                                     theme.overrides.MuiOutlinedInput.root,
                             }}
                         />
-
                         {/* Buttons */}
-                        <Box
-                            display="flex"
-                            flexDirection="column"
-                            alignItems="center"
-                            justifyContent="center"
-                            marginTop={2}
-                            // marginLeft={4}
+                        {/* Create Button */}
+                        <Button
+                            variant="contained"
+                            type="submit"
+                            color="primary"
+                            fullWidth
+                            sx={{
+                                ...theme.commonButtonStyles,
+                                marginTop: 3,
+                                width: "90%",
+                            }}
                         >
-                            {/* <Box
-                                display="flex"
-                                flexDirection="row"
-                                alignItems="center"
-                                justifyContent="center"
-                            > */}
-                            {/* Cancel Button */}
-                            {/* <Button
-                                    variant="contained"
-                                    type="submit"
-                                    color="primary"
-                                    onClick={handleCancel}
-                                    sx={{
-                                        ...theme.commonButtonStyles,
-                                        width: 120,
-                                    }}
-                                >
-                                    Cancel
-                                </Button> */}
-
-                            {/* Create Button */}
-                            <Button
-                                variant="contained"
-                                type="submit"
-                                color="primary"
-                                fullWidth
-                                sx={{
-                                    ...theme.commonButtonStyles,
-                                    // marginLeft: 5,
-                                    width: 300,
-                                }}
-                            >
-                                Create
-                            </Button>
-                            {/* Update Activity Button */}
-                            {/* <Button
+                            Create
+                        </Button>
+                        {/* Update Activity Button */}
+                        {/* <Button
                                 variant="contained"
                                 type="submit"
                                 color="primary"
@@ -791,7 +768,7 @@ const CreateActivity = () => {
                             >
                                 Update Activity
                             </Button> */}
-                        </Box>
+                        {/* </Box> */}
                     </form>
                 </Box>
             </ThemeProvider>

@@ -92,6 +92,7 @@ const Navbar = () => {
                     >
                         {/* Menu Buttons: Create activity */}
                         {/* </Button> */}
+                        
                         <Button
                             sx={{
                                 ...theme.navbarButtonStyles,
