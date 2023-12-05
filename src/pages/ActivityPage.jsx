@@ -12,41 +12,90 @@ import InfoIcon from '@mui/icons-material/Info';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SportsTennisIcon from '@mui/icons-material/SportsTennis';
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router';
+import axios from 'axios';
 // const players = [
 //   { id: 1, name: "Remy Sharp", img: "../../pictures/1.jpg" },
 //   { id: 2, name: "Remy Sharp", img: "../../pictures/2.jpg" },
 //   { id: 3, name: "Remy Sharp", img: "../../pictures/3.jpg" },
 // ];
 
-const ActivityCard = ({ activity }) => {
+const ActivityPage = () => {
+  const [activity, setActivity] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [isAdded, setIsAdded] = useState(false);
-  const navigate = useNavigate();
 
-  let players = activity.players;
+  const { activityId } = useParams();
 
-  let formattedDate = '';
-  let formattedTime = '';
-  const dateString = activity.date; // "2023-12-15T05:00:00.000Z"
-  const dateObject = new Date(dateString);
+  // let players = activity.players;
 
-  if (dateObject instanceof Date && !isNaN(dateObject)) {
-    formattedDate = `${(dateObject.getMonth() + 1)
-      .toString()
-      .padStart(2, '0')}/${(dateObject.getDate() + 1)
-      .toString()
-      .padStart(2, '0')}/${dateObject.getFullYear()}`;
+  // let formattedDate = '';
+  // let formattedTime = '';
+  // const dateString = activity.date; // "2023-12-15T05:00:00.000Z"
+  // const dateObject = new Date(dateString);
 
-    // Format the time
-    const timeString = activity.time; // "16:30:00"
-    const [hours, minutes] = timeString.split(':');
-    const formattedHours = (hours % 12 || 12).toString().padStart(2, '0');
-    const period = hours < 12 ? 'AM' : 'PM';
-    formattedTime = `${formattedHours}:${minutes} ${period}`;
-  } else {
-    console.error('Invalid date object');
-  }
+  // if (dateObject instanceof Date && !isNaN(dateObject)) {
+  //   formattedDate = `${(dateObject.getMonth() + 1)
+  //     .toString()
+  //     .padStart(2, '0')}/${(dateObject.getDate() + 1)
+  //     .toString()
+  //     .padStart(2, '0')}/${dateObject.getFullYear()}`;
+
+  //   // Format the time
+  //   const timeString = activity.time; // "16:30:00"
+  //   const [hours, minutes] = timeString.split(':');
+  //   const formattedHours = (hours % 12 || 12).toString().padStart(2, '0');
+  //   const period = hours < 12 ? 'AM' : 'PM';
+  //   formattedTime = `${formattedHours}:${minutes} ${period}`;
+  // } else {
+  //   console.error('Invalid date object');
+  // }
+  useEffect(() => {
+    const fetchActivity = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/v1/activities/myActivities/${activityId}`
+        );
+        const data = response.data;
+
+        setActivity(data.activity);
+        console.log(data.activity);
+
+        // // Check if data.activities is an array before setting state
+        // if (Array.isArray(data.activities)) {
+        //   console.log('Fetched data:', data); // Log the fetched data
+        //   setActivities(data.activities);
+        // } else {
+        //   console.error('Invalid data structure. Expected an array.');
+        // }
+
+        // Set loading to false when data is fetched
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching activities:', error);
+
+        // Set loading to false even if there's an error
+        setLoading(false);
+      }
+    };
+
+    fetchActivity();
+  }, []);
+
+  const {
+    activityType,
+    date,
+    experienceLevel,
+    fees,
+    location,
+    contactName,
+    contactEmail,
+    contactPhoneNum,
+    minPlayers,
+    maxPlayers,
+    players,
+  } = activity;
 
   return (
     <>
@@ -77,11 +126,11 @@ const ActivityCard = ({ activity }) => {
               }}
             >
               <SportsTennisIcon sx={{ marginRight: 1 }} />
-              <strong>{activity.activityType} </strong>
+              <strong>{activityType} </strong>
               <CalendarMonthIcon sx={{ marginLeft: 4 }} />
-              <strong>{formattedDate}</strong>
+              <strong>{'formattedDate'}</strong>
               <AccessTimeIcon sx={{ marginLeft: 2 }} />
-              <strong>{formattedTime}</strong>
+              <strong>{'formattedTime'}</strong>
             </Typography>
           </Box>
           <Box sx={{ marginBottom: 0 }}>
@@ -90,8 +139,8 @@ const ActivityCard = ({ activity }) => {
               color="text.primary"
               sx={{ marginBottom: 0 }}
             >
-              {activity.location.address}, {activity.location.city},{' '}
-              {activity.location.state} {activity.location.zipCode}
+              {location?.address}, {location?.city}, {location?.state}{' '}
+              {location?.zipCode}
             </Typography>
           </Box>
           <Box
@@ -103,7 +152,7 @@ const ActivityCard = ({ activity }) => {
           >
             <AvatarGroup max={4}>
               {players
-                .filter((playerId) => playerId && playerId !== '0') // Filter out players with "0" as the ID
+                ?.filter((playerId) => playerId && playerId !== '0') // Filter out players with "0" as the ID
                 .map((playerId) => (
                   <Avatar
                     key={playerId} // Use playerId as the key
@@ -111,7 +160,7 @@ const ActivityCard = ({ activity }) => {
                   />
                 ))}
 
-              {/*{isAdded ? (
+              {isAdded ? (
                 <Avatar
                   sx={{ width: 32, height: 32 }}
                   alt="Remy Sharp"
@@ -119,7 +168,7 @@ const ActivityCard = ({ activity }) => {
                 />
               ) : (
                 <Avatar sx={{ width: 32, height: 32 }}>+1</Avatar>
-              )}*/}
+              )}
             </AvatarGroup>
             <span>
               <IconButton
@@ -132,10 +181,7 @@ const ActivityCard = ({ activity }) => {
                   <PersonAddAlt1Icon fontSize="large" sx={{ color: 'green' }} />
                 )}
               </IconButton>
-              <IconButton
-                sx={{ marginTop: -1 }}
-                onClick={() => navigate(`/activity/${activity._id}`)}
-              >
+              <IconButton sx={{ marginTop: -1 }}>
                 <InfoIcon fontSize="large" sx={{ color: 'orange' }} />
               </IconButton>
             </span>
@@ -146,4 +192,4 @@ const ActivityCard = ({ activity }) => {
   );
 };
 
-export default ActivityCard;
+export default ActivityPage;
