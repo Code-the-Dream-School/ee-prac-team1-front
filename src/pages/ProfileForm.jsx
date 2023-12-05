@@ -161,9 +161,15 @@ dateOfBirth: convertedDateOfBirth,
             // if (statusText !== "Created") {
             //     throw new Error("Update User failed")
             //     }
-            console.log("Saved successfully:", res.data);
-            navigate("/");
-
+          console.log("Saved successfully:", res.data);
+        toast.success("Your profile was successfully updated.", {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+          });
         } catch (error) {
         toast.error("Update User failed. Please try again", {
             position: "top-center",
@@ -493,7 +499,7 @@ dateOfBirth: convertedDateOfBirth,
                                         color="primary"
                                         sx={{
                                             ...theme.commonButtonStyles,
-                                            width: 200,
+                                            width: "100%",
                                         }}
                                         onClick={handleSubmit}
                                     >
