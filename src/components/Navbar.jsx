@@ -1,6 +1,7 @@
 import {
     AppBar,
     Avatar,
+    Box,
     Button,
     IconButton,
     Stack,
@@ -13,7 +14,7 @@ import { ToastContainer, toast } from "react-toastify";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
-import Logo from "../assets/logo100.png";
+import Logo from "../assets/logo90.png";
 import LogoutIcon from "@mui/icons-material/Logout";
 import axios from "axios";
 import { theme } from "../utils/theme";
@@ -27,6 +28,17 @@ const Navbar = () => {
     const { firstName, lastName } = user || { firstName: "", lastName: "" };
 
     const handleCreateActivity = () => {
+        if (!isLoggedIn) {
+            toast.warning("Please register or login to create activity", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            return;
+        }
         navigate("/createactivity");
     };
 
@@ -79,10 +91,16 @@ const Navbar = () => {
                     sx={{
                         display: "flex",
                         flexDirection: "row",
-                        justifyContent: "center",
+                        justifyContent: "space-between",
                     }}
                 >
-                    <img src={Logo} alt="Player Buddy Logo" />
+                    <Box
+                        sx={{
+                        marginTop: "10px"
+                        }}
+                    >
+                        <img src={Logo} alt="Player Buddy Logo" />
+                    </Box>
                     <Stack
                         direction="row"
                         sx={{
@@ -92,13 +110,13 @@ const Navbar = () => {
                     >
                         {/* Menu Buttons: Create activity */}
                         {/* </Button> */}
-                        
                         <Button
                             sx={{
                                 ...theme.navbarButtonStyles,
                             }}
                             variant="text"
                             onClick={handleCreateActivity}
+                            // disabled={!isLoggedIn}
                         >
                             Create Activity
                         </Button>
