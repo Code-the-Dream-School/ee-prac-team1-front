@@ -21,12 +21,16 @@ import PeopleIcon from '@mui/icons-material/People';
 import StarIcon from '@mui/icons-material/Star';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PermDeviceInformationIcon from '@mui/icons-material/PermDeviceInformation';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import PersonIcon from '@mui/icons-material/Person';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import axios from 'axios';
 import { Navbar } from '../components';
 import { theme } from '../utils/theme';
 import SearchForm from '../components/SearchForm';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 // const players = [
 //   { id: 1, name: "Remy Sharp", img: "../../pictures/1.jpg" },
 //   { id: 2, name: "Remy Sharp", img: "../../pictures/2.jpg" },
@@ -197,7 +201,7 @@ const ActivityPage = () => {
                   </Typography>
                 </Grid>
               </Grid>
-              <Grid container sx={{ marginTop: 1, marginBottom: 1 }}>
+              <Grid container sx={{ marginTop: 1, marginBottom: 2 }}>
                 <LocationOnIcon sx={{ marginRight: 1 }} />
                 <Grid item xs>
                   <Typography variant="body1">
@@ -208,7 +212,7 @@ const ActivityPage = () => {
                 </Grid>
               </Grid>
               <Divider />
-              <Grid container sx={{ marginTop: 1 }}>
+              <Grid container sx={{ marginTop: 2 }}>
                 <StarIcon sx={{ marginRight: 1 }} />
                 <Grid item xs>
                   <Typography variant="h6"> Experience</Typography>
@@ -228,21 +232,48 @@ const ActivityPage = () => {
                   </Typography>
                 </Grid>
               </Grid>
-              <Grid container sx={{ marginTop: 1 }}>
+              <Grid container sx={{ marginTop: 1, marginBottom: 2 }}>
                 <AttachMoneyIcon sx={{ marginRight: 1 }} />
 
                 <Grid item xs>
-                  <Typography variant="h6"> Game fee:</Typography>
+                  <Typography variant="h6"> Activity fee:</Typography>
                 </Grid>
                 <Grid item xs>
                   <Typography variant="h6"> {`$ ${fees}`}</Typography>
                 </Grid>
               </Grid>
+              <Divider />
+              <Grid container sx={{ marginTop: 2 }}>
+                <PermDeviceInformationIcon sx={{ marginRight: 1 }} />
+                <Grid item xs>
+                  <Typography variant="h6"> Contact Information</Typography>
+                </Grid>
+              </Grid>
+              <Grid container sx={{ marginTop: 1 }}>
+                <PersonIcon sx={{ marginRight: 1 }} />
+                <Grid item xs>
+                  <Typography variant="body1"> {contactName}</Typography>
+                </Grid>
+              </Grid>
+              <Grid container sx={{ marginTop: 1 }}>
+                <AlternateEmailIcon sx={{ marginRight: 1 }} />
+                <Grid item xs>
+                  <Typography variant="body1"> {contactEmail}</Typography>
+                </Grid>
+              </Grid>
+              <Grid container sx={{ marginTop: 1, marginBottom: 2 }}>
+                <LocalPhoneIcon sx={{ marginRight: 1 }} />
+                <Grid item xs>
+                  <Typography variant="body1"> {contactPhoneNum}</Typography>
+                </Grid>
+              </Grid>
+              <Divider />
               <Box
                 sx={{
                   display: 'flex',
                   flexDirection: 'raw',
                   justifyContent: 'space-between',
+                  marginTop: 2,
                 }}
               >
                 <AvatarGroup max={4}>
