@@ -5,14 +5,15 @@ import {
   Card,
   IconButton,
   Typography,
-} from "@mui/material";
-import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import InfoIcon from "@mui/icons-material/Info";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import SportsTennisIcon from "@mui/icons-material/SportsTennis";
-import { useState } from "react";
+} from '@mui/material';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import InfoIcon from '@mui/icons-material/Info';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import SportsTennisIcon from '@mui/icons-material/SportsTennis';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
 // const players = [
 //   { id: 1, name: "Remy Sharp", img: "../../pictures/1.jpg" },
 //   { id: 2, name: "Remy Sharp", img: "../../pictures/2.jpg" },
@@ -21,27 +22,30 @@ import { useState } from "react";
 
 const ActivityCard = ({ activity }) => {
   const [isAdded, setIsAdded] = useState(false);
+  const navigate = useNavigate();
 
-  let players= activity.players;
-console.log("players", players)
-  let formattedDate = "";
-  let formattedTime = "";
-   const dateString = activity.date; // "2023-12-15T05:00:00.000Z"
+  let players = activity?.players;
+
+  let formattedDate = '';
+  let formattedTime = '';
+  const dateString = activity.date; // "2023-12-15T05:00:00.000Z"
   const dateObject = new Date(dateString);
 
   if (dateObject instanceof Date && !isNaN(dateObject)) {
-    formattedDate = `${
-  (dateObject.getMonth() + 1).toString().padStart(2, '0')
-}/${(dateObject.getDate()+1).toString().padStart(2, '0')}/${dateObject.getFullYear()}`;
-    
+    formattedDate = `${(dateObject.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}/${(dateObject.getDate() + 1)
+      .toString()
+      .padStart(2, '0')}/${dateObject.getFullYear()}`;
+
     // Format the time
-    const timeString = activity.time; // "16:30:00"
+    const timeString = activity?.time; // "16:30:00"
     const [hours, minutes] = timeString.split(':');
     const formattedHours = (hours % 12 || 12).toString().padStart(2, '0');
     const period = hours < 12 ? 'AM' : 'PM';
     formattedTime = `${formattedHours}:${minutes} ${period}`;
   } else {
-    console.error("Invalid date object");
+    console.error('Invalid date object');
   }
 
   return (
@@ -51,15 +55,15 @@ console.log("players", players)
         sx={{
           minHeight: { xs: 94, sm: 94, md: 94 },
           maxWidth: { xs: 378, sm: 378, md: 378 },
-          borderRadius: "14px",
-          display: "flex",
-          margin: "auto",
+          borderRadius: '14px',
+          display: 'flex',
+          margin: 'auto',
           paddingTop: 1,
         }}
       >
         <Box
           sx={{
-            margin: "auto",
+            margin: 'auto',
           }}
         >
           <Box>
@@ -67,8 +71,8 @@ console.log("players", players)
               variant="body1"
               color="text.primary"
               sx={{
-                display: "flex",
-                justifyContent: "space-between",
+                display: 'flex',
+                justifyContent: 'space-between',
                 marginRight: 2,
               }}
             >
@@ -86,25 +90,24 @@ console.log("players", players)
               color="text.primary"
               sx={{ marginBottom: 0 }}
             >
-              {activity.location.address}, {activity.location.city}, {activity.location.state} {activity.location.zipCode}
+              {activity?.location?.address}, {activity?.location?.city},{' '}
+              {activity?.location?.state} {activity?.location?.zipCode}
             </Typography>
           </Box>
           <Box
             sx={{
-              display: "flex",
-              flexDirection: "raw",
-              justifyContent: "space-between",
+              display: 'flex',
+              flexDirection: 'raw',
+              justifyContent: 'space-between',
             }}
           >
             <AvatarGroup max={4}>
-  {players
-    ?.filter(playerId => playerId && playerId !== "0")  // Filter out players with "0" as the ID
-    ?.map(playerId => (
-      <Avatar
-        key={playerId}  // Use playerId as the key
-        sx={{ width: 32, height: 32 }}
-      />
-    ))}
+              {players?.map((playerId) => (
+                <Avatar
+                  key={playerId} // Use playerId as the key
+                  sx={{ width: 32, height: 32 }}
+                />
+              ))}
 
               {/*{isAdded ? (
                 <Avatar
@@ -122,13 +125,16 @@ console.log("players", players)
                 onClick={() => setIsAdded(!isAdded)}
               >
                 {isAdded ? (
-                  <PersonRemoveIcon fontSize="large" sx={{ color: "red" }} />
+                  <PersonRemoveIcon fontSize="large" sx={{ color: 'red' }} />
                 ) : (
-                  <PersonAddAlt1Icon fontSize="large" sx={{ color: "green" }} />
+                  <PersonAddAlt1Icon fontSize="large" sx={{ color: 'green' }} />
                 )}
               </IconButton>
-              <IconButton sx={{ marginTop: -1 }}>
-                <InfoIcon fontSize="large" sx={{ color: "orange" }} />
+              <IconButton
+                sx={{ marginTop: -1 }}
+                onClick={() => navigate(`/activity/${activity._id}`)}
+              >
+                <InfoIcon fontSize="large" sx={{ color: 'orange' }} />
               </IconButton>
             </span>
           </Box>

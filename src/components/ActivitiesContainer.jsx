@@ -5,53 +5,53 @@ import {
   Typography,
   Box,
   Pagination,
-} from '@mui/material'
-import { useEffect, useState } from 'react'
-import axios from 'axios' // Import Axios library
-import ActivityCard from './ActivityCard'
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import axios from 'axios'; // Import Axios library
+import ActivityCard from './ActivityCard';
 
 const ActivitiesContainer = ({ activitiesByZip }) => {
-  const [activities, setActivities] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [activities, setActivities] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchActivities = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/api/v1/activities`,
-        )
-        const data = response.data
+          `${process.env.REACT_APP_BASE_URL}/api/v1/activities`
+        );
+        const data = response.data;
 
         // Check if data.activities is an array before setting state
         if (Array.isArray(data.activities)) {
-          console.log('Fetched data:', data) // Log the fetched data
-          setActivities(data.activities)
+          console.log('Fetched data:', data); // Log the fetched data
+          setActivities(data.activities);
         } else {
-          console.error('Invalid data structure. Expected an array.')
+          console.error('Invalid data structure. Expected an array.');
         }
 
         // Set loading to false when data is fetched
-        setLoading(false)
+        setLoading(false);
       } catch (error) {
-        console.error('Error fetching activities:', error)
+        console.error('Error fetching activities:', error);
 
         // Set loading to false even if there's an error
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchActivities()
-  }, [])
+    fetchActivities();
+  }, []);
 
-  const pageSize = 4
-  const [page, setPage] = useState(1)
+  const pageSize = 4;
+  const [page, setPage] = useState(1);
   const handleChange = (event, value) => {
-    setPage(value)
-  }
+    setPage(value);
+  };
 
   useEffect(() => {
-    setActivities(activitiesByZip)
-  }, [activitiesByZip])
+    setActivities(activitiesByZip);
+  }, [activitiesByZip]);
 
   return (
     <Grid container spacing={1}>
@@ -71,12 +71,14 @@ const ActivitiesContainer = ({ activitiesByZip }) => {
               </Grid>
             ))}
 
-          <Grid sx={{ 
-            paddingTop:3,
-                    margin: "auto", 
-                    width: "fit-content", 
-                    alignItems: "center", 
-                }}>
+          <Grid
+            sx={{
+              paddingTop: 3,
+              margin: 'auto',
+              width: 'fit-content',
+              alignItems: 'center',
+            }}
+          >
             <Pagination
               variant="outlined"
               shape="rounded"
@@ -99,7 +101,7 @@ const ActivitiesContainer = ({ activitiesByZip }) => {
         </Box>
       )}
     </Grid>
-  )
-}
+  );
+};
 
-export default ActivitiesContainer
+export default ActivitiesContainer;
