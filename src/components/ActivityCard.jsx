@@ -23,7 +23,7 @@ const ActivityCard = ({ activity }) => {
   const [isAdded, setIsAdded] = useState(false);
 
   let players= activity.players;
-
+console.log("players", players)
   let formattedDate = "";
   let formattedTime = "";
    const dateString = activity.date; // "2023-12-15T05:00:00.000Z"
@@ -98,8 +98,8 @@ const ActivityCard = ({ activity }) => {
           >
             <AvatarGroup max={4}>
   {players
-    .filter(playerId => playerId && playerId !== "0")  // Filter out players with "0" as the ID
-    .map(playerId => (
+    ?.filter(playerId => playerId && playerId !== "0")  // Filter out players with "0" as the ID
+    ?.map(playerId => (
       <Avatar
         key={playerId}  // Use playerId as the key
         sx={{ width: 32, height: 32 }}
