@@ -24,7 +24,7 @@ const ActivityCard = ({ activity }) => {
   const [isAdded, setIsAdded] = useState(false);
   const navigate = useNavigate();
 
-  let players = activity.players;
+  let players = activity?.players;
 
   let formattedDate = '';
   let formattedTime = '';

@@ -1,23 +1,26 @@
-import React, { useEffect } from "react";
-import { useFormik } from "formik";
+import "react-toastify/dist/ReactToastify.css";
+
 import * as Yup from "yup";
+
 import {
-    TextField,
+    Box,
     Button,
+    FormControl,
+    InputLabel,
     MenuItem,
     Select,
-    InputLabel,
+    TextField,
     ThemeProvider,
-    Box,
-    FormControl,
 } from "@mui/material";
+import React, { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
-import { useNavigate } from "react-router-dom";
-import { theme } from "../utils/theme";
+import Navbar from "../components/Navbar";
 import ProfileImage from "./ProfileImage";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { theme } from "../utils/theme";
+import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object({
     phoneNumber: Yup.string().matches(
@@ -158,9 +161,15 @@ dateOfBirth: convertedDateOfBirth,
             // if (statusText !== "Created") {
             //     throw new Error("Update User failed")
             //     }
-            console.log("Saved successfully:", res.data);
-            navigate("/");
-
+          console.log("Saved successfully:", res.data);
+        toast.success("Your profile was successfully updated.", {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+          });
         } catch (error) {
         toast.error("Update User failed. Please try again", {
             position: "top-center",
@@ -174,42 +183,43 @@ dateOfBirth: convertedDateOfBirth,
         }
     };
 
-    const handleCancel = () => {
-        navigate("/");
-    };
+    // const handleCancel = () => {
+    //     navigate("/");
+    // };
 
     const handleUpdatePassword = () => {
         navigate("/updatepassword");
     };
 
-    return (
-        <>
-            <ThemeProvider theme={theme}>
-                <Box
-                    sx={{
-                        minHeight: "100vh",
-                        bgcolor: theme.palette.background.main,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <form onSubmit={formik.handleSubmit}>
-                        <Box
-                            display="flex"
-                            flexDirection="column"
-                            alignItems={"start"}
-                            justifyContent="center"
-                            margin={"auto"}
-                            gap={1}
-                            // padding={3}
-                        >
-                            <ProfileImage
-                                userData={formik.values}
-                                // firstName={userData.firstName}
-                                // lastName={userData.lastName}
-                            />
+  return (
+    <>
+      <Navbar />
+      <ThemeProvider theme={theme}>
+        <Box
+          sx={{
+            minHeight: '100vh',
+            bgcolor: theme.palette.background.main,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <form onSubmit={formik.handleSubmit}>
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems={'start'}
+              justifyContent="center"
+              margin={'auto'}
+              gap={1}
+              // padding={3}
+            >
+              <ProfileImage
+                userData={formik.values}
+                // firstName={userData.firstName}
+                // lastName={userData.lastName}
+              />
 
                             {/* Phone number */}
                             <TextField
@@ -458,16 +468,18 @@ dateOfBirth: convertedDateOfBirth,
                                 display="flex"
                                 flexDirection="column"
                                 alignItems="center"
-                                marginTop={5}
+                                justifyContent="center"
+                                marginTop={2}
+                                marginLeft={4}
                             >
-                                <Box
+                                {/* <Box
                                     display="flex"
                                     flexDirection="row"
                                     alignItems="center"
                                     justifyContent="center"
-                                >
+                                > */}
                                     {/* Cancel Button */}
-                                    <Button
+                                    {/* <Button
                                         variant="contained"
                                         type="submit"
                                         color="primary"
@@ -479,7 +491,7 @@ dateOfBirth: convertedDateOfBirth,
                                         spacing={10}
                                     >
                                         Cancel
-                                    </Button>
+                                    </Button> */}
                                     {/* Save Button */}
                                     <Button
                                         variant="contained"
@@ -487,14 +499,13 @@ dateOfBirth: convertedDateOfBirth,
                                         color="primary"
                                         sx={{
                                             ...theme.commonButtonStyles,
-                                            marginLeft: 5,
-                                            width: 120,
+                                            width: "100%",
                                         }}
                                         onClick={handleSubmit}
                                     >
                                         Save
                                     </Button>
-                                </Box>
+                                {/* Update password button*/}
                                 <Button
                                     variant="contained"
                                     type="submit"

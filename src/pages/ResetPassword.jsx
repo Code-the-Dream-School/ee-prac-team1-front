@@ -16,17 +16,15 @@ import InputAdornment from '@mui/material/InputAdornment'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
+import Navbar from '../components/Navbar'
 import { useState } from 'react'
-import { Navbar } from '../components'
+
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import axios from 'axios'
 
 const validationSchema = yup.object({
-  oldPassword: yup
-    .string('Enter your Current password')
-    .required('Current Password is required'),
   newPassword: yup
     .string('Enter your New password')
     .matches(
@@ -43,9 +41,8 @@ const validationSchema = yup.object({
     ),
 })
 
-const UpdatePassword = () => {
+const ResetPassword = () => {
   const navigate = useNavigate()
-  const [showoldPassword, setShowoldPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
   const {
     handleSubmit,
@@ -56,7 +53,6 @@ const UpdatePassword = () => {
     values,
   } = useFormik({
     initialValues: {
-      oldPassword: '',
       newPassword: '',
       confirmPassword: '',
     },
@@ -69,12 +65,12 @@ const UpdatePassword = () => {
           Authorization: `Bearer ${token}`,
         },
       }
-      const updatePassword = async () => {
+      const resetPassword = async () => {
         try {
           const response = await axios.patch(
-            `${process.env.REACT_APP_BASE_URL}/api/v1/users/updateUserPassword`,
+            //TBD from back end
+            `${process.env.REACT_APP_BASE_URL}/api/v1/users/resetUserPassword`,
             {
-              oldPassword: values.oldPassword,
               newPassword: values.newPassword,
             },
             config,
@@ -92,8 +88,24 @@ const UpdatePassword = () => {
             pauseOnHover: true,
             draggable: true,
           })
-        } catch (error) {
-          toast.error('Update password failed. Please try again', {
+        } catch (err) {
+          const { code } = err
+          if (code === 'ERR_NETWORK') {
+            // Show error message
+            toast.error(
+              'Operation failed. Please check your network connection',
+              {
+                position: 'top-center',
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+              },
+            )
+            return
+          }
+          toast.err('Reset password failed. Please try again', {
             position: 'top-center',
             autoClose: 3000,
             hideProgressBar: true,
@@ -101,20 +113,16 @@ const UpdatePassword = () => {
             pauseOnHover: true,
             draggable: true,
           })
-          console.error('Error registration:', error)
+          console.error('Error registration:', err)
         }
       }
 
-      updatePassword()
+      resetPassword()
 
-      navigate('/profileForm')
+      navigate('/resetpassword')
     },
   })
 
-  const handleoldPasswordVisibility = () => {
-    console.log('handleoldPasswordVisibility enter', showoldPassword)
-    setShowoldPassword(!showoldPassword)
-  }
   const handleNewPasswordVisibility = () => {
     console.log('handleNewPasswordVisibility enter', showNewPassword)
     setShowNewPassword(!showNewPassword)
@@ -122,7 +130,6 @@ const UpdatePassword = () => {
 
   return (
     <>
-
       <ThemeProvider theme={theme}>
         <Box
           sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
@@ -139,7 +146,7 @@ const UpdatePassword = () => {
               padding={3}
               borderRadius={5}
             >
-               <Navbar />
+              < Navbar />
 
               <Typography
                 padding={10}
@@ -151,51 +158,8 @@ const UpdatePassword = () => {
                   fontSize: theme.typography.titleText.fontSize,
                 }}
               >
-                UPDATE PASSWORD
+                RESET PASSWORD
               </Typography>
-              {/* current password field */}
-              <TextField
-                sx={{
-                  bgcolor: '#fff',
-                  '& .MuiInputLabel-root.Mui-focused':
-                    theme.overrides.MuiInputLabel.root['&.Mui-focused'],
-                  '& .MuiOutlinedInput-root':
-                    theme.overrides.MuiOutlinedInput.root,
-                }}
-                size="small"
-                margin="normal"
-                placeholder="Enter your current password"
-                variant="outlined"
-                fullWidth
-                id="oldPassword"
-                name="oldPassword"
-                label="Current Password"
-                type={showoldPassword ? 'text' : 'password'}
-                autoComplete="current-password"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleoldPasswordVisibility}
-                        aria-label="toggle password"
-                        edge="end"
-                      >
-                        {showoldPassword ? (
-                          <VisibilityOffIcon />
-                        ) : (
-                          <VisibilityIcon />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                value={values.oldPassword}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.password && Boolean(errors.password)}
-                helperText={touched.oldPassword && errors.oldPassword}
-              />
-
               {/* new password field */}
               <TextField
                 sx={{
@@ -275,7 +239,7 @@ const UpdatePassword = () => {
                   marginRight: 2,
                 }}
               >
-                Update
+                Reset
               </Button>
             </Box>
           </form>
@@ -297,4 +261,4 @@ const UpdatePassword = () => {
   )
 }
 
-export default UpdatePassword
+export default ResetPassword
