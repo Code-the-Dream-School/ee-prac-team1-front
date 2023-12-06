@@ -38,21 +38,23 @@ const ActivitiesContainer = () => {
   }, []);
 
   return (
-    <Grid container spacing={1}>
-      {loading ? (
-        // Display a spinner while loading
-        <Grid item xs={12} style={{ textAlign: 'center' }}>
-          <CircularProgress />
-        </Grid>
-      ) : (
-        // Map through activities and render ActivityCard for each
-        activities.map((activity) => (
-          <Grid item xs={12} key={activity._id}>
-            <ActivityCard activity={activity} />
+    <>
+      <Grid container spacing={1}>
+        {loading ? (
+          // Display a spinner while loading
+          <Grid item xs={12} style={{ textAlign: 'center' }}>
+            <CircularProgress />
           </Grid>
-        ))
-      )}
-    </Grid>
+        ) : (
+          // Map through activities and render ActivityCard for each
+          activities?.map((activity) => (
+            <Grid item xs={12} key={activity._id}>
+              <ActivityCard activity={activity} />
+            </Grid>
+          ))
+        )}
+      </Grid>
+    </>
   );
 };
 

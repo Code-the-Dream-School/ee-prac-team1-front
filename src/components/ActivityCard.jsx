@@ -39,7 +39,7 @@ const ActivityCard = ({ activity }) => {
       .padStart(2, '0')}/${dateObject.getFullYear()}`;
 
     // Format the time
-    const timeString = activity.time; // "16:30:00"
+    const timeString = activity?.time; // "16:30:00"
     const [hours, minutes] = timeString.split(':');
     const formattedHours = (hours % 12 || 12).toString().padStart(2, '0');
     const period = hours < 12 ? 'AM' : 'PM';
@@ -90,8 +90,8 @@ const ActivityCard = ({ activity }) => {
               color="text.primary"
               sx={{ marginBottom: 0 }}
             >
-              {activity.location.address}, {activity.location.city},{' '}
-              {activity.location.state} {activity.location.zipCode}
+              {activity?.location?.address}, {activity?.location?.city},{' '}
+              {activity?.location?.state} {activity?.location?.zipCode}
             </Typography>
           </Box>
           <Box
@@ -102,14 +102,12 @@ const ActivityCard = ({ activity }) => {
             }}
           >
             <AvatarGroup max={4}>
-              {players
-                .filter((playerId) => playerId && playerId !== '0') // Filter out players with "0" as the ID
-                .map((playerId) => (
-                  <Avatar
-                    key={playerId} // Use playerId as the key
-                    sx={{ width: 32, height: 32 }}
-                  />
-                ))}
+              {players?.map((playerId) => (
+                <Avatar
+                  key={playerId} // Use playerId as the key
+                  sx={{ width: 32, height: 32 }}
+                />
+              ))}
 
               {/*{isAdded ? (
                 <Avatar
