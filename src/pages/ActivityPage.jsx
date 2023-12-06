@@ -24,8 +24,11 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PermDeviceInformationIcon from '@mui/icons-material/PermDeviceInformation';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import PersonIcon from '@mui/icons-material/Person';
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import axios from 'axios';
 import { Navbar } from '../components';
 import { theme } from '../utils/theme';
@@ -49,6 +52,7 @@ const ActivityPage = () => {
   const [activity, setActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAdded, setIsAdded] = useState(false);
+  const navigate = useNavigate();
 
   const { activityId } = useParams();
 
@@ -119,6 +123,7 @@ const ActivityPage = () => {
     minPlayers,
     maxPlayers,
     players,
+    notes,
   } = activity;
 
   let formattedDate = '';
@@ -268,6 +273,20 @@ const ActivityPage = () => {
                 </Grid>
               </Grid>
               <Divider />
+              <Grid container sx={{ marginTop: 2 }}>
+                <EventNoteIcon sx={{ marginRight: 1 }} />
+                <Grid item xs>
+                  <Typography variant="h6"> Notes</Typography>
+                </Grid>
+              </Grid>
+              <Grid container sx={{ marginTop: 1, marginBottom: 2 }}>
+                <FormatListBulletedIcon sx={{ marginRight: 1 }} />
+                <Grid item xs>
+                  <Typography variant="body1"> {notes}</Typography>
+                </Grid>
+              </Grid>
+
+              <Divider />
               <Box
                 sx={{
                   display: 'flex',
@@ -311,8 +330,14 @@ const ActivityPage = () => {
                       />
                     )}
                   </IconButton>
-                  <IconButton sx={{ marginTop: -1 }}>
-                    <InfoIcon fontSize="large" sx={{ color: 'orange' }} />
+                  <IconButton
+                    sx={{ marginTop: -1 }}
+                    onClick={() => navigate('/')}
+                  >
+                    <ArrowCircleLeftIcon
+                      fontSize="large"
+                      sx={{ color: 'orange' }}
+                    />
                   </IconButton>
                 </span>
               </Box>
