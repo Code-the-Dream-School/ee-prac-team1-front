@@ -148,7 +148,7 @@ const Navbar = () => {
                                         width: 30,
                                         height: 30,
                                         textDecoration: "none",
-                                        fontSize: 11,
+                                        fontSize: 12,
                                     }}
                                     component={Link}
                                     to="/profileform"

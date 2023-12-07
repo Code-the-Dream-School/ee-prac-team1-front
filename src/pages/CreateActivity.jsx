@@ -1,5 +1,4 @@
 import * as Yup from "yup";
-
 import {
     Accordion,
     AccordionDetails,
@@ -15,7 +14,6 @@ import {
     Typography,
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
-
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Navbar from "../components/Navbar";
@@ -23,8 +21,8 @@ import React from "react";
 import axios from "axios";
 import { theme } from "../utils/theme";
 import { useFormik } from "formik";
-// import { useNavigate } from "react-router-dom";
-// import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 const validationSchema = Yup.object({
     activityType: Yup.string().required("Please select one of the activities"),
@@ -71,7 +69,7 @@ const validationSchema = Yup.object({
 });
 
 const CreateActivity = () => {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const experienceLevel = ["Beginner", "Intermediate", "Advanced"];
     const venue = ["Indoor", "Outdoor", "Online"];
@@ -155,10 +153,9 @@ const CreateActivity = () => {
                     closeOnClick: true,
                     pauseOnHover: true,
                     draggable: true,
-                    onClose: () => {
-                        window.location.href = '/';
-                    }
                 });
+                    await new Promise((resolve) => setTimeout(resolve, 1500)); 
+                    navigate("/");
             } catch (error) {
                 toast.error(
                     "Create activity was failed. Please enter valid data and try again.",
@@ -189,8 +186,8 @@ const CreateActivity = () => {
 
     return (
         <>
+            <Navbar />
             <ThemeProvider theme={theme}>
-                <Navbar />
                 <Box
                     sx={{
                         minHeight: "100vh",
@@ -308,7 +305,7 @@ const CreateActivity = () => {
                                         "& .MuiOutlinedInput-root":
                                             theme.overrides.MuiOutlinedInput
                                                 .root,
-                                        width: "70%",
+                                        width: "80%",
                                     }}
                                     label="Time"
                                     type="time"
@@ -625,9 +622,7 @@ const CreateActivity = () => {
 
                         {/* Box 5 -Accordion - First Name, Last Name, Phone Number, Email*/}
                         <Accordion sx={{ width: "90%", marginBottom: 3 }}>
-                            <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                            >
+                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                 <Typography>Contact</Typography>
                             </AccordionSummary>
 
@@ -783,7 +778,7 @@ const CreateActivity = () => {
                 draggable
                 pauseOnHover
             />
-            {/* <Footer /> */}
+            <Footer />
         </>
     );
 };
