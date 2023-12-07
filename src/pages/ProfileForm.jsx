@@ -1,7 +1,5 @@
-import "react-toastify/dist/ReactToastify.css";
-
+import React, { useEffect } from "react";
 import * as Yup from "yup";
-
 import {
     Box,
     Button,
@@ -12,15 +10,15 @@ import {
     TextField,
     ThemeProvider,
 } from "@mui/material";
-import React, { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
-
+import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../components/Navbar";
 import ProfileImage from "./ProfileImage";
 import axios from "axios";
 import { theme } from "../utils/theme";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 const validationSchema = Yup.object({
     phoneNumber: Yup.string().matches(
@@ -57,10 +55,6 @@ const ProfileForm = () => {
                 state: "",
                 zipCode: "",
             },
-            // address: "",
-            // city: "",
-            // state: "",
-            // zipCode: "",
             experienceLevel: "",
         },
         validationSchema: validationSchema,
@@ -83,7 +77,7 @@ const ProfileForm = () => {
                     `${process.env.REACT_APP_BASE_URL}/api/v1/users/current-user`,
                     config
                 );
-                
+
                 if (res.data && res.data.user) {
                     const user = res.data.user;
 
@@ -104,7 +98,6 @@ const ProfileForm = () => {
                         },
                     });
                 }
-                
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
@@ -133,18 +126,18 @@ const ProfileForm = () => {
         const dateOfBirth = formik.values.dateOfBirth;
         let convertedDateOfBirth = null;
 
-            if (dateOfBirth) {
+        if (dateOfBirth) {
             const dateObject = new Date(dateOfBirth);
-                const year = dateObject.getFullYear();
-                const month = String(dateObject.getMonth() + 1).padStart(2, "0");
-                const day = String(dateObject.getDate()).padStart(2, "0");
-                convertedDateOfBirth = `${year}-${month}-${day}`;
-            }
+            const year = dateObject.getFullYear();
+            const month = String(dateObject.getMonth() + 1).padStart(2, "0");
+            const day = String(dateObject.getDate()).padStart(2, "0");
+            convertedDateOfBirth = `${year}-${month}-${day}`;
+        }
 
-formik.setValues({
-    ...formik.values,
-dateOfBirth: convertedDateOfBirth,
-});
+        formik.setValues({
+            ...formik.values,
+            dateOfBirth: convertedDateOfBirth,
+        });
 
         try {
             const updateUser = `${process.env.REACT_APP_BASE_URL}/api/v1/users/updateUser`;
@@ -156,30 +149,30 @@ dateOfBirth: convertedDateOfBirth,
                 },
                 config
             );
-            // const { data, statusText } = res
-            // console.log(data)
-            // if (statusText !== "Created") {
-            //     throw new Error("Update User failed")
-            //     }
-          console.log("Saved successfully:", res.data);
-        toast.success("Your profile was successfully updated.", {
-              position: "top-center",
-              autoClose: 3000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-          });
+            console.log("Saved successfully:", res.data);
+            toast.success("Your profile was successfully updated.", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+            navigate("/");
         } catch (error) {
-        toast.error("Update User failed. Please try again", {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-})
-    console.error("Error update user:", error)
+            toast.error(
+                "Saving your profile data was failed. Please try again",
+                {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                }
+            );
+            console.error("Error update user:", error);
         }
     };
 
@@ -191,35 +184,35 @@ dateOfBirth: convertedDateOfBirth,
         navigate("/updatepassword");
     };
 
-  return (
-    <>
-      <Navbar />
-      <ThemeProvider theme={theme}>
-        <Box
-          sx={{
-            minHeight: '100vh',
-            bgcolor: theme.palette.background.main,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <form onSubmit={formik.handleSubmit}>
-            <Box
-              display="flex"
-              flexDirection="column"
-              alignItems={'start'}
-              justifyContent="center"
-              margin={'auto'}
-              gap={1}
-              // padding={3}
-            >
-              <ProfileImage
-                userData={formik.values}
-                // firstName={userData.firstName}
-                // lastName={userData.lastName}
-              />
+    return (
+        <>
+            <Navbar />
+            <ThemeProvider theme={theme}>
+                <Box
+                    sx={{
+                        minHeight: "100vh",
+                        backgroundImage: theme.palette.background2.gradient,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <form onSubmit={formik.handleSubmit}>
+                        <Box
+                            display="flex"
+                            flexDirection="column"
+                            alignItems={"start"}
+                            justifyContent="center"
+                            margin={"auto"}
+                            gap={1}
+                            // padding={3}
+                        >
+                            <ProfileImage
+                                userData={formik.values}
+                                // firstName={userData.firstName}
+                                // lastName={userData.lastName}
+                            />
 
                             {/* Phone number */}
                             <TextField
@@ -310,22 +303,29 @@ dateOfBirth: convertedDateOfBirth,
                                         theme.overrides.MuiOutlinedInput.root,
                                 }}
                                 label="Address"
-                                name="residentialAddress.address"  
+                                name="residentialAddress.address"
                                 value={formik.values.residentialAddress.address}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 InputProps={{
-                                placeholder: "Address",
+                                    placeholder: "Address",
                                 }}
                                 error={
-                                formik.touched.residentialAddress?.address &&  
-                                Boolean(formik.errors.residentialAddress?.address) 
+                                    formik.touched.residentialAddress
+                                        ?.address &&
+                                    Boolean(
+                                        formik.errors.residentialAddress
+                                            ?.address
+                                    )
                                 }
                                 helperText={
-                                formik.touched.residentialAddress?.address && 
-                                formik.errors.residentialAddress?.address  
+                                    formik.touched.residentialAddress
+                                        ?.address &&
+                                    formik.errors.residentialAddress?.address
                                 }
-                                {...formik.getFieldProps("residentialAddress.address")}  
+                                {...formik.getFieldProps(
+                                    "residentialAddress.address"
+                                )}
                             />
 
                             {/* City */}
@@ -342,22 +342,26 @@ dateOfBirth: convertedDateOfBirth,
                                 }}
                                 size="small"
                                 label="City"
-                                name="residentialAddress.city"  
+                                name="residentialAddress.city"
                                 value={formik.values.residentialAddress.city}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 InputProps={{
-                                placeholder: "City",
+                                    placeholder: "City",
                                 }}
                                 error={
-                                formik.touched.residentialAddress?.city &&  
-                                Boolean(formik.errors.residentialAddress?.city) 
+                                    formik.touched.residentialAddress?.city &&
+                                    Boolean(
+                                        formik.errors.residentialAddress?.city
+                                    )
                                 }
                                 helperText={
-                                formik.touched.residentialAddress?.city && 
-                                formik.errors.residentialAddress?.city  
+                                    formik.touched.residentialAddress?.city &&
+                                    formik.errors.residentialAddress?.city
                                 }
-                                {...formik.getFieldProps("residentialAddress.city")}  
+                                {...formik.getFieldProps(
+                                    "residentialAddress.city"
+                                )}
                             />
                             {/* State */}
                             <TextField
@@ -373,22 +377,26 @@ dateOfBirth: convertedDateOfBirth,
                                 }}
                                 size="small"
                                 label="State"
-                                name="residentialAddress.state"  
+                                name="residentialAddress.state"
                                 value={formik.values.residentialAddress.state}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 InputProps={{
-                                placeholder: "State",
+                                    placeholder: "State",
                                 }}
                                 error={
-                                formik.touched.residentialAddress?.state &&  
-                                Boolean(formik.errors.residentialAddress?.state) 
+                                    formik.touched.residentialAddress?.state &&
+                                    Boolean(
+                                        formik.errors.residentialAddress?.state
+                                    )
                                 }
                                 helperText={
-                                formik.touched.residentialAddress?.state && 
-                                formik.errors.residentialAddress?.state  
+                                    formik.touched.residentialAddress?.state &&
+                                    formik.errors.residentialAddress?.state
                                 }
-                                {...formik.getFieldProps("residentialAddress.state")}  
+                                {...formik.getFieldProps(
+                                    "residentialAddress.state"
+                                )}
                             />
                             {/* Zip Code */}
                             <TextField
@@ -405,23 +413,30 @@ dateOfBirth: convertedDateOfBirth,
                                 }}
                                 size="small"
                                 label="Zip Code"
-                                name="residentialAddress.zipCode"  
+                                name="residentialAddress.zipCode"
                                 value={formik.values.residentialAddress.zipCode}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 InputProps={{
-                                placeholder: "Zip Code",
+                                    placeholder: "Zip Code",
                                 }}
                                 error={
-                                formik.touched.residentialAddress?.zipCode &&  
-                                Boolean(formik.errors.residentialAddress?.zipCode) 
+                                    formik.touched.residentialAddress
+                                        ?.zipCode &&
+                                    Boolean(
+                                        formik.errors.residentialAddress
+                                            ?.zipCode
+                                    )
                                 }
                                 helperText={
-                                formik.touched.residentialAddress?.zipCode && 
-                                formik.errors.residentialAddress?.zipCode  
+                                    formik.touched.residentialAddress
+                                        ?.zipCode &&
+                                    formik.errors.residentialAddress?.zipCode
                                 }
-                                {...formik.getFieldProps("residentialAddress.zipCode")}  
-                                />
+                                {...formik.getFieldProps(
+                                    "residentialAddress.zipCode"
+                                )}
+                            />
                             {/* Experience */}
                             <FormControl
                                 sx={{
@@ -478,8 +493,8 @@ dateOfBirth: convertedDateOfBirth,
                                     alignItems="center"
                                     justifyContent="center"
                                 > */}
-                                    {/* Cancel Button */}
-                                    {/* <Button
+                                {/* Cancel Button */}
+                                {/* <Button
                                         variant="contained"
                                         type="submit"
                                         color="primary"
@@ -492,19 +507,19 @@ dateOfBirth: convertedDateOfBirth,
                                     >
                                         Cancel
                                     </Button> */}
-                                    {/* Save Button */}
-                                    <Button
-                                        variant="contained"
-                                        type="submit"
-                                        color="primary"
-                                        sx={{
-                                            ...theme.commonButtonStyles,
-                                            width: "100%",
-                                        }}
-                                        onClick={handleSubmit}
-                                    >
-                                        Save
-                                    </Button>
+                                {/* Save Button */}
+                                <Button
+                                    variant="contained"
+                                    type="submit"
+                                    color="primary"
+                                    sx={{
+                                        ...theme.commonButtonStyles,
+                                        width: "100%",
+                                    }}
+                                    onClick={handleSubmit}
+                                >
+                                    Save
+                                </Button>
                                 {/* Update password button*/}
                                 <Button
                                     variant="contained"
@@ -525,6 +540,7 @@ dateOfBirth: convertedDateOfBirth,
                     </form>
                 </Box>
             </ThemeProvider>
+            <Footer />
             <ToastContainer
                 position="top-center"
                 autoClose={3000}
