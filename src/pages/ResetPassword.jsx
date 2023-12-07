@@ -6,8 +6,7 @@ import {
   ThemeProvider,
 } from '@mui/material'
 import { theme } from '../utils/theme'
-import Logo from '../assets/logo70.png'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
@@ -19,7 +18,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import Navbar from '../components/Navbar'
 import { useState } from 'react'
 
-import { toast, ToastContainer } from 'react-toastify'
+//import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import axios from 'axios'
@@ -42,6 +41,9 @@ const validationSchema = yup.object({
 })
 
 const ResetPassword = () => {
+  console.log('params', useParams())
+  const { verificationCode, email } = useParams()
+  console.log('params', { verificationCode, email })
   const navigate = useNavigate()
   const [showNewPassword, setShowNewPassword] = useState(false)
   const {
@@ -59,67 +61,86 @@ const ResetPassword = () => {
 
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      const token = localStorage.getItem('jwtToken')
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
       const resetPassword = async () => {
         try {
-          const response = await axios.patch(
-            //TBD from back end
-            `${process.env.REACT_APP_BASE_URL}/api/v1/users/resetUserPassword`,
+          const { newPassword } = values
+          const response = await axios.post(
+            `${process.env.REACT_APP_BASE_URL}/api/v1/auth/resetPassword/${verificationCode}`,
             {
-              newPassword: values.newPassword,
+              newPassword,
+              email,
             },
-            config,
           )
-          console.log(response)
-          const { data, statusText } = response
-          if (statusText !== 'OK') {
-            throw new Error('Password Change failed')
-          }
-          toast.success(`${data.msg}`, {
-            position: 'top-center',
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          })
-        } catch (err) {
-          const { code } = err
-          if (code === 'ERR_NETWORK') {
-            // Show error message
-            toast.error(
-              'Operation failed. Please check your network connection',
-              {
-                position: 'top-center',
-                autoClose: 3000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-              },
+
+          if (response.status === 200) {
+            // Password reset successful
+            alert(
+              'Password reset successful! Please log in with your new password.',
             )
-            return
+            window.location.href = '/login'
+          } else {
+            throw new Error('Password reset failed')
           }
-          toast.err('Reset password failed. Please try again', {
-            position: 'top-center',
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          })
-          console.error('Error registration:', err)
+        } catch (error) {
+          console.error(error)
+          alert('Password reset failed. Please try again.')
         }
       }
 
+      //   try {
+      //     const response = await axios.patch(
+      //       //TBD from back end
+      //       `${process.env.REACT_APP_BASE_URL}/api/v1/users/resetUserPassword`,
+      //       {
+      //         newPassword: values.newPassword,
+      //       },
+      //       config,
+      //     )
+      //     console.log(response)
+      //     const { data, statusText } = response
+      //     if (statusText !== 'OK') {
+      //       throw new Error('Password Change failed')
+      //     }
+      //     toast.success(`${data.msg}`, {
+      //       position: 'top-center',
+      //       autoClose: 3000,
+      //       hideProgressBar: true,
+      //       closeOnClick: true,
+      //       pauseOnHover: true,
+      //       draggable: true,
+      //     })
+      //   } catch (err) {
+      //     const { code } = err
+      //     if (code === 'ERR_NETWORK') {
+      //       // Show error message
+      //       toast.error(
+      //         'Operation failed. Please check your network connection',
+      //         {
+      //           position: 'top-center',
+      //           autoClose: 3000,
+      //           hideProgressBar: true,
+      //           closeOnClick: true,
+      //           pauseOnHover: true,
+      //           draggable: true,
+      //         },
+      //       )
+      //       return
+      //     }
+      //     toast.err('Reset password failed. Please try again', {
+      //       position: 'top-center',
+      //       autoClose: 3000,
+      //       hideProgressBar: true,
+      //       closeOnClick: true,
+      //       pauseOnHover: true,
+      //       draggable: true,
+      //     })
+      //     console.error('Error registration:', err)
+      //   }
+      // }
+
       resetPassword()
 
-      navigate('/resetpassword')
+      navigate('/login')
     },
   })
 
@@ -146,7 +167,7 @@ const ResetPassword = () => {
               padding={3}
               borderRadius={5}
             >
-              < Navbar />
+              <Navbar />
 
               <Typography
                 padding={10}
@@ -246,7 +267,7 @@ const ResetPassword = () => {
         </Box>
       </ThemeProvider>
       {/* Add the ToastContainer */}
-      <ToastContainer
+      {/* <ToastContainer
         position="top-center"
         autoClose={3000}
         hideProgressBar
@@ -256,7 +277,7 @@ const ResetPassword = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-      />
+      /> */}
     </>
   )
 }

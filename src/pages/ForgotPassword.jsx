@@ -26,7 +26,6 @@ const validationSchema = yup.object({
 })
 
 const ForgotPassword = () => {
-
   const navigate = useNavigate()
   const {
     handleSubmit,
@@ -37,7 +36,7 @@ const ForgotPassword = () => {
     values,
   } = useFormik({
     initialValues: {
-      email: '',
+      email: 'fkreminsky@gmail.com',
     },
 
     validationSchema: validationSchema,
@@ -45,7 +44,7 @@ const ForgotPassword = () => {
       const forgotPassword = async () => {
         try {
           const response = await axios.post(
-            `${process.env.REACT_APP_BASE_URL}/api/v1/auth/forgotpassword`,
+            `${process.env.REACT_APP_BASE_URL}/api/v1/auth/forgotPassword`,
             {
               email: values.email,
             },
@@ -58,7 +57,9 @@ const ForgotPassword = () => {
             throw new Error('Email sending failed')
           }
 
-          navigate('/login')
+          toast.success('successful')
+
+          navigate('/resetpassword')
         } catch (err) {
           const { code } = err
           if (code === 'ERR_NETWORK') {
@@ -80,19 +81,14 @@ const ForgotPassword = () => {
           const { data } = response
           const { error } = data
           // Show error message//
-          toast.error(
-            error ||
-              err.message ||
-              'Please resent an email',
-            {
-              position: 'top-center',
-              autoClose: 3000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-            },
-          )
+          toast.error(error || err.message || 'Please resent an email', {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          })
           console.error('Error sending email', error)
         }
       }
@@ -118,7 +114,6 @@ const ForgotPassword = () => {
               padding={3}
               borderRadius={5}
             >
-              
               <Navbar />
               <Typography
                 padding={12}

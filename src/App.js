@@ -8,45 +8,55 @@ import {
   CreateActivity,
   ActivityPage,
   ResetPassword,
-} from './pages';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+} from "./pages";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Dashboard />,
   },
   {
-    path: 'activity/:activityId',
+    path: "activity/:activityId",
     element: <ActivityPage />,
   },
   {
-    path: 'register',
+    path: "register",
     element: <Register />,
   },
   {
-    path: 'login',
+    path: "login",
     element: <Login />,
   },
   {
-    path: 'profileform',
+    path: "profileform",
     element: <ProfileForm />,
   },
   {
-    path: 'createactivity',
+    path: "createactivity",
     element: <CreateActivity />,
   },
   {
-    path: 'updatepassword',
+    path: "updatepassword",
     element: <UpdatePassword />,
   },
   {
-    path: 'forgotpassword',
+    path: "forgotpassword",
     element: <ForgotPassword />,
   },
+
   {
-    path: 'resetpassword',
+    path: "resetPassword",
     element: <ResetPassword />,
+  },
+  {
+    path: "/resetPassword/:verificationCode/:email",
+    element: <ResetPassword />,
+    // query: {
+    //   email: {
+    //     type: "string",
+    //   },
+    // },
   },
 ]);
 
