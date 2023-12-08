@@ -137,7 +137,7 @@ const Login = () => {
       <Navbar />
       <ThemeProvider theme={theme}>
         <Box
-          sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
+          sx={{ backgroundImage: theme.palette.background2.gradient, minHeight: '100vh' }}
         >
           <form onSubmit={handleSubmit}>
             <Box
