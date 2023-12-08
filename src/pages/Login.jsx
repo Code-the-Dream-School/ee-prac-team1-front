@@ -51,8 +51,8 @@ const Login = () => {
     values,
   } = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      email: 'fkreminsky@gmail.com',
+      password: 'Fk123456',
     },
 
     validationSchema: validationSchema,
@@ -134,6 +134,7 @@ const Login = () => {
 
   return (
     <>
+      <Navbar />
       <ThemeProvider theme={theme}>
         <Box
           sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
@@ -146,14 +147,11 @@ const Login = () => {
               alignItems="center"
               justifyContent={'center'}
               margin="auto"
-              marginTop={3}
               padding={3}
               borderRadius={5}
             >
-              <Navbar />
-
               <Typography
-                padding={10}
+                padding={5}
                 textAlign="center"
                 sx={{
                   color: theme.palette.primary.contrastText,

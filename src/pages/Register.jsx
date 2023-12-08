@@ -120,6 +120,7 @@ const Register = () => {
 
   return (
     <>
+           <Navbar />
       <ThemeProvider theme={theme}>
         <Box
           sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
@@ -132,15 +133,12 @@ const Register = () => {
               alignItems="center"
               justifyContent={'center'}
               margin="auto"
-              marginTop={3}
               padding={3}
               borderRadius={5}
             >
-              
-              <Navbar />
 
               <Typography
-                padding={10}
+                padding={5}
                 textAlign="center"
                 sx={{
                   color: theme.palette.primary.contrastText,

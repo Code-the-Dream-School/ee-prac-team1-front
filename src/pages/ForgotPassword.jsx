@@ -59,7 +59,7 @@ const ForgotPassword = () => {
 
           toast.success('successful')
 
-          navigate('/resetpassword')
+          navigate('/')
         } catch (err) {
           const { code } = err
           if (code === 'ERR_NETWORK') {
@@ -98,6 +98,7 @@ const ForgotPassword = () => {
 
   return (
     <>
+      <Navbar />
       <ThemeProvider theme={theme}>
         <Box
           sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
@@ -110,13 +111,11 @@ const ForgotPassword = () => {
               alignItems="center"
               justifyContent={'center'}
               margin="auto"
-              marginTop={1}
               padding={3}
               borderRadius={5}
             >
-              <Navbar />
               <Typography
-                padding={12}
+                padding={5}
                 textAlign="center"
                 sx={{
                   color: theme.palette.primary.contrastText,

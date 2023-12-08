@@ -151,6 +151,7 @@ const ResetPassword = () => {
 
   return (
     <>
+      <Navbar />
       <ThemeProvider theme={theme}>
         <Box
           sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
@@ -163,12 +164,9 @@ const ResetPassword = () => {
               alignItems="center"
               justifyContent={'center'}
               margin="auto"
-              marginTop={3}
               padding={3}
               borderRadius={5}
             >
-              <Navbar />
-
               <Typography
                 padding={10}
                 textAlign="center"
