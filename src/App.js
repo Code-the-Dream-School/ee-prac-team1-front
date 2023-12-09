@@ -8,10 +8,15 @@ import {
   CreateActivity,
   ActivityPage,
   ResetPassword,
+  LandingPage,
 } from "./pages";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
+  {
+    path: "/landing",
+    element: <Landing />,
+  },  
   {
     path: "/",
     element: <Dashboard />,
@@ -46,17 +51,12 @@ const router = createBrowserRouter([
   },
 
   {
-    path: "resetPassword",
+    path: "resetpassword",
     element: <ResetPassword />,
   },
   {
     path: "/resetPassword/:verificationCode/:email",
     element: <ResetPassword />,
-    // query: {
-    //   email: {
-    //     type: "string",
-    //   },
-    // },
   },
 ]);
 
