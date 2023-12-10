@@ -24,26 +24,55 @@ import { userDataContext } from "../context/userContext";
 const Navbar = () => {
     const navigate = useNavigate();
     const { userData, setUserData } = useContext(userDataContext);
-    const { isLoggedIn } = userData;
-    // const { isLoggedIn, user } = userData;
-    // const { firstName, lastName } = user || { firstName: "", lastName: "" };
-
+    const { isLoggedIn, user } = userData;
+    
     const getInitials = () => {
-        const firstName = localStorage.getItem("firstName");
-        const lastName = localStorage.getItem("lastName");
-        return  `${firstName.charAt(0)}${lastName.charAt(0)}`;
 
+    const { firstName, lastName } = user || { firstName: "", lastName: "" };    
+    const initials =
+        firstName && lastName
+            ? `${firstName.charAt(0)}${lastName.charAt(0)}`
+            : "";
+    return initials;
     };
-
+    
     const [initials, setInitials] = useState(getInitials());
 
     useEffect(() => {
         const loggedInUser = localStorage.getItem("jwtToken");
         if (loggedInUser) {
             setUserData({ isLoggedIn: true, token: loggedInUser });
+            fetchUserData(loggedInUser);
         }
         setInitials(getInitials());
     }, [setUserData]);
+
+    const fetchUserData = async (token) => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+
+        try {
+            const res = await axios.get(
+                `${process.env.REACT_APP_BASE_URL}/api/v1/users/current-user`,
+                config
+            );
+
+            if (res.data && res.data.user) {
+                const user = res.data.user;
+                setUserData((prevUserData) => ({
+                    ...prevUserData,
+                    user: user,
+                }));
+
+                setInitials(getInitials(user));
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    };
 
     const handleCreateActivity = () => {
         if (!isLoggedIn) {
