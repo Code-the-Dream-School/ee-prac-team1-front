@@ -16,7 +16,7 @@ const validationSchema = Yup.object({
   zipCode: Yup.string().matches(/^\d{5}$/, 'Invalid ZIP'),
 });
 
-const SearchForm = ({ setActivitiesByZip }) => {
+const SearchForm = ({ setActivitiesByZip, setSortedBy }) => {
   const {
     handleSubmit,
     touched,
@@ -34,6 +34,7 @@ const SearchForm = ({ setActivitiesByZip }) => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
+      setSortedBy("zip");
       const token = localStorage.getItem('jwtToken');
       const config = {
         headers: {

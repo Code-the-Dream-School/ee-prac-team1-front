@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios'; // Import Axios library
 import ActivityCard from './ActivityCard';
 
-const ActivitiesContainer = ({ activitiesByZip }) => {
+const ActivitiesContainer = ({ sortedActivities }) => {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -50,8 +50,9 @@ const ActivitiesContainer = ({ activitiesByZip }) => {
   };
 
   useEffect(() => {
-    setActivities(activitiesByZip);
-  }, [activitiesByZip]);
+    setActivities(sortedActivities);
+  }, [sortedActivities]);
+
 
   return (
     <Grid container spacing={1}>
