@@ -1,22 +1,22 @@
-import { useFormik } from 'formik';
-import axios from 'axios';
-import * as Yup from 'yup';
+import { useFormik } from 'formik'
+import axios from 'axios'
+import * as Yup from 'yup'
 import {
   TextField,
   Button,
   ThemeProvider,
   Box,
   Typography,
-} from '@mui/material';
-import { toast, ToastContainer } from 'react-toastify';
+} from '@mui/material'
+import { toast, ToastContainer } from 'react-toastify'
 
-import { theme } from '../utils/theme';
+import { theme } from '../utils/theme'
 
 const validationSchema = Yup.object({
   zipCode: Yup.string().matches(/^\d{5}$/, 'Invalid ZIP'),
-});
+})
 
-const SearchForm = ({ setActivitiesByZip, setSortedBy }) => {
+const SearchForm = ({ setActivitiesByZip }) => {
   const {
     handleSubmit,
     touched,
@@ -33,24 +33,23 @@ const SearchForm = ({ setActivitiesByZip, setSortedBy }) => {
 
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
-      setSortedBy("zip");
-      const token = localStorage.getItem('jwtToken');
+      console.log(values)
+      const token = localStorage.getItem('jwtToken')
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      };
+      }
 
       const fetchActivitiesByZip = async () => {
         try {
           const response = await axios.get(
             `${process.env.REACT_APP_BASE_URL}/api/v1/nearBy-activities/search/${values.zipCode}`,
-            config
-          );
-          const { data } = response;
-          setActivitiesByZip(data.activities);
-          setFieldValue('zipCode', '');
+            config,
+          )
+          const { data } = response
+          setActivitiesByZip(data.activities)
+          setFieldValue('zipCode', '')
         } catch (error) {
           toast.error('Invalid ZIP code', {
             position: 'top-center',
@@ -59,13 +58,13 @@ const SearchForm = ({ setActivitiesByZip, setSortedBy }) => {
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
-          });
+          })
         }
-      };
+      }
 
-      fetchActivitiesByZip();
+      fetchActivitiesByZip()
     },
-  });
+  })
 
   return (
     <>
@@ -154,7 +153,7 @@ const SearchForm = ({ setActivitiesByZip, setSortedBy }) => {
         pauseOnHover
       />
     </>
-  );
-};
+  )
+}
 
-export default SearchForm;
+export default SearchForm

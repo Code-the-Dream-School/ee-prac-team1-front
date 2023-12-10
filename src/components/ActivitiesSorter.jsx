@@ -5,12 +5,15 @@ import { Button, ThemeProvider, Box } from '@mui/material'
 import { theme } from '../utils/theme'
 
 const ActivitiesSorter = ({
-  setActivitiesJoined,
-  setActivitiesCreated,
-  setSortedBy,
+  // setActivitiesJoined,
+  // setActivitiesCreated,
+  // setActivitiesAll,
+  // setSortedBy,
+  setSortedActivities
 }) => {
+  //const [loading, setLoading] = useState(true);
   const handleSubmitJoined = () => {
-    setSortedBy('joined')
+    // setSortedBy('joined')
     const token = localStorage.getItem('jwtToken')
     const userId = localStorage.getItem('userId')
     const config = {
@@ -26,7 +29,7 @@ const ActivitiesSorter = ({
         )
         const { data } = response
         console.log(data)
-        setActivitiesJoined(data.upcomingActivities)
+        setSortedActivities(data.upcomingActivities)
       } catch (error) {}
     }
 
@@ -34,7 +37,6 @@ const ActivitiesSorter = ({
   }
 
   const handleSubmitCreated = () => {
-    setSortedBy('created')
     const token = localStorage.getItem('jwtToken')
     const userId = localStorage.getItem('userId')
     const config = {
@@ -50,11 +52,35 @@ const ActivitiesSorter = ({
         )
         const { data } = response
         console.log(data)
-        setActivitiesCreated(data.upcomingActivities)
+        setSortedActivities(data.upcomingActivities)
       } catch (error) {}
     }
 
     fetchActivitiesCreated()
+  }
+
+  const handleSubmitAll = () => {
+    
+    const fetchActivities = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/api/v1/activities`,
+        )
+        const data = response.data
+
+        // Check if data.activities is an array before setting state
+        if (Array.isArray(data.activities)) {
+          console.log('Fetched data:', data) // Log the fetched data
+          setSortedActivities(data.activities);
+        } else {
+          console.error('Invalid data structure. Expected an array.')
+        }
+      } catch (error) {
+        console.error('Error fetching activities:', error)
+      }
+    }
+
+    fetchActivities()
   }
 
   return (
@@ -78,7 +104,7 @@ const ActivitiesSorter = ({
               ...theme.commonButtonStyles,
               width: 120,
             }}
-            //onClick={handleSubmitAll}
+            onClick={handleSubmitAll}
             spacing={10}
           >
             All
