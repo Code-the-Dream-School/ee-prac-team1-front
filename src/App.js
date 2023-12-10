@@ -8,13 +8,13 @@ import {
   CreateActivity,
   ActivityPage,
   ResetPassword,
-  LandingPage,
+  Landing,
 } from "./pages";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
-    path: "/landing",
+    path: "landing",
     element: <Landing />,
   },  
   {
