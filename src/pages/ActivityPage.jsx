@@ -151,7 +151,7 @@ const ActivityPage = () => {
   return (
     <>
       <Navbar />
-      <SearchForm sx={{ marginBottom: 1 }} />
+      {/* <SearchForm sx={{ marginBottom: 1 }} /> */}
       <ThemeProvider theme={theme}>
         <Box
           sx={{
