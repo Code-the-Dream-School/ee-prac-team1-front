@@ -4,16 +4,9 @@ import { Button, ThemeProvider, Box } from '@mui/material'
 // import { toast, ToastContainer } from 'react-toastify'
 import { theme } from '../utils/theme'
 
-const ActivitiesSorter = ({
-  // setActivitiesJoined,
-  // setActivitiesCreated,
-  // setActivitiesAll,
-  // setSortedBy,
-  setSortedActivities
-}) => {
-  //const [loading, setLoading] = useState(true);
+const ActivitiesSorter = ({ setSortedActivities }) => {
+  //User used Button joined
   const handleSubmitJoined = () => {
-    // setSortedBy('joined')
     const token = localStorage.getItem('jwtToken')
     const userId = localStorage.getItem('userId')
     const config = {
@@ -24,11 +17,12 @@ const ActivitiesSorter = ({
     const fetchActivitiesJoined = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/api/v1/activities/createdActivities/:${userId}`,
+          `${process.env.REACT_APP_BASE_URL}/api/v1/activities/joinedActivities/${userId}`,
           config,
         )
         const { data } = response
         console.log(data)
+
         setSortedActivities(data.upcomingActivities)
       } catch (error) {}
     }
@@ -36,6 +30,7 @@ const ActivitiesSorter = ({
     fetchActivitiesJoined()
   }
 
+  //User used Button created
   const handleSubmitCreated = () => {
     const token = localStorage.getItem('jwtToken')
     const userId = localStorage.getItem('userId')
@@ -47,7 +42,7 @@ const ActivitiesSorter = ({
     const fetchActivitiesCreated = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/api/v1/activities/createdActivities/:${userId}`,
+          `${process.env.REACT_APP_BASE_URL}/api/v1/activities/createdActivities/${userId}`,
           config,
         )
         const { data } = response
@@ -55,32 +50,35 @@ const ActivitiesSorter = ({
         setSortedActivities(data.upcomingActivities)
       } catch (error) {}
     }
-
     fetchActivitiesCreated()
   }
 
+  //User used Button ALL
   const handleSubmitAll = () => {
-    
-    const fetchActivities = async () => {
+    const token = localStorage.getItem('jwtToken')
+    const userId = localStorage.getItem('userId')
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+    const fetchActivitiesAllOther = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/api/v1/activities`,
+          `${process.env.REACT_APP_BASE_URL}/api/v1/activities/allOtherActivities/${userId}`,
+          config,
         )
-        const data = response.data
+        const { data } = response
+        const { upcomingActivities } = data
+        //const { todayActivities } = data 
+        console.log(data)
 
-        // Check if data.activities is an array before setting state
-        if (Array.isArray(data.activities)) {
-          console.log('Fetched data:', data) // Log the fetched data
-          setSortedActivities(data.activities);
-        } else {
-          console.error('Invalid data structure. Expected an array.')
-        }
-      } catch (error) {
-        console.error('Error fetching activities:', error)
-      }
+        setSortedActivities(upcomingActivities)
+       //setSortedActivities(todayActivities)
+
+      } catch (error) {}
     }
-
-    fetchActivities()
+    fetchActivitiesAllOther()
   }
 
   return (
