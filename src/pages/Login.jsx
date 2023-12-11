@@ -151,7 +151,7 @@ const Login = () => {
               borderRadius={5}
             >
               <Typography
-                padding={5}
+                padding={10}
                 textAlign="center"
                 sx={{
                   color: theme.palette.primary.contrastText,
