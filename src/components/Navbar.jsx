@@ -8,7 +8,7 @@ import {
     Toolbar,
     Typography,
 } from "@mui/material";
-import { React, useContext } from "react";
+import { React, useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -25,7 +25,54 @@ const Navbar = () => {
     const navigate = useNavigate();
     const { userData, setUserData } = useContext(userDataContext);
     const { isLoggedIn, user } = userData;
-    const { firstName, lastName } = user || { firstName: "", lastName: "" };
+    
+    const getInitials = () => {
+
+    const { firstName, lastName } = user || { firstName: "", lastName: "" };    
+    const initials =
+        firstName && lastName
+            ? `${firstName.charAt(0)}${lastName.charAt(0)}`
+            : "";
+    return initials;
+    };
+    
+    const [initials, setInitials] = useState(getInitials());
+
+    useEffect(() => {
+        const loggedInUser = localStorage.getItem("jwtToken");
+        if (loggedInUser) {
+            setUserData({ isLoggedIn: true, token: loggedInUser });
+            fetchUserData(loggedInUser);
+        }
+        setInitials(getInitials());
+    }, [setUserData]);
+
+    const fetchUserData = async (token) => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+
+        try {
+            const res = await axios.get(
+                `${process.env.REACT_APP_BASE_URL}/api/v1/users/current-user`,
+                config
+            );
+
+            if (res.data && res.data.user) {
+                const user = res.data.user;
+                setUserData((prevUserData) => ({
+                    ...prevUserData,
+                    user: user,
+                }));
+
+                setInitials(getInitials(user));
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    };
 
     const handleCreateActivity = () => {
         if (!isLoggedIn) {
@@ -71,12 +118,6 @@ const Navbar = () => {
         }
     };
 
-    const getInitials = () => {
-        const firstInitial = firstName ? firstName.charAt(0) : "";
-        const lastInitial = lastName ? lastName.charAt(0) : "";
-        return `${firstInitial}${lastInitial}`;
-    };
-
     return (
         <>
             <AppBar
@@ -96,7 +137,7 @@ const Navbar = () => {
                 >
                     <Box
                         sx={{
-                        marginTop: "10px"
+                            marginTop: "10px",
                         }}
                     >
                         <img src={Logo} alt="Player Buddy Logo" />
@@ -124,7 +165,7 @@ const Navbar = () => {
                         <IconButton
                             aria-label="login"
                             component={Link}
-                            to="/login"
+                            to={isLoggedIn ? "/profileform" : "/login"}
                             sx={{
                                 color: "#090759",
                             }}
@@ -134,7 +175,7 @@ const Navbar = () => {
                                 <Typography
                                     sx={{
                                         paddingRight: "2px",
-                                        ...theme.subTitleText2,
+                                        ...theme.typography.subTitleText2,
                                     }}
                                 >
                                     Hello,
@@ -142,18 +183,14 @@ const Navbar = () => {
                             )}
                             {isLoggedIn ? (
                                 <Avatar
-                                    // alt="User Profile Image"
                                     sx={{
                                         bgcolor: "#090759",
                                         width: 30,
                                         height: 30,
-                                        textDecoration: "none",
-                                        fontSize: 12,
+                                        fontSize: 11,
                                     }}
-                                    component={Link}
-                                    to="/profileform"
                                 >
-                                    {getInitials()}
+                                    {initials}
                                 </Avatar>
                             ) : (
                                 <AccountCircleIcon />
