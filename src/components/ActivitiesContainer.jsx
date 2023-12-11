@@ -65,7 +65,7 @@ const ActivitiesContainer = ({ sortedActivities }) => {
             minHeight: '100vh',
           }}
         >
-          <Grid container spacing={2}>
+          <Grid container spacing={1}>
             {loading ? (
               // Display a spinner while loading
               <Grid item xs={12} style={{ textAlign: 'center' }}>

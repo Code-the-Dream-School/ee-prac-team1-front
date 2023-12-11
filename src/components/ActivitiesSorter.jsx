@@ -4,15 +4,7 @@ import { Button, ThemeProvider, Box } from '@mui/material'
 // import { toast, ToastContainer } from 'react-toastify'
 import { theme } from '../utils/theme'
 
-import { React, useContext } from "react";
-import { userDataContext } from '../context/userContext'
-
 const ActivitiesSorter = ({ setSortedActivities }) => {
-
-  //destructure isLoggedIn from global 
-    const { userData } = useContext(userDataContext);
-    const { isLoggedIn } = userData;
-
   //JOINED
   const handleSubmitJoined = () => {
     const token = localStorage.getItem('jwtToken')
@@ -91,64 +83,60 @@ const ActivitiesSorter = ({ setSortedActivities }) => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        {isLoggedIn ? (
-          <Box sx={{ bgcolor: '#caf2c9' }}>
-            <Box
-              display="flex"
-              flexDirection={'row'}
-              maxWidth={500}
-              alignItems={'start'}
-              justifyContent={'center'}
-              margin={'auto'}
-              gap={1}
-              padding={1}
+        <Box sx={{ bgcolor: '#caf2c9' }}>
+          <Box
+            display="flex"
+            flexDirection={'row'}
+            maxWidth={500}
+            alignItems={'start'}
+            justifyContent={'center'}
+            margin={'auto'}
+            gap={1}
+            padding={1}
+          >
+            <Button
+              variant="contained"
+              type="submit"
+              color="primary"
+              sx={{
+                ...theme.commonButtonStyles,
+                width: 120,
+              }}
+              onClick={handleSubmitAll}
+              spacing={10}
             >
-              <Button
-                variant="contained"
-                type="submit"
-                color="primary"
-                sx={{
-                  ...theme.commonButtonStyles,
-                  width: 120,
-                }}
-                onClick={handleSubmitAll}
-                spacing={10}
-              >
-                All
-              </Button>
-              <Button
-                variant="contained"
-                type="submit"
-                color="primary"
-                sx={{
-                  ...theme.commonButtonStyles,
-                  width: 120,
-                }}
-                onClick={handleSubmitJoined}
-                spacing={10}
-              >
-                Joined
-              </Button>
+              All
+            </Button>
+            <Button
+              variant="contained"
+              type="submit"
+              color="primary"
+              sx={{
+                ...theme.commonButtonStyles,
+                width: 120,
+              }}
+              onClick={handleSubmitJoined}
+              spacing={10}
+            >
+              Joined
+            </Button>
 
-              {/* Search  Button */}
-              <Button
-                variant="contained"
-                type="submit"
-                color="primary"
-                sx={{
-                  ...theme.commonButtonStyles,
-                  width: 120,
-                }}
-                onClick={handleSubmitCreated}
-                spacing={10}
-              >
-                Created
-              </Button>
-            </Box>
+            {/* Search  Button */}
+            <Button
+              variant="contained"
+              type="submit"
+              color="primary"
+              sx={{
+                ...theme.commonButtonStyles,
+                width: 120,
+              }}
+              onClick={handleSubmitCreated}
+              spacing={10}
+            >
+              Created
+            </Button>
           </Box>
-        ) : (
-          <Button />
-        )}
+        </Box>
       </ThemeProvider>
     </>
   )
