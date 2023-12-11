@@ -4,8 +4,16 @@ import { Button, ThemeProvider, Box } from '@mui/material'
 // import { toast, ToastContainer } from 'react-toastify'
 import { theme } from '../utils/theme'
 
+import { React, useContext } from "react";
+import { userDataContext } from '../context/userContext'
+
 const ActivitiesSorter = ({ setSortedActivities }) => {
-  //User used Button joined
+
+  //destructure isLoggedIn from global 
+    const { userData } = useContext(userDataContext);
+    const { isLoggedIn } = userData;
+
+  //JOINED
   const handleSubmitJoined = () => {
     const token = localStorage.getItem('jwtToken')
     const userId = localStorage.getItem('userId')
@@ -30,7 +38,7 @@ const ActivitiesSorter = ({ setSortedActivities }) => {
     fetchActivitiesJoined()
   }
 
-  //User used Button created
+  // CREATED
   const handleSubmitCreated = () => {
     const token = localStorage.getItem('jwtToken')
     const userId = localStorage.getItem('userId')
@@ -53,7 +61,7 @@ const ActivitiesSorter = ({ setSortedActivities }) => {
     fetchActivitiesCreated()
   }
 
-  //User used Button ALL
+  //ALL
   const handleSubmitAll = () => {
     const token = localStorage.getItem('jwtToken')
     const userId = localStorage.getItem('userId')
@@ -70,12 +78,11 @@ const ActivitiesSorter = ({ setSortedActivities }) => {
         )
         const { data } = response
         const { upcomingActivities } = data
-        //const { todayActivities } = data 
+        //const { todayActivities } = data
         console.log(data)
 
         setSortedActivities(upcomingActivities)
-       //setSortedActivities(todayActivities)
-
+        //setSortedActivities(todayActivities)
       } catch (error) {}
     }
     fetchActivitiesAllOther()
@@ -84,70 +91,65 @@ const ActivitiesSorter = ({ setSortedActivities }) => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Box
-          display="flex"
-          flexDirection={'row'}
-          maxWidth={500}
-          alignItems={'start'}
-          justifyContent={'center'}
-          margin={'auto'}
-          gap={1}
-          padding={1}
-        >
-          <Button
-            variant="contained"
-            type="submit"
-            color="primary"
-            sx={{
-              ...theme.commonButtonStyles,
-              width: 120,
-            }}
-            onClick={handleSubmitAll}
-            spacing={10}
-          >
-            All
-          </Button>
-          <Button
-            variant="contained"
-            type="submit"
-            color="primary"
-            sx={{
-              ...theme.commonButtonStyles,
-              width: 120,
-            }}
-            onClick={handleSubmitJoined}
-            spacing={10}
-          >
-            Joined
-          </Button>
+        {isLoggedIn ? (
+          <Box sx={{ bgcolor: '#caf2c9' }}>
+            <Box
+              display="flex"
+              flexDirection={'row'}
+              maxWidth={500}
+              alignItems={'start'}
+              justifyContent={'center'}
+              margin={'auto'}
+              gap={1}
+              padding={1}
+            >
+              <Button
+                variant="contained"
+                type="submit"
+                color="primary"
+                sx={{
+                  ...theme.commonButtonStyles,
+                  width: 120,
+                }}
+                onClick={handleSubmitAll}
+                spacing={10}
+              >
+                All
+              </Button>
+              <Button
+                variant="contained"
+                type="submit"
+                color="primary"
+                sx={{
+                  ...theme.commonButtonStyles,
+                  width: 120,
+                }}
+                onClick={handleSubmitJoined}
+                spacing={10}
+              >
+                Joined
+              </Button>
 
-          {/* Search  Button */}
-          <Button
-            variant="contained"
-            type="submit"
-            color="primary"
-            sx={{
-              ...theme.commonButtonStyles,
-              width: 120,
-            }}
-            onClick={handleSubmitCreated}
-            spacing={10}
-          >
-            Created
-          </Button>
-        </Box>
+              {/* Search  Button */}
+              <Button
+                variant="contained"
+                type="submit"
+                color="primary"
+                sx={{
+                  ...theme.commonButtonStyles,
+                  width: 120,
+                }}
+                onClick={handleSubmitCreated}
+                spacing={10}
+              >
+                Created
+              </Button>
+            </Box>
+          </Box>
+        ) : (
+          <Button />
+        )}
       </ThemeProvider>
-      {/* <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      /> */}
     </>
   )
 }

@@ -5,15 +5,15 @@ import {
   Card,
   IconButton,
   Typography,
-} from '@mui/material';
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import InfoIcon from '@mui/icons-material/Info';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import SportsTennisIcon from '@mui/icons-material/SportsTennis';
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+} from '@mui/material'
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove'
+import InfoIcon from '@mui/icons-material/Info'
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import SportsTennisIcon from '@mui/icons-material/SportsTennis'
+import { useState } from 'react'
+import { useNavigate } from 'react-router'
 // const players = [
 //   { id: 1, name: "Remy Sharp", img: "../../pictures/1.jpg" },
 //   { id: 2, name: "Remy Sharp", img: "../../pictures/2.jpg" },
@@ -21,31 +21,31 @@ import { useNavigate } from 'react-router';
 // ];
 
 const ActivityCard = ({ activity }) => {
-  const [isAdded, setIsAdded] = useState(false);
-  const navigate = useNavigate();
+  const [isAdded, setIsAdded] = useState(false)
+  const navigate = useNavigate()
 
-  let players = activity?.players;
+  let players = activity?.players
 
-  let formattedDate = '';
-  let formattedTime = '';
-  const dateString = activity.date; // "2023-12-15T05:00:00.000Z"
-  const dateObject = new Date(dateString);
+  let formattedDate = ''
+  let formattedTime = ''
+  const dateString = activity.date // "2023-12-15T05:00:00.000Z"
+  const dateObject = new Date(dateString)
 
   if (dateObject instanceof Date && !isNaN(dateObject)) {
     formattedDate = `${(dateObject.getMonth() + 1)
       .toString()
       .padStart(2, '0')}/${(dateObject.getDate() + 1)
       .toString()
-      .padStart(2, '0')}/${dateObject.getFullYear()}`;
+      .padStart(2, '0')}/${dateObject.getFullYear()}`
 
     // Format the time
-    const timeString = activity?.time; // "16:30:00"
-    const [hours, minutes] = timeString.split(':');
-    const formattedHours = (hours % 12 || 12).toString().padStart(2, '0');
-    const period = hours < 12 ? 'AM' : 'PM';
-    formattedTime = `${formattedHours}:${minutes} ${period}`;
+    const timeString = activity?.time // "16:30:00"
+    const [hours, minutes] = timeString.split(':')
+    const formattedHours = (hours % 12 || 12).toString().padStart(2, '0')
+    const period = hours < 12 ? 'AM' : 'PM'
+    formattedTime = `${formattedHours}:${minutes} ${period}`
   } else {
-    console.error('Invalid date object');
+    console.error('Invalid date object')
   }
 
   return (
@@ -88,7 +88,7 @@ const ActivityCard = ({ activity }) => {
             <Typography
               variant="subtitle2"
               color="text.primary"
-              sx={{ marginBottom: 0 }}
+              sx={{ marginBottom: 0, marginLeft: 2 }}
             >
               {activity?.location?.address}, {activity?.location?.city},{' '}
               {activity?.location?.state} {activity?.location?.zipCode}
@@ -141,7 +141,7 @@ const ActivityCard = ({ activity }) => {
         </Box>
       </Card>
     </>
-  );
-};
+  )
+}
 
-export default ActivityCard;
+export default ActivityCard
