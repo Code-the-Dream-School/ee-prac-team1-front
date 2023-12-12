@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { Link } from 'react-router-dom'
+
+import Footer from "../components/Footer";
 //import Grid from '@mui/material/Grid' // Grid version 1
 
 import Grid from '@mui/material/Unstable_Grid2'
@@ -134,9 +136,10 @@ const Login = () => {
 
   return (
     <>
+      <Navbar />
       <ThemeProvider theme={theme}>
         <Box
-          sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
+          sx={{ backgroundImage: theme.palette.background2.gradient, minHeight: '100vh' }}
         >
           <form onSubmit={handleSubmit}>
             <Box
@@ -146,12 +149,9 @@ const Login = () => {
               alignItems="center"
               justifyContent={'center'}
               margin="auto"
-              marginTop={3}
               padding={3}
               borderRadius={5}
             >
-              <Navbar />
-
               <Typography
                 padding={10}
                 textAlign="center"
@@ -307,6 +307,7 @@ const Login = () => {
         draggable
         pauseOnHover
       />
+      <Footer />
     </>
   )
 }

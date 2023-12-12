@@ -12,6 +12,8 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Link } from 'react-router-dom';
 
+import Footer from "../components/Footer";
+
 import Navbar from '../components/Navbar'
 
 import IconButton from '@mui/material/IconButton';
@@ -120,6 +122,7 @@ const Register = () => {
 
   return (
     <>
+           <Navbar />
       <ThemeProvider theme={theme}>
         <Box
           sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
@@ -132,15 +135,12 @@ const Register = () => {
               alignItems="center"
               justifyContent={'center'}
               margin="auto"
-              marginTop={3}
               padding={3}
               borderRadius={5}
             >
-              
-              <Navbar />
 
               <Typography
-                padding={10}
+                padding={5}
                 textAlign="center"
                 sx={{
                   color: theme.palette.primary.contrastText,
@@ -328,6 +328,7 @@ const Register = () => {
         draggable
         pauseOnHover
       />
+      <Footer />
     </>
   );
 };

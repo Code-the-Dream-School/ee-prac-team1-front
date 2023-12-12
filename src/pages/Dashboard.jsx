@@ -1,17 +1,32 @@
-import { useState } from 'react';
-import { Navbar, ActivitiesContainer } from '../components';
-import SearchForm from '../components/SearchForm';
+import { useState } from 'react'
+import { Navbar, ActivitiesContainer, ActivitiesSorter, Footer } from '../components'
+import SearchForm from '../components/SearchForm'
+
+import { React, useContext } from "react";
+import { userDataContext } from '../context/userContext'
 
 const Dashboard = () => {
-  const [activitiesByZip, setActivitiesByZip] = useState([]);
-
+  const [sortedActivities, setSortedActivities] = useState([])
+    //destructure isLoggedIn from global 
+    const { userData } = useContext(userDataContext);
+    const { isLoggedIn } = userData;
   return (
     <>
       <Navbar />
-      <SearchForm setActivitiesByZip={setActivitiesByZip} />
-      <ActivitiesContainer activitiesByZip={activitiesByZip} />
+      <SearchForm
+        setActivitiesByZip={setSortedActivities}
+      />
+      {isLoggedIn ? (
+      <ActivitiesSorter
+        setSortedActivities={setSortedActivities}
+      />
+      ) : (
+          <></>
+        )}
+      <ActivitiesContainer sortedActivities={sortedActivities} />
+      <Footer />
     </>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard

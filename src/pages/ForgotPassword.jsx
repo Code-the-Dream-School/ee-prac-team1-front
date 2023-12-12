@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
+import Footer from "../components/Footer";
+
 import { toast, ToastContainer } from 'react-toastify' // Add this import
 import 'react-toastify/dist/ReactToastify.css' // Add this import
 
@@ -59,7 +61,7 @@ const ForgotPassword = () => {
 
           toast.success('successful')
 
-          navigate('/resetpassword')
+          navigate('/')
         } catch (err) {
           const { code } = err
           if (code === 'ERR_NETWORK') {
@@ -98,9 +100,10 @@ const ForgotPassword = () => {
 
   return (
     <>
+      <Navbar />
       <ThemeProvider theme={theme}>
         <Box
-          sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
+          sx={{ backgroundImage: theme.palette.background2.gradient, minHeight: '100vh' }}
         >
           <form onSubmit={handleSubmit}>
             <Box
@@ -110,13 +113,11 @@ const ForgotPassword = () => {
               alignItems="center"
               justifyContent={'center'}
               margin="auto"
-              marginTop={1}
               padding={3}
               borderRadius={5}
             >
-              <Navbar />
               <Typography
-                padding={12}
+                padding={5}
                 textAlign="center"
                 sx={{
                   color: theme.palette.primary.contrastText,
@@ -167,6 +168,7 @@ const ForgotPassword = () => {
           </form>
         </Box>
       </ThemeProvider>
+      <Footer />
     </>
   )
 }

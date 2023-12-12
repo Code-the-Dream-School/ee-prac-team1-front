@@ -18,6 +18,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import Navbar from '../components/Navbar'
 import { useState } from 'react'
 
+import Footer from "../components/Footer";
 //import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -151,6 +152,7 @@ const ResetPassword = () => {
 
   return (
     <>
+      <Navbar />
       <ThemeProvider theme={theme}>
         <Box
           sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
@@ -163,12 +165,9 @@ const ResetPassword = () => {
               alignItems="center"
               justifyContent={'center'}
               margin="auto"
-              marginTop={3}
               padding={3}
               borderRadius={5}
             >
-              <Navbar />
-
               <Typography
                 padding={10}
                 textAlign="center"
@@ -278,6 +277,7 @@ const ResetPassword = () => {
         draggable
         pauseOnHover
       /> */}
+      <Footer />
     </>
   )
 }
