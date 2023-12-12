@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { Link } from 'react-router-dom'
+
+import Footer from "../components/Footer";
 //import Grid from '@mui/material/Grid' // Grid version 1
 
 import Grid from '@mui/material/Unstable_Grid2'
@@ -305,6 +307,7 @@ const Login = () => {
         draggable
         pauseOnHover
       />
+      <Footer />
     </>
   )
 }

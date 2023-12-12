@@ -18,6 +18,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import Navbar from '../components/Navbar'
 import { useState } from 'react'
 
+import Footer from "../components/Footer";
 //import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -276,6 +277,7 @@ const ResetPassword = () => {
         draggable
         pauseOnHover
       /> */}
+      <Footer />
     </>
   )
 }

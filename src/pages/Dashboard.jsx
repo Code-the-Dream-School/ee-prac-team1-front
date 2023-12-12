@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Navbar, ActivitiesContainer, ActivitiesSorter } from '../components'
+import { Navbar, ActivitiesContainer, ActivitiesSorter, Footer } from '../components'
 import SearchForm from '../components/SearchForm'
 
 import { React, useContext } from "react";
@@ -24,6 +24,7 @@ const Dashboard = () => {
           <></>
         )}
       <ActivitiesContainer sortedActivities={sortedActivities} />
+      <Footer />
     </>
   )
 }

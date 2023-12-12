@@ -12,6 +12,8 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Link } from 'react-router-dom';
 
+import Footer from "../components/Footer";
+
 import Navbar from '../components/Navbar'
 
 import IconButton from '@mui/material/IconButton';
@@ -326,6 +328,7 @@ const Register = () => {
         draggable
         pauseOnHover
       />
+      <Footer />
     </>
   );
 };

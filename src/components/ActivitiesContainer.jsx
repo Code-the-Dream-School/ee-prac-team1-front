@@ -15,6 +15,8 @@ import ActivityCard from './ActivityCard'
 const ActivitiesContainer = ({ sortedActivities }) => {
   const [activities, setActivities] = useState([])
   const [loading, setLoading] = useState(true)
+  
+  const [data, setData] = useState([]);
 
   //for all activities , even when the user is not logged in
   useEffect(() => {
@@ -24,11 +26,11 @@ const ActivitiesContainer = ({ sortedActivities }) => {
           `${process.env.REACT_APP_BASE_URL}/api/v1/activities`,
         )
         const data = response.data
-
         // Check if data.activities is an array before setting state
         if (Array.isArray(data.activities)) {
           console.log('Fetched data:', data) // Log the fetched data
           setActivities(data.activities)
+          setData(data)
         } else {
           console.error('Invalid data structure. Expected an array.')
         }
@@ -45,6 +47,10 @@ const ActivitiesContainer = ({ sortedActivities }) => {
 
     fetchActivities()
   }, [])
+
+  
+        const message = data.message
+        console.log("message:",message)
 
   const pageSize = 4
   const [page, setPage] = useState(1)
@@ -74,6 +80,13 @@ const ActivitiesContainer = ({ sortedActivities }) => {
             ) : // Map through activities and render ActivityCard for each
             activities?.length > 0 ? (
               <>
+              {/* <Box sx={{ margin: 'auto' }}>
+                <Grid item xs>
+                <Typography variant="h6" sx={{ textTransform: 'capitalize' }}>
+                    <strong>{message}</strong>
+                  </Typography>
+                  </Grid>
+              </Box> */}
                 {activities
                   .slice((page - 1) * pageSize, page * pageSize)
                   .map((activity) => (

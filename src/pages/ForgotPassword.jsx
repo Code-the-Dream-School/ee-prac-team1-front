@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
+import Footer from "../components/Footer";
+
 import { toast, ToastContainer } from 'react-toastify' // Add this import
 import 'react-toastify/dist/ReactToastify.css' // Add this import
 
@@ -166,6 +168,7 @@ const ForgotPassword = () => {
           </form>
         </Box>
       </ThemeProvider>
+      <Footer />
     </>
   )
 }

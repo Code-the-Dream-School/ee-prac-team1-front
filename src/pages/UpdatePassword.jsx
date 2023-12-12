@@ -21,6 +21,8 @@ import { Navbar } from '../components'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+import Footer from "../components/Footer";
+
 import axios from 'axios'
 
 const validationSchema = yup.object({
@@ -293,6 +295,7 @@ const UpdatePassword = () => {
         draggable
         pauseOnHover
       />
+      <Footer />
     </>
   )
 }
