@@ -14,7 +14,7 @@ const VerifyCode = () => {
   const [verificationMessage, setVerificationMessage] = useState('');
 
   useEffect(() => {
-    const forgotPassword = async () => {
+    const verify = async () => {
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_BASE_URL}/api/v1/auth/verifyCode/${verificationCode}`,
@@ -46,7 +46,7 @@ const VerifyCode = () => {
     };
 
     // Automatically send the Axios request when the component mounts
-    forgotPassword();
+    verify();
   }, [verificationCode, email, navigate]);
 
   return (
