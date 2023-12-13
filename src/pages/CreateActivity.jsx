@@ -207,6 +207,15 @@ const CreateActivity = () => {
                     }}
                 > */}
                 <form onSubmit={formik.handleSubmit}>
+                    {/* <Box
+                            display="flex"
+                            flexDirection="column"
+                            alignItems={"start"}
+                            justifyContent="center"
+                            margin={"auto"}
+                            gap={1}
+                            // padding={3}
+                        > */}
                     <Grid
                         sx={{
                             backgroundImage: theme.palette.background2.gradient,
@@ -230,6 +239,7 @@ const CreateActivity = () => {
                                         theme.overrides.MuiOutlinedInput.root,
                                     marginBottom: 3,
                                     marginTop: 3,
+                                    marginLeft: 2,
                                 }}
                                 // fullWidth
                                 error={
@@ -275,6 +285,7 @@ const CreateActivity = () => {
                                                 theme.overrides.MuiOutlinedInput
                                                     .root,
                                             width: "70%",
+                                            marginLeft: 2,
                                         }}
                                         label="Date"
                                         type="date"
@@ -302,6 +313,7 @@ const CreateActivity = () => {
                                         sx={{
                                             bgcolor: "#fff",
                                             width: "50%",
+                                            marginLeft: 2,
                                             "& .MuiInputLabel-root.Mui-focused":
                                                 theme.overrides.MuiInputLabel
                                                     .root["&.Mui-focused"],
@@ -340,6 +352,7 @@ const CreateActivity = () => {
                                                 theme.overrides.MuiOutlinedInput
                                                     .root,
                                             width: "50%",
+                                            marginLeft: 2,
                                         }}
                                         error={
                                             formik.touched.minPlayers &&
@@ -390,6 +403,7 @@ const CreateActivity = () => {
                                                 theme.overrides.MuiOutlinedInput
                                                     .root,
                                             width: "50%",
+                                            marginLeft: 2,
                                         }}
                                         error={
                                             formik.touched.maxPlayers &&
@@ -431,7 +445,13 @@ const CreateActivity = () => {
                                 </Grid>
                             </Grid>
                             {/* Box 3 - Accordion - Address, City, State, ZipCode*/}
-                            <Accordion sx={{ width: "90%", marginBottom: 3 }}>
+                            <Accordion
+                                sx={{
+                                    width: "90%",
+                                    marginBottom: 3,
+                                    marginLeft: 2,
+                                }}
+                            >
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
                                 >
@@ -440,6 +460,7 @@ const CreateActivity = () => {
                                 <AccordionDetails
                                     sx={{
                                         width: "50%",
+                                        marginLeft: 5,
                                     }}
                                 >
                                     {/* <Box
@@ -642,6 +663,7 @@ const CreateActivity = () => {
                                         // fullWidth
                                         sx={{
                                             width: "50%",
+                                            marginLeft: 2,
                                             "& .MuiInputLabel-root.Mui-focused":
                                                 theme.overrides.MuiInputLabel
                                                     .root["&.Mui-focused"],
@@ -688,6 +710,7 @@ const CreateActivity = () => {
                                         // fullWidth
                                         sx={{
                                             width: "50%",
+                                            marginLeft: 2,
                                             "& .MuiInputLabel-root.Mui-focused":
                                                 theme.overrides.MuiInputLabel
                                                     .root["&.Mui-focused"],
@@ -756,6 +779,7 @@ const CreateActivity = () => {
                                                 theme.overrides.MuiOutlinedInput
                                                     .root,
                                             width: "30%",
+                                            marginLeft: 2,
                                         }}
                                         label="Fee $"
                                         name="fees"
@@ -768,7 +792,13 @@ const CreateActivity = () => {
                             </Grid>
 
                             {/* Box 5 -Accordion - First Name, Last Name, Phone Number, Email*/}
-                            <Accordion sx={{ width: "90%", marginBottom: 3 }}>
+                            <Accordion
+                                sx={{
+                                    width: "90%",
+                                    marginBottom: 3,
+                                    marginLeft: 2,
+                                }}
+                            >
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
                                 >
@@ -778,6 +808,7 @@ const CreateActivity = () => {
                                 <AccordionDetails
                                     sx={{
                                         width: "50%",
+                                        marginLeft: 5,
                                     }}
                                 >
                                     <Grid container justifyContent="center">
@@ -960,6 +991,7 @@ const CreateActivity = () => {
                                     sx={{
                                         width: "90%",
                                         bgcolor: "#fff",
+                                        marginLeft: 2,
 
                                         "& .MuiInputLabel-root.Mui-focused":
                                             theme.overrides.MuiInputLabel.root[
@@ -981,6 +1013,7 @@ const CreateActivity = () => {
                                     ...theme.commonButtonStyles,
                                     marginTop: 3,
                                     width: "90%",
+                                    marginLeft: 2,
                                 }}
                             >
                                 Create
@@ -1002,6 +1035,7 @@ const CreateActivity = () => {
                             {/* </Box> */}
                         </Grid>
                     </Grid>
+                    {/* </Box> */}
                 </form>
                 {/* </Box> */}
             </ThemeProvider>
