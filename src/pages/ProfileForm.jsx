@@ -26,7 +26,6 @@ const validationSchema = Yup.object({
         "Phone number must be 10 digits, no dashes"
     ),
     dateOfBirth: Yup.date()
-        .required("Date of birth is required")
         .nullable()
         .max(new Date(), "Date of birth must be in the past"),
     residentialAddress: Yup.object().shape({
@@ -258,7 +257,7 @@ const ProfileForm = () => {
                                     paddingLeft: 2,
                                 }}
                             >
-                                Date of Birth <i>(*Required)</i>
+                                Date of Birth
                             </InputLabel>
 
                             <TextField
