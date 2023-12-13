@@ -6,7 +6,6 @@ import {
   ThemeProvider,
 } from '@mui/material'
 import { theme } from '../utils/theme'
-import Logo from '../assets/logo70.png'
 import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
@@ -60,7 +59,7 @@ const validationSchema = yup.object({
 const Register = () => {
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
-  const { userData, setUserData } = useContext(userDataContext)
+  const {setUserData } = useContext(userDataContext)
 
   const {
     handleSubmit,
