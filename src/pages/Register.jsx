@@ -4,30 +4,30 @@ import {
   TextField,
   Typography,
   ThemeProvider,
-} from '@mui/material';
-import { theme } from '../utils/theme';
-import Logo from '../assets/logo70.png';
-import { useNavigate } from 'react-router-dom';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { Link } from 'react-router-dom';
+} from '@mui/material'
+import { theme } from '../utils/theme'
+import Logo from '../assets/logo70.png'
+import { useNavigate } from 'react-router-dom'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
+import { Link } from 'react-router-dom'
 
-import Footer from "../components/Footer";
+import Footer from '../components/Footer'
 
 import Navbar from '../components/Navbar'
 
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
-import { useState, useContext } from 'react';
+import { useState, useContext } from 'react'
 
-import { toast, ToastContainer } from 'react-toastify'; // Add this import
-import 'react-toastify/dist/ReactToastify.css'; // Add this import
+import { toast, ToastContainer } from 'react-toastify' // Add this import
+import 'react-toastify/dist/ReactToastify.css' // Add this import
 
-import axios from 'axios';
-import { userDataContext } from '../context/userContext';
+import axios from 'axios'
+import { userDataContext } from '../context/userContext'
 
 const validationSchema = yup.object({
   firstName: yup
@@ -48,84 +48,93 @@ const validationSchema = yup.object({
     .string('Enter your password')
     .matches(
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-      'Password must be at least 8 characters long, contain a lowercase letter, an uppercase letter, and a number or special character.'
+      'Password must be at least 8 characters long, contain a lowercase letter, an uppercase letter, and a number or special character.',
     )
     .required('Password is required'),
   confirmPassword: yup
     .string()
     .required('Confirm password is required')
     .oneOf([yup.ref('password')], 'Confirm password must match password'),
-});
+})
 
 const Register = () => {
-  const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const { userData, setUserData } = useContext(userDataContext);
+  const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false)
+  const { userData, setUserData } = useContext(userDataContext)
 
-  const { handleSubmit, touched, errors, handleChange, handleBlur, values } =
-    useFormik({
-      initialValues: {
-        lastName: '',
-        firstName: '',
-        email: '',
-        password: '',
-      },
+  const {
+    handleSubmit,
+    touched,
+    errors,
+    handleChange,
+    handleBlur,
+    values,
+  } = useFormik({
+    initialValues: {
+      lastName: '',
+      firstName: '',
+      email: '',
+      password: '',
+    },
 
-      validationSchema: validationSchema,
-      onSubmit: (values) => {
-        const register = async () => {
-          try {
-            const response = await axios.post(
-              `${process.env.REACT_APP_BASE_URL}/api/v1/auth/register`,
-              {
-                firstName: values.firstName,
-                lastName: values.lastName,
-                password: values.password,
-                email: values.email,
-              }
-            );
-            const { data, statusText } = response;
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      const register = async () => {
+        try {
+          const response = await axios.post(
+            `${process.env.REACT_APP_BASE_URL}/api/v1/auth/register`,
+            {
+              firstName: values.firstName,
+              lastName: values.lastName,
+              password: values.password,
+              email: values.email,
+            },
+          )
+          const { data, statusText } = response
 
-            if (statusText !== 'Created') {
-              throw new Error('Register failed');
-            }
-
-            const { token, user } = data;
-            const { userId } = user;
-            setUserData({ ...data });
-            // Save token to localStorage
-            localStorage.setItem('jwtToken', token);
-            localStorage.setItem('userId', userId);
-          } catch (error) {
-            // Show error message
-            toast.error('Registration failed. Please try again', {
-              position: 'top-center',
-              autoClose: 3000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-            });
-            console.error('Error registration:', error);
+          if (statusText !== 'Created') {
+            throw new Error('Register failed')
           }
-          navigate('/profileForm');
-        };
 
-        register();
-      },
-    });
+          const { token, user } = data
+          const { userId } = user
+          setUserData({ ...data })
+          // Save token to localStorage
+          localStorage.setItem('jwtToken', token)
+          localStorage.setItem('userId', userId)
+        } catch (error) {
+          // Show error message
+          toast.error('Registration failed. Please try again', {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          })
+          console.error('Error registration:', error)
+        }
+        navigate('/profileForm')
+      }
+
+      register()
+    },
+  })
 
   const handlePasswordVisibility = () => {
-    console.log('handlePasswordVisibility enter', showPassword);
-    setShowPassword(!showPassword);
-  };
+    console.log('handlePasswordVisibility enter', showPassword)
+    setShowPassword(!showPassword)
+  }
 
   return (
     <>
-           <Navbar />
+      <Navbar />
       <ThemeProvider theme={theme}>
         <Box
-          sx={{ bgcolor: theme.palette.background.main, minHeight: '100vh' }}
+          sx={{
+            backgroundImage: theme.palette.background2.gradient,
+            minHeight: '100vh',
+          }}
         >
           <form onSubmit={handleSubmit}>
             <Box
@@ -138,7 +147,6 @@ const Register = () => {
               padding={3}
               borderRadius={5}
             >
-
               <Typography
                 padding={5}
                 textAlign="center"
@@ -330,7 +338,7 @@ const Register = () => {
       />
       <Footer />
     </>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register
