@@ -5,48 +5,143 @@ import {
   Card,
   IconButton,
   Typography,
-} from '@mui/material'
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove'
-import InfoIcon from '@mui/icons-material/Info'
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import SportsTennisIcon from '@mui/icons-material/SportsTennis'
-import { useState } from 'react'
-import { useNavigate } from 'react-router'
-// const players = [
-//   { id: 1, name: "Remy Sharp", img: "../../pictures/1.jpg" },
-//   { id: 2, name: "Remy Sharp", img: "../../pictures/2.jpg" },
-//   { id: 3, name: "Remy Sharp", img: "../../pictures/3.jpg" },
-// ];
+} from '@mui/material';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import InfoIcon from '@mui/icons-material/Info';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import SportsTennisIcon from '@mui/icons-material/SportsTennis';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { toast, ToastContainer } from 'react-toastify';
+import axios from 'axios';
 
 const ActivityCard = ({ activity }) => {
-  const [isAdded, setIsAdded] = useState(false)
-  const navigate = useNavigate()
+  const [singleActivity, setSingleActivity] = useState([]);
+  const [isAdded, setIsAdded] = useState(false);
+  const navigate = useNavigate();
 
-  let players = activity?.players
+  const jwtToken = localStorage.getItem('jwtToken');
+  const userId = localStorage.getItem('userId');
 
-  let formattedDate = ''
-  let formattedTime = ''
-  const dateString = activity.date // "2023-12-15T05:00:00.000Z"
-  const dateObject = new Date(dateString)
+  useEffect(() => {
+    const isPlayerAdded = activity?.players?.some(
+      (player) => player?.playerId === userId
+    );
+    setSingleActivity(activity);
+    setIsAdded(isPlayerAdded);
+  }, []);
+
+  const addUserToActivity = async () => {
+    try {
+      const response = await axios.patch(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/activities/addMe/${activityId}`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+
+      const data = response.data;
+
+      setSingleActivity(data.activity);
+      setIsAdded(true);
+    } catch (error) {
+      toast.error('Please login or register to join the activity', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  };
+
+  const removeUserFromActivity = async () => {
+    try {
+      const response = await axios.patch(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/activities/removeMe/${activityId}`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+      const data = response.data;
+
+      setSingleActivity(data.activity);
+      setIsAdded(false);
+    } catch (error) {
+      toast.error('Please login or register to join the activity', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  };
+
+  function stringToColor(string) {
+    let hash = 0;
+    let i;
+
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = '#';
+
+    for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+
+    return color;
+  }
+
+  function stringAvatar(name) {
+    return {
+      sx: {
+        bgcolor: stringToColor(name),
+      },
+      children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+    };
+  }
+
+  let formattedDate = '';
+  let formattedTime = '';
+  const dateString = activity.date; // "2023-12-15T05:00:00.000Z"
+  const dateObject = new Date(dateString);
 
   if (dateObject instanceof Date && !isNaN(dateObject)) {
     formattedDate = `${(dateObject.getMonth() + 1)
       .toString()
       .padStart(2, '0')}/${(dateObject.getDate() + 1)
       .toString()
-      .padStart(2, '0')}/${dateObject.getFullYear()}`
+      .padStart(2, '0')}/${dateObject.getFullYear()}`;
 
     // Format the time
-    const timeString = activity?.time // "16:30:00"
-    const [hours, minutes] = timeString.split(':')
-    const formattedHours = (hours % 12 || 12).toString().padStart(2, '0')
-    const period = hours < 12 ? 'AM' : 'PM'
-    formattedTime = `${formattedHours}:${minutes} ${period}`
+    const timeString = activity?.time; // "16:30:00"
+    const [hours, minutes] = timeString.split(':');
+    const formattedHours = (hours % 12 || 12).toString().padStart(2, '0');
+    const period = hours < 12 ? 'AM' : 'PM';
+    formattedTime = `${formattedHours}:${minutes} ${period}`;
   } else {
-    console.error('Invalid date object')
+    console.error('Invalid date object');
   }
+
+  const { _id: activityId, maxPlayers, players } = singleActivity;
 
   return (
     <>
@@ -78,9 +173,9 @@ const ActivityCard = ({ activity }) => {
             >
               <SportsTennisIcon sx={{ marginRight: 1 }} />
               <strong>{activity.activityType} </strong>
-              <CalendarMonthIcon sx={{ marginLeft: 4 }} />
+              <CalendarMonthIcon sx={{ marginLeft: 3 }} />
               <strong>{formattedDate}</strong>
-              <AccessTimeIcon sx={{ marginLeft: 2 }} />
+              <AccessTimeIcon sx={{ marginLeft: 1 }} />
               <strong>{formattedTime}</strong>
             </Typography>
           </Box>
@@ -101,35 +196,29 @@ const ActivityCard = ({ activity }) => {
               justifyContent: 'space-between',
             }}
           >
-            <AvatarGroup max={4}>
-              {players?.map((playerId) => (
+            <AvatarGroup total={maxPlayers} max={5}>
+              {players?.map((player) => (
                 <Avatar
-                  key={playerId} // Use playerId as the key
-                  sx={{ width: 32, height: 32 }}
+                  key={player?.playerId} // Use playerId as the key
+                  src={player?.profileImage}
+                  {...stringAvatar(`${player?.firstName} ${player?.lastName}`)}
                 />
               ))}
-
-              {/*{isAdded ? (
-                <Avatar
-                  sx={{ width: 32, height: 32 }}
-                  alt="Remy Sharp"
-                  src="./../pictures/1.jpg"
-                />
-              ) : (
-                <Avatar sx={{ width: 32, height: 32 }}>+1</Avatar>
-              )}*/}
             </AvatarGroup>
             <span>
-              <IconButton
-                sx={{ marginTop: -1 }}
-                onClick={() => setIsAdded(!isAdded)}
-              >
-                {isAdded ? (
+              {isAdded ? (
+                <IconButton
+                  sx={{ marginTop: -1 }}
+                  onClick={removeUserFromActivity}
+                >
                   <PersonRemoveIcon fontSize="large" sx={{ color: 'red' }} />
-                ) : (
+                </IconButton>
+              ) : (
+                <IconButton sx={{ marginTop: -1 }} onClick={addUserToActivity}>
                   <PersonAddAlt1Icon fontSize="large" sx={{ color: 'green' }} />
-                )}
-              </IconButton>
+                </IconButton>
+              )}
+
               <IconButton
                 sx={{ marginTop: -1 }}
                 onClick={() => navigate(`/activity/${activity._id}`)}
@@ -140,8 +229,19 @@ const ActivityCard = ({ activity }) => {
           </Box>
         </Box>
       </Card>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
-  )
-}
+  );
+};
 
-export default ActivityCard
+export default ActivityCard;
