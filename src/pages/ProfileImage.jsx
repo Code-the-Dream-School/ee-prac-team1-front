@@ -1,16 +1,21 @@
-import React from "react";
-import { useState, useEffect } from "react";
 import { Avatar, Badge, Box, TextField } from "@mui/material/";
+import { useEffect, useState } from "react";
+
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import React from "react";
 import axios from "axios";
 import { theme } from "../utils/theme";
+
 const ProfileImage = (event) => {
     const [userData, setUserData] = useState({
         firstName: "",
         lastName: "",
         email: "",
+        profileImage: "",
     });
 
+
+    // const fileInputRef = useRef(null);
     useEffect(() => {
         const fetchData = async () => {
             const token = localStorage.getItem("jwtToken");
@@ -25,7 +30,6 @@ const ProfileImage = (event) => {
                     config
                 );
                 setUserData(res.data.user);
-                
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
@@ -39,6 +43,42 @@ const ProfileImage = (event) => {
         const lastInitial = lastName ? lastName.charAt(0) : "";
         return firstInitial + lastInitial;
     };
+
+
+// const handleImageUpload = async () => {
+//       // If the file input is present, trigger its click event
+//     if (fileInputRef.current) {
+//         fileInputRef.current.click();
+//     } else {
+//           // Handle image upload logic 
+//         const file = event.target.files[0];
+//         const formData = new FormData();
+//         formData.append("profileImage", file);
+
+//         try {
+//             const token = localStorage.getItem("jwtToken");
+//             const config = {
+//                 headers: {
+//                     Authorization: `Bearer ${token}`,
+//                     "Content-Type": "multipart/form-data",
+//                 },
+//             };
+
+//             const res = await axios.patch(
+//                 `${process.env.REACT_APP_BASE_URL}/api/v1/users/updateUser`,
+//                 formData,
+//                 config
+//             );
+
+//             setUserData((prevUserData) => ({
+//                 ...prevUserData,
+//                 profileImage: res.data.user.profileImage,
+//             }));
+//         } catch (error) {
+//             console.error("Error uploading image:", error);
+//         }
+//     }
+// };
 
     return (
         <>
@@ -58,10 +98,12 @@ const ProfileImage = (event) => {
                                 marginTop: 2,
                                 cursor: "pointer",
                             }}
+                            // onClick={handleImageUpload}
                         />
                     }
                 >
                     <Avatar
+                        src={userData.profileImage}
                         // alt="User Profile Image"
                         sx={{
                             bgcolor: "#1DE619",
@@ -69,7 +111,8 @@ const ProfileImage = (event) => {
                             height: 100,
                         }}
                     >
-                        {getInitials()}
+                        {/* {getInitials()} */}
+                        {/* {userData.profileImage} */}
                     </Avatar>
                 </Badge>
                 <Box
@@ -129,6 +172,13 @@ const ProfileImage = (event) => {
                         }}
                     />
                 </Box>
+                {/* <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={handleImageUpload}
+                    ref={fileInputRef}
+                /> */}
             </Box>
         </>
     );

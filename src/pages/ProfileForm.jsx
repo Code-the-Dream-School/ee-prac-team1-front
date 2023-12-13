@@ -26,6 +26,7 @@ const validationSchema = Yup.object({
         "Phone number must be 10 digits, no dashes"
     ),
     dateOfBirth: Yup.date()
+        .required("Date of birth is required")
         .nullable()
         .max(new Date(), "Date of birth must be in the past"),
     residentialAddress: Yup.object().shape({
@@ -55,7 +56,7 @@ const ProfileForm = () => {
                 state: "",
                 zipCode: "",
             },
-            experienceLevel: "",
+            experienceLevel: "Beginner",
         },
         validationSchema: validationSchema,
         // onSubmit: async (values) => {
@@ -162,7 +163,7 @@ const ProfileForm = () => {
             navigate("/");
         } catch (error) {
             toast.error(
-                "Saving your profile data was failed. Please try again",
+                "Please enter your date of birth.",
                 {
                     position: "top-center",
                     autoClose: 3000,
@@ -257,7 +258,7 @@ const ProfileForm = () => {
                                     paddingLeft: 2,
                                 }}
                             >
-                                Date of Birth
+                                Date of Birth <i>(*Required)</i>
                             </InputLabel>
 
                             <TextField
