@@ -33,6 +33,7 @@ import axios from 'axios';
 import { Footer, Navbar } from '../components';
 import { theme } from '../utils/theme';
 import SearchForm from '../components/SearchForm';
+import { toast, ToastContainer } from 'react-toastify';
 
 const ActivityPage = () => {
   const [activity, setActivity] = useState([]);
@@ -70,38 +71,60 @@ const ActivityPage = () => {
   }, []);
 
   const addUserToActivity = async () => {
-    const response = await axios.patch(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/activities/addMe/${activityId}`,
-      {},
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      }
-    );
+    try {
+      const response = await axios.patch(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/activities/addMe/${activityId}`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
 
-    const data = response.data;
+      const data = response.data;
 
-    setActivity(data.activity);
-    setIsAdded(true);
+      setActivity(data.activity);
+      setIsAdded(true);
+    } catch (error) {
+      toast.error('Please login or register to join the activity', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
   };
 
   const removeUserFromActivity = async () => {
-    const response = await axios.patch(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/activities/removeMe/${activityId}`,
-      {},
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      }
-    );
-    const data = response.data;
+    try {
+      const response = await axios.patch(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/activities/removeMe/${activityId}`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+      const data = response.data;
 
-    setActivity(data.activity);
-    setIsAdded(false);
+      setActivity(data.activity);
+      setIsAdded(false);
+    } catch (error) {
+      toast.error('Please login or register to join the activity', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
   };
 
   function stringToColor(string) {
@@ -390,6 +413,17 @@ const ActivityPage = () => {
         </Box>
       </ThemeProvider>
       <Footer />
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 };
