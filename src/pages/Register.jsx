@@ -104,19 +104,23 @@ const Register = () => {
           localStorage.setItem('userId', userId)
         } catch (error) {
           // Show error message
-          toast.error('Registration failed. Please try again', {
-            position: 'top-center',
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          })
+          toast.error(
+            `Registration failed: ${error.response?.data?.msg}`,
+            {
+              position: 'top-center',
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            },
+          )
           console.error('Error registration:', error)
+          // navigate('/')
+          return
         }
         navigate('/profileForm')
       }
-
       register()
     },
   })
