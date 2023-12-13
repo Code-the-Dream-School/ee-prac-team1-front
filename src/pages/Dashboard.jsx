@@ -17,13 +17,18 @@ const Dashboard = () => {
         setActivitiesByZip={setSortedActivities}
       />
       {isLoggedIn ? (
+      <>
       <ActivitiesSorter
         setSortedActivities={setSortedActivities}
       />
-      ) : (
-          <></>
-        )}
       <ActivitiesContainer sortedActivities={sortedActivities} />
+      </>
+      ) : (
+          <>
+      <ActivitiesContainer sortedActivities={sortedActivities} />
+
+          </>
+        )}
       <Footer />
     </>
   )
