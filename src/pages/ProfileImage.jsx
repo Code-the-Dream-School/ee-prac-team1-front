@@ -14,8 +14,6 @@ const ProfileImage = (event) => {
         profileImage: "",
     });
 
-
-    // const fileInputRef = useRef(null);
     useEffect(() => {
         const fetchData = async () => {
             const token = localStorage.getItem("jwtToken");
@@ -45,40 +43,35 @@ const ProfileImage = (event) => {
     };
 
 
-// const handleImageUpload = async () => {
-//       // If the file input is present, trigger its click event
-//     if (fileInputRef.current) {
-//         fileInputRef.current.click();
-//     } else {
-//           // Handle image upload logic 
-//         const file = event.target.files[0];
-//         const formData = new FormData();
-//         formData.append("profileImage", file);
+    const handleImageUpload = async (event) => {
+        const file = event.target.files[0];
+        const formData = new FormData();
+        formData.append("profileImage", file);
 
-//         try {
-//             const token = localStorage.getItem("jwtToken");
-//             const config = {
-//                 headers: {
-//                     Authorization: `Bearer ${token}`,
-//                     "Content-Type": "multipart/form-data",
-//                 },
-//             };
+        try {
+            const token = localStorage.getItem("jwtToken");
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            };
 
-//             const res = await axios.patch(
-//                 `${process.env.REACT_APP_BASE_URL}/api/v1/users/updateUser`,
-//                 formData,
-//                 config
-//             );
+            const res = await axios.patch(
+                `${process.env.REACT_APP_BASE_URL}/api/v1/users/updateUser`,
+                formData,
+                config
+            );
 
-//             setUserData((prevUserData) => ({
-//                 ...prevUserData,
-//                 profileImage: res.data.user.profileImage,
-//             }));
-//         } catch (error) {
-//             console.error("Error uploading image:", error);
-//         }
-//     }
-// };
+            setUserData((prevUserData) => ({
+                ...prevUserData,
+                profileImage: res.data.profileImage,
+            }));
+        } catch (error) {
+            console.error("Error uploading image:", error);
+        }
+    
+};
 
     return (
         <>
@@ -98,6 +91,7 @@ const ProfileImage = (event) => {
                                 marginTop: 2,
                                 cursor: "pointer",
                             }}
+                        onClick={() => document.getElementById("fileInput").click()}
                             // onClick={handleImageUpload}
                         />
                     }
@@ -172,13 +166,13 @@ const ProfileImage = (event) => {
                         }}
                     />
                 </Box>
-                {/* <input
+                <input
+                    id="fileInput"
                     type="file"
                     accept="image/*"
                     style={{ display: "none" }}
                     onChange={handleImageUpload}
-                    ref={fileInputRef}
-                /> */}
+                />
             </Box>
         </>
     );
