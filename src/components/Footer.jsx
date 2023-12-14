@@ -3,12 +3,9 @@ import {
     Avatar,
     IconButton,
     Stack,
-    Toolbar,
     Typography,
 } from "@mui/material";
 
-import HomeIcon from "@mui/icons-material/Home";
-import { Link } from "react-router-dom";
 import React from "react";
 import { theme } from "../utils/theme";
 
@@ -49,18 +46,9 @@ const Footer = () => {
                 marginTop: "auto",
             }}
         >
-            <Toolbar
-                sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                }}
-            >
                 <Stack
                     direction="row"
-                    sx={{
-                        justifyContent: "center",
-                    }}
+                    sx={{  justifyContent: "center" }}
                 >
                     {/* Icons of GitHub repositories of creators */}
                     <Typography
@@ -84,7 +72,7 @@ const Footer = () => {
                         ))}
                     </Typography>
                     {/* Home Icon */}
-                    <IconButton
+                    {/* <IconButton
                         aria-label="home"
                         component={Link}
                         to="/"
@@ -92,10 +80,9 @@ const Footer = () => {
                             color: "#090759",
                         }}
                     >
-                        <HomeIcon />
-                    </IconButton>
+                        <HomeIcon /> */}
+                    {/* </IconButton> */}
                 </Stack>
-            </Toolbar>
         </AppBar>
     );
 };
