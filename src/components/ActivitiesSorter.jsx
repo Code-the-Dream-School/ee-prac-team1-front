@@ -1,12 +1,18 @@
 import { Box, Button, ThemeProvider } from '@mui/material'
 
 import axios from 'axios'
-import { theme } from '../utils/theme'
 
+import { theme } from '../utils/theme'
+import { useContext } from 'react'
 // import { toast, ToastContainer } from 'react-toastify'
 
 
+import { useNavigate } from 'react-router-dom'
+import { userDataContext } from '../context/userContext'
+
 const ActivitiesSorter = ({ setSortedActivities }) => {
+  const navigate = useNavigate()
+  const { setUserData } = useContext(userDataContext)
   //JOINED
   const handleSubmitJoined = () => {
     const token = localStorage.getItem('jwtToken')
@@ -26,7 +32,17 @@ const ActivitiesSorter = ({ setSortedActivities }) => {
         console.log(data)
 
         setSortedActivities(data.upcomingActivities)
-      } catch (error) {}
+      } catch (error) {
+        const { response } = error
+        const { status } = response
+
+        if (status === 401) {
+          localStorage.removeItem('jwtToken')
+          localStorage.removeItem('userId')
+          setUserData({ isLoggedIn: false })
+          navigate('/')
+        }
+      }
     }
 
     fetchActivitiesJoined()
@@ -50,7 +66,17 @@ const ActivitiesSorter = ({ setSortedActivities }) => {
         const { data } = response
         console.log(data)
         setSortedActivities(data.upcomingActivities)
-      } catch (error) {}
+      } catch (error) {
+        const { response } = error
+        const { status } = response
+
+        if (status === 401) {
+          localStorage.removeItem('jwtToken')
+          localStorage.removeItem('userId')
+          setUserData({ isLoggedIn: false })
+          navigate('/')
+        }
+      }
     }
     fetchActivitiesCreated()
   }
@@ -77,7 +103,17 @@ const ActivitiesSorter = ({ setSortedActivities }) => {
 
         setSortedActivities(upcomingActivities)
         //setSortedActivities(todayActivities)
-      } catch (error) {}
+      } catch (error) {
+        const { response } = error
+        const { status } = response
+
+        if (status === 401) {
+          localStorage.removeItem('jwtToken')
+          localStorage.removeItem('userId')
+          setUserData({ isLoggedIn: false })
+          navigate('/')
+        }
+      }
     }
     fetchActivitiesAllOther()
   }

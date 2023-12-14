@@ -52,7 +52,7 @@ const ActivitiesContainer = ({ sortedActivities }) => {
         const message = data.message
         console.log("message:",message)
 
-  const pageSize = 4
+  const pageSize = 6
   const [page, setPage] = useState(1)
   const handleChange = (event, value) => {
     setPage(value)
