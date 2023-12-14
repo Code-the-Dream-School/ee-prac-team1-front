@@ -1,18 +1,45 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { theme } from "../utils/theme";
 import {
     AppBar,
+    Avatar,
     IconButton,
     Stack,
     Toolbar,
     Typography,
-    Tooltip,
 } from "@mui/material";
+
 import HomeIcon from "@mui/icons-material/Home";
-import GitHubIcon from "@mui/icons-material/GitHub";
+import { Link } from "react-router-dom";
+import React from "react";
+import { theme } from "../utils/theme";
 
 const Footer = () => {
+    const githubProfiles = [
+        {
+            name: "Oxana Michkasova",
+            username: "oxangyal",
+            avatarUrl: "https://avatars.githubusercontent.com/u/103294778?v=4",
+        },
+        {
+            name: "Fany Kreminski",
+            username: "Kremifany",
+            avatarUrl: "https://avatars.githubusercontent.com/u/34751960?v=4",
+        },
+        {
+            name: "Vitalii Popovych",
+            username: "vitaliipp",
+            avatarUrl: "https://avatars.githubusercontent.com/u/109319234?v=4",
+        },
+        {
+            name: "Ljiljana Janjic",
+            username: "Ljanjic",
+            avatarUrl: "https://avatars.githubusercontent.com/u/118481016?v=4",
+        },
+        {
+            name: "Tammam Alwafai",
+            username: "TammamWafai",
+            avatarUrl: "https://avatars.githubusercontent.com/u/47179662?v=4",
+        },
+    ];
     return (
         <AppBar
             position="static"
@@ -39,56 +66,23 @@ const Footer = () => {
                     <Typography
                         sx={{
                             ...theme.typography,
-                            fontWeight: "700"
+                            fontWeight: "700",
                         }}
                     >
-                        Created by
+                        Crafted by
+                        {githubProfiles.map((profile) => (
+                            <IconButton
+                                sx={{ ml: 1 }}
+                                color="inherit"
+                                href={`https://github.com/${profile.username}`}
+                            >
+                                <Avatar
+                                    alt={profile.name}
+                                    src={profile.avatarUrl}
+                                />
+                            </IconButton>
+                        ))}
                     </Typography>
-                    <Tooltip title="Oxana Michkasova" arrow>
-                        <IconButton
-                            sx={{ bgcolor: "#090759", ml: 1 }}
-                            color="inherit"
-                            href="https://github.com/oxangyal"
-                        >
-                            <GitHubIcon />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Fany Kreminsky" arrow>
-                        <IconButton
-                            sx={{ bgcolor: "#090759", ml: 1 }}
-                            color="inherit"
-                            href="https://github.com/Kremifany"
-                        >
-                            <GitHubIcon />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Vitalii Popovich" arrow>
-                        <IconButton
-                            sx={{ bgcolor: "#090759", ml: 1 }}
-                            color="inherit"
-                            href="https://github.com/vitaliipp"
-                        >
-                            <GitHubIcon />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Ljiljana Janjic " arrow>
-                        <IconButton
-                            sx={{ bgcolor: "#090759", ml: 1 }}
-                            color="inherit"
-                            href="https://github.com/Ljanjic"
-                        >
-                            <GitHubIcon />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Tammam Alwafai" arrow>
-                        <IconButton
-                            sx={{ bgcolor: "#090759", ml: 1 }}
-                            color="inherit"
-                            href="https://github.com/TammamWafai"
-                        >
-                            <GitHubIcon />
-                        </IconButton>
-                    </Tooltip>
                     {/* Home Icon */}
                     <IconButton
                         aria-label="home"
