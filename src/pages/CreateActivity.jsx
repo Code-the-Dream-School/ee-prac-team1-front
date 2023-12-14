@@ -31,7 +31,7 @@ const validationSchema = Yup.object({
     activityType: Yup.string().required("Please select one of the activities"),
     date: Yup.date()
         .required("Date is required")
-        .min(new Date(), "Date cannot be in the past"),
+        .min(new Date(new Date().setHours(0, 0, 0, 0)), "Date cannot be in the past"),
     time: Yup.string().required("Time is required"),
     maxPlayers: Yup.number()
         .required("Maximum of players is required")
