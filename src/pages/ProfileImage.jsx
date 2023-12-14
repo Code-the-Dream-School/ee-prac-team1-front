@@ -42,7 +42,6 @@ const ProfileImage = (event) => {
         return firstInitial + lastInitial;
     };
 
-
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];
         const formData = new FormData();
@@ -70,8 +69,7 @@ const ProfileImage = (event) => {
         } catch (error) {
             console.error("Error uploading image:", error);
         }
-    
-};
+    };
 
     return (
         <>
@@ -91,20 +89,23 @@ const ProfileImage = (event) => {
                                 marginTop: 2,
                                 cursor: "pointer",
                             }}
-                        onClick={() => document.getElementById("fileInput").click()}
+                            onClick={() =>
+                                document.getElementById("fileInput").click()
+                            }
                             // onClick={handleImageUpload}
                         />
                     }
                 >
                     <Avatar
                         src={userData.profileImage}
-                        // alt="User Profile Image"
+                        alt="User Profile Image"
                         sx={{
                             bgcolor: "#1DE619",
                             width: 100,
                             height: 100,
                         }}
                     >
+                        {userData.profileImage ? null : getInitials()}
                         {/* {getInitials()} */}
                         {/* {userData.profileImage} */}
                     </Avatar>
