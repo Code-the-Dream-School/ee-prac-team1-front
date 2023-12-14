@@ -33,9 +33,9 @@ const VerifyCode = () => {
         setVerificationMessage(data.message + '\nYou will be redirected to the Home page');
         toast.success('successful');
 
-        // Navigate to '/' after 5 seconds if the response was successful
+        // Navigate to '/dashboard' after 5 seconds if the response was successful
         setTimeout(() => {
-          navigate('/');
+          navigate('/dashboard');
         }, 5000);
       } catch (err) {
         setVerificationMessage(

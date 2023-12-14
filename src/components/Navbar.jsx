@@ -1,45 +1,32 @@
-import {
-    AppBar,
-    Avatar,
-    Box,
-    Button,
-    IconButton,
-    Stack,
-    Toolbar,
-    Typography,
-} from "@mui/material";
-import { React, useContext, useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { AppBar, Avatar, Box, Button, IconButton, Stack, Toolbar, Typography } from '@mui/material';
+import { React, useContext, useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import HomeIcon from "@mui/icons-material/Home";
-import { Link } from "react-router-dom";
-import Logo from "../assets/logo90.png";
-import LogoutIcon from "@mui/icons-material/Logout";
-import axios from "axios";
-import { theme } from "../utils/theme";
-import { useNavigate } from "react-router-dom";
-import { userDataContext } from "../context/userContext";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import HomeIcon from '@mui/icons-material/Home';
+import { Link } from 'react-router-dom';
+import Logo from '../assets/logo90.png';
+import LogoutIcon from '@mui/icons-material/Logout';
+import axios from 'axios';
+import { theme } from '../utils/theme';
+import { useNavigate } from 'react-router-dom';
+import { userDataContext } from '../context/userContext';
 
 const Navbar = () => {
     const navigate = useNavigate();
     const { userData, setUserData } = useContext(userDataContext);
     const { isLoggedIn, user } = userData;
-    
-    const getInitials = () => {
 
-    const { firstName, lastName } = user || { firstName: "", lastName: "" };    
-    const initials =
-        firstName && lastName
-            ? `${firstName.charAt(0)}${lastName.charAt(0)}`
-            : "";
-    return initials;
+    const getInitials = () => {
+        const { firstName, lastName } = user || { firstName: '', lastName: '' };
+        const initials = firstName && lastName ? `${firstName.charAt(0)}${lastName.charAt(0)}` : '';
+        return initials;
     };
-    
+
     const [initials, setInitials] = useState(getInitials());
 
     useEffect(() => {
-        const loggedInUser = localStorage.getItem("jwtToken");
+        const loggedInUser = localStorage.getItem('jwtToken');
         if (loggedInUser) {
             setUserData({ isLoggedIn: true, token: loggedInUser });
             fetchUserData(loggedInUser);
@@ -55,10 +42,7 @@ const Navbar = () => {
         };
 
         try {
-            const res = await axios.get(
-                `${process.env.REACT_APP_BASE_URL}/api/v1/users/current-user`,
-                config
-            );
+            const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/users/current-user`, config);
 
             if (res.data && res.data.user) {
                 const user = res.data.user;
@@ -70,14 +54,14 @@ const Navbar = () => {
                 setInitials(getInitials(user));
             }
         } catch (error) {
-            console.error("Error fetching user data:", error);
+            console.error('Error fetching user data:', error);
         }
     };
 
     const handleCreateActivity = () => {
         if (!isLoggedIn) {
-            toast.warning("Please register or login to create activity", {
-                position: "top-center",
+            toast.warning('Please register or login to create activity', {
+                position: 'top-center',
                 autoClose: 3000,
                 hideProgressBar: true,
                 closeOnClick: true,
@@ -86,29 +70,27 @@ const Navbar = () => {
             });
             return;
         }
-        navigate("/createactivity");
+        navigate('/createactivity');
     };
 
     const handleLogout = async () => {
         try {
-            const res = await axios.get(
-                `${process.env.REACT_APP_BASE_URL}/api/v1/auth/logout`
-            );
+            const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/logout`);
             if (res.status === 200) {
-                localStorage.removeItem("jwtToken");
-                localStorage.removeItem("userId");
+                localStorage.removeItem('jwtToken');
+                localStorage.removeItem('userId');
                 setUserData({ isLoggedIn: false });
-                toast.success("Logout successful");
-                navigate("/");
+                toast.success('Logout successful');
+                navigate('/dashboard');
             } else {
-                console.error("Logout failed:", res.data);
+                console.error('Logout failed:', res.data);
                 console.log(res.data);
-                toast.error("Logout failed. Please try again.");
+                toast.error('Logout failed. Please try again.');
             }
         } catch (error) {
-            console.error("Logout error:", error.message);
-            toast.error("Logout failed. Please try again", {
-                position: "top-center",
+            console.error('Logout error:', error.message);
+            toast.error('Logout failed. Please try again', {
+                position: 'top-center',
                 autoClose: 3000,
                 hideProgressBar: true,
                 closeOnClick: true,
@@ -121,32 +103,32 @@ const Navbar = () => {
     return (
         <>
             <AppBar
-                position="static"
+                position='static'
                 sx={{
                     backgroundImage: theme.palette.background.gradient,
                     // bgcolor: theme.palette.background.main,
-                    boxShadow: "none",
+                    boxShadow: 'none',
                 }}
             >
                 <Toolbar
                     sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
                     }}
                 >
                     <Box
                         sx={{
-                            marginTop: "10px",
+                            marginTop: '10px',
                         }}
                     >
-                        <img src={Logo} alt="Player Buddy Logo" />
+                        <img src={Logo} alt='Player Buddy Logo' />
                     </Box>
                     <Stack
-                        direction="row"
+                        direction='row'
                         sx={{
                             color: theme.palette.primary.contastText,
-                            justifyContent: "flex-end",
+                            justifyContent: 'flex-end',
                         }}
                     >
                         {/* Menu Buttons: Create activity */}
@@ -155,7 +137,7 @@ const Navbar = () => {
                             sx={{
                                 ...theme.navbarButtonStyles,
                             }}
-                            variant="text"
+                            variant='text'
                             onClick={handleCreateActivity}
                             // disabled={!isLoggedIn}
                         >
@@ -163,18 +145,18 @@ const Navbar = () => {
                         </Button>
                         {/* User Profile/log In/Sign Up Icon*/}
                         <IconButton
-                            aria-label="login"
+                            aria-label='login'
                             component={Link}
-                            to={isLoggedIn ? "/profileform" : "/login"}
+                            to={isLoggedIn ? '/profileform' : '/login'}
                             sx={{
-                                color: "#090759",
+                                color: '#090759',
                             }}
                         >
                             {/* Welcome message */}
                             {isLoggedIn && (
                                 <Typography
                                     sx={{
-                                        paddingRight: "2px",
+                                        paddingRight: '2px',
                                         ...theme.typography.subTitleText2,
                                     }}
                                 >
@@ -184,7 +166,7 @@ const Navbar = () => {
                             {isLoggedIn ? (
                                 <Avatar
                                     sx={{
-                                        bgcolor: "#090759",
+                                        bgcolor: '#090759',
                                         width: 30,
                                         height: 30,
                                         fontSize: 11,
@@ -198,28 +180,24 @@ const Navbar = () => {
                         </IconButton>
                         {/* Home Icon */}
                         <IconButton
-                            aria-label="home"
+                            aria-label='home'
                             component={Link}
-                            to="/"
+                            to='/dashboard'
                             sx={{
-                                color: "#090759",
+                                color: '#090759',
                             }}
                         >
                             <HomeIcon />
                         </IconButton>
                         {/* Logout Icon */}
-                        <IconButton
-                            aria-label="logout"
-                            sx={{ color: "#090759" }}
-                            onClick={handleLogout}
-                        >
+                        <IconButton aria-label='logout' sx={{ color: '#090759' }} onClick={handleLogout}>
                             {isLoggedIn ? <LogoutIcon /> : null}
                         </IconButton>
                     </Stack>
                 </Toolbar>
             </AppBar>
             <ToastContainer
-                position="top-center"
+                position='top-center'
                 autoClose={3000}
                 hideProgressBar
                 newestOnTop={false}

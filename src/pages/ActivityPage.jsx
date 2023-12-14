@@ -82,9 +82,7 @@ const ActivityPage = () => {
   useEffect(() => {
     const fetchActivity = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/v1/activities/myActivities/${activityId}`
-        );
+        const response = await axios.get(`http://localhost:8000/api/v1/activities/myActivities/${activityId}`);
         const data = response.data;
 
         setActivity(data.activity);
@@ -132,9 +130,7 @@ const ActivityPage = () => {
   const dateObject = new Date(dateString);
 
   if (dateObject instanceof Date && !isNaN(dateObject)) {
-    formattedDate = `${(dateObject.getMonth() + 1)
-      .toString()
-      .padStart(2, '0')}/${(dateObject.getDate() + 1)
+    formattedDate = `${(dateObject.getMonth() + 1).toString().padStart(2, '0')}/${(dateObject.getDate() + 1)
       .toString()
       .padStart(2, '0')}/${dateObject.getFullYear()}`;
 
@@ -177,30 +173,26 @@ const ActivityPage = () => {
             >
               <Grid container sx={{ marginTop: 1 }}>
                 <Grid item xs>
-                  <Typography variant="h6">
-                    <SportsTennisIcon
-                      sx={{ marginRight: 1, marginBottom: -1 }}
-                    />
+                  <Typography variant='h6'>
+                    <SportsTennisIcon sx={{ marginRight: 1, marginBottom: -1 }} />
                     Activity
                   </Typography>
                 </Grid>
                 <Grid item xs>
-                  <Typography variant="h6" sx={{ textTransform: 'capitalize' }}>
+                  <Typography variant='h6' sx={{ textTransform: 'capitalize' }}>
                     <strong>{activityType}</strong>
                   </Typography>
                 </Grid>
               </Grid>
               <Grid container sx={{ marginTop: 1 }}>
                 <Grid item xs>
-                  <Typography variant="body1">
-                    <CalendarMonthIcon
-                      sx={{ marginRight: 1, marginBottom: -1 }}
-                    />
+                  <Typography variant='body1'>
+                    <CalendarMonthIcon sx={{ marginRight: 1, marginBottom: -1 }} />
                     <strong>{formattedDate}</strong>
                   </Typography>
                 </Grid>
                 <Grid item xs>
-                  <Typography variant="body1">
+                  <Typography variant='body1'>
                     <AccessTimeIcon sx={{ marginRight: 0, marginBottom: -1 }} />
                     <strong> {formattedTime}</strong>
                   </Typography>
@@ -209,10 +201,9 @@ const ActivityPage = () => {
               <Grid container sx={{ marginTop: 1, marginBottom: 2 }}>
                 <LocationOnIcon sx={{ marginRight: 1 }} />
                 <Grid item xs>
-                  <Typography variant="body1">
+                  <Typography variant='body1'>
                     {' '}
-                    {location?.address}, {location?.city}, {location?.state}{' '}
-                    {location?.zipCode}
+                    {location?.address}, {location?.city}, {location?.state} {location?.zipCode}
                   </Typography>
                 </Grid>
               </Grid>
@@ -220,19 +211,19 @@ const ActivityPage = () => {
               <Grid container sx={{ marginTop: 2 }}>
                 <StarIcon sx={{ marginRight: 1 }} />
                 <Grid item xs>
-                  <Typography variant="h6"> Experience</Typography>
+                  <Typography variant='h6'> Experience</Typography>
                 </Grid>
                 <Grid item xs>
-                  <Typography variant="h6"> {experienceLevel}</Typography>
+                  <Typography variant='h6'> {experienceLevel}</Typography>
                 </Grid>
               </Grid>
               <Grid container sx={{ marginTop: 1 }}>
                 <PeopleIcon sx={{ marginRight: 1 }} />
                 <Grid item xs>
-                  <Typography variant="h6">Enrollment</Typography>
+                  <Typography variant='h6'>Enrollment</Typography>
                 </Grid>
                 <Grid item xs>
-                  <Typography variant="h6">
+                  <Typography variant='h6'>
                     {`min: ${minPlayers}    `} {`max: ${maxPlayers}`}
                   </Typography>
                 </Grid>
@@ -241,48 +232,48 @@ const ActivityPage = () => {
                 <AttachMoneyIcon sx={{ marginRight: 1 }} />
 
                 <Grid item xs>
-                  <Typography variant="h6"> Activity fee:</Typography>
+                  <Typography variant='h6'> Activity fee:</Typography>
                 </Grid>
                 <Grid item xs>
-                  <Typography variant="h6"> {`$ ${fees}`}</Typography>
+                  <Typography variant='h6'> {`$ ${fees}`}</Typography>
                 </Grid>
               </Grid>
               <Divider />
               <Grid container sx={{ marginTop: 2 }}>
                 <PermDeviceInformationIcon sx={{ marginRight: 1 }} />
                 <Grid item xs>
-                  <Typography variant="h6"> Contact Information</Typography>
+                  <Typography variant='h6'> Contact Information</Typography>
                 </Grid>
               </Grid>
               <Grid container sx={{ marginTop: 1 }}>
                 <PersonIcon sx={{ marginRight: 1 }} />
                 <Grid item xs>
-                  <Typography variant="body1"> {contactName}</Typography>
+                  <Typography variant='body1'> {contactName}</Typography>
                 </Grid>
               </Grid>
               <Grid container sx={{ marginTop: 1 }}>
                 <AlternateEmailIcon sx={{ marginRight: 1 }} />
                 <Grid item xs>
-                  <Typography variant="body1"> {contactEmail}</Typography>
+                  <Typography variant='body1'> {contactEmail}</Typography>
                 </Grid>
               </Grid>
               <Grid container sx={{ marginTop: 1, marginBottom: 2 }}>
                 <LocalPhoneIcon sx={{ marginRight: 1 }} />
                 <Grid item xs>
-                  <Typography variant="body1"> {contactPhoneNum}</Typography>
+                  <Typography variant='body1'> {contactPhoneNum}</Typography>
                 </Grid>
               </Grid>
               <Divider />
               <Grid container sx={{ marginTop: 2 }}>
                 <EventNoteIcon sx={{ marginRight: 1 }} />
                 <Grid item xs>
-                  <Typography variant="h6"> Notes</Typography>
+                  <Typography variant='h6'> Notes</Typography>
                 </Grid>
               </Grid>
               <Grid container sx={{ marginTop: 1, marginBottom: 2 }}>
                 <FormatListBulletedIcon sx={{ marginRight: 1 }} />
                 <Grid item xs>
-                  <Typography variant="body1"> {notes}</Typography>
+                  <Typography variant='body1'> {notes}</Typography>
                 </Grid>
               </Grid>
 
@@ -304,40 +295,21 @@ const ActivityPage = () => {
                   ))}
 
                   {isAdded ? (
-                    <Avatar
-                      sx={{ width: 32, height: 32 }}
-                      alt="Remy Sharp"
-                      src="./../pictures/1.jpg"
-                    />
+                    <Avatar sx={{ width: 32, height: 32 }} alt='Remy Sharp' src='./../pictures/1.jpg' />
                   ) : (
                     <Avatar sx={{ width: 32, height: 32 }}>+1</Avatar>
                   )}
                 </AvatarGroup>
                 <span>
-                  <IconButton
-                    sx={{ marginTop: -1 }}
-                    onClick={() => setIsAdded(!isAdded)}
-                  >
+                  <IconButton sx={{ marginTop: -1 }} onClick={() => setIsAdded(!isAdded)}>
                     {isAdded ? (
-                      <PersonRemoveIcon
-                        fontSize="large"
-                        sx={{ color: 'red' }}
-                      />
+                      <PersonRemoveIcon fontSize='large' sx={{ color: 'red' }} />
                     ) : (
-                      <PersonAddAlt1Icon
-                        fontSize="large"
-                        sx={{ color: 'green' }}
-                      />
+                      <PersonAddAlt1Icon fontSize='large' sx={{ color: 'green' }} />
                     )}
                   </IconButton>
-                  <IconButton
-                    sx={{ marginTop: -1 }}
-                    onClick={() => navigate('/')}
-                  >
-                    <ArrowCircleLeftIcon
-                      fontSize="large"
-                      sx={{ color: 'orange' }}
-                    />
+                  <IconButton sx={{ marginTop: -1 }} onClick={() => navigate('/dashboard')}>
+                    <ArrowCircleLeftIcon fontSize='large' sx={{ color: 'orange' }} />
                   </IconButton>
                 </span>
               </Box>
