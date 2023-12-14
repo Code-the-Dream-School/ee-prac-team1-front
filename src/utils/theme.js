@@ -16,8 +16,7 @@ export const theme = createTheme({
             secondary: "#c9f0ff",
         },
         background2: {
-            gradient:
-                "linear-gradient(to bottom, #caf2c9, #c9f0ff)",
+            gradient: "linear-gradient(to bottom, #caf2c9, #c9f0ff)",
             main: "#caf2c9",
             secondary: "#c9f0ff",
         },
@@ -75,5 +74,12 @@ export const theme = createTheme({
         fontFamily: "Poppins",
         color: "#090759",
         cursor: "pointer",
+    },
+    sortingButtons: {
+        fontSize: 14,
+        fontWeight: "800",
+        fontFamily: "Poppins",
+        bgcolor: "#e6f4f1",
+        color: "#090759",
     },
 });
