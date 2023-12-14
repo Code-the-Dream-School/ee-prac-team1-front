@@ -55,7 +55,7 @@ const ProfileForm = () => {
                 state: "",
                 zipCode: "",
             },
-            experienceLevel: "",
+            experienceLevel: "Beginner",
         },
         validationSchema: validationSchema,
         // onSubmit: async (values) => {
@@ -162,7 +162,7 @@ const ProfileForm = () => {
             navigate("/");
         } catch (error) {
             toast.error(
-                "Saving your profile data was failed. Please try again",
+                "Please enter your date of birth.",
                 {
                     position: "top-center",
                     autoClose: 3000,
