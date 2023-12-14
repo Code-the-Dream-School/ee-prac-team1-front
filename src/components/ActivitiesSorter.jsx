@@ -1,8 +1,10 @@
-import axios from 'axios'
+import { Box, Button, ThemeProvider } from '@mui/material'
 
-import { Button, ThemeProvider, Box } from '@mui/material'
-// import { toast, ToastContainer } from 'react-toastify'
+import axios from 'axios'
 import { theme } from '../utils/theme'
+
+// import { toast, ToastContainer } from 'react-toastify'
+
 
 const ActivitiesSorter = ({ setSortedActivities }) => {
   //JOINED
@@ -81,65 +83,65 @@ const ActivitiesSorter = ({ setSortedActivities }) => {
   }
 
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <Box sx={{ bgcolor: '#caf2c9' }}>
-          <Box
-            display="flex"
-            flexDirection={'row'}
-            maxWidth={500}
-            alignItems={'start'}
-            justifyContent={'center'}
-            margin={'auto'}
-            gap={1}
-            padding={1}
-          >
-            <Button
-              variant="contained"
-              type="submit"
-              color="primary"
-              sx={{
-                ...theme.commonButtonStyles,
-                width: 120,
-              }}
-              onClick={handleSubmitAll}
-              spacing={10}
-            >
-              All
-            </Button>
-            <Button
-              variant="contained"
-              type="submit"
-              color="primary"
-              sx={{
-                ...theme.commonButtonStyles,
-                width: 120,
-              }}
-              onClick={handleSubmitJoined}
-              spacing={10}
-            >
-              Joined
-            </Button>
+      <>
+          <ThemeProvider theme={theme}>
+              <Box sx={{ bgcolor: "#caf2c9" }}>
+                  <Box
+                      display="flex"
+                      flexDirection={"row"}
+                      maxWidth={500}
+                      alignItems={"start"}
+                      justifyContent={"center"}
+                      margin={"auto"}
+                      gap={1}
+                      padding={2}
+                  >
+                      <Button
+                          variant="text"
+                          type="submit"
+                          color="primary"
+                          sx={{
+                              ...theme.sortingButtons,
+                              width: 120,
+                          }}
+                          onClick={handleSubmitAll}
+                          spacing={10}
+                      >
+                          All
+                      </Button>
+                      <Button
+                          variant="text"
+                          type="submit"
+                          color="primary"
+                          sx={{
+                              ...theme.sortingButtons,
+                              width: 120,
+                          }}
+                          onClick={handleSubmitJoined}
+                          spacing={10}
+                      >
+                          Joined
+                      </Button>
 
-            {/* Search  Button */}
-            <Button
-              variant="contained"
-              type="submit"
-              color="primary"
-              sx={{
-                ...theme.commonButtonStyles,
-                width: 120,
-              }}
-              onClick={handleSubmitCreated}
-              spacing={10}
-            >
-              Created
-            </Button>
-          </Box>
-        </Box>
-      </ThemeProvider>
-    </>
-  )
+                      {/* Search  Button */}
+                      <Button
+                          variant="text"
+                          type="submit"
+                          color="primary"
+                          sx={{
+                              ...theme.sortingButtons,
+                              width: 120,
+                          }}
+                          onClick={handleSubmitCreated}
+                          spacing={10}
+                      >
+                          Created
+                      </Button>
+                  </Box>
+              </Box>
+          </ThemeProvider>
+      </>
+  );
 }
 
 export default ActivitiesSorter
