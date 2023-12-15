@@ -161,17 +161,14 @@ const ProfileForm = () => {
             await new Promise((resolve) => setTimeout(resolve, 1500));
             navigate("/");
         } catch (error) {
-            toast.error(
-                "Please enter your date of birth.",
-                {
-                    position: "top-center",
-                    autoClose: 3000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                }
-            );
+            toast.error("Please enter valid data and try again.", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
             console.error("Error update user:", error);
         }
     };
