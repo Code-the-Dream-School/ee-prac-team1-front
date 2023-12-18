@@ -409,7 +409,8 @@ const ActivityPage = () => {
 
                     <IconButton
                       sx={{ marginTop: -1 }}
-                      onClick={() => navigate('/')}
+                      onClick={() => navigate('/dashboard')}
+
                     >
                       <ArrowCircleLeftIcon
                         fontSize="large"

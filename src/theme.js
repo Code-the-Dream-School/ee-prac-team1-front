@@ -1,19 +1,19 @@
-import { createMuiTheme } from "@material-ui/core/styles";
+import { createMuiTheme } from '@material-ui/core/styles';
 // A custom theme for this app
 
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#1DE619", // bright green
+      main: '#1DE619', // bright green
     },
     secondary: {
-      main: "#090759", // blue
+      main: '#090759', // blue
     },
     tertiary: {
-      main: "#1C18DF", // blue for signin
+      main: '#1C18DF', // blue for signin
     },
     background: {
-      main: "#CAF2C9", // light green
+      main: '#CAF2C9', // light green
     },
   },
 });

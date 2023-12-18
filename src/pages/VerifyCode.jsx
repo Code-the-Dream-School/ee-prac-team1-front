@@ -14,7 +14,7 @@ const VerifyCode = () => {
   const [verificationMessage, setVerificationMessage] = useState('');
 
   useEffect(() => {
-    const forgotPassword = async () => {
+    const verify = async () => {
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_BASE_URL}/api/v1/auth/verifyCode/${verificationCode}`,
@@ -33,9 +33,9 @@ const VerifyCode = () => {
         setVerificationMessage(data.message + '\nYou will be redirected to the Home page');
         toast.success('successful');
 
-        // Navigate to '/' after 5 seconds if the response was successful
+        // Navigate to '/dashboard' after 5 seconds if the response was successful
         setTimeout(() => {
-          navigate('/');
+          navigate('/dashboard');
         }, 5000);
       } catch (err) {
         setVerificationMessage(
@@ -46,7 +46,7 @@ const VerifyCode = () => {
     };
 
     // Automatically send the Axios request when the component mounts
-    forgotPassword();
+    verify();
   }, [verificationCode, email, navigate]);
 
   return (

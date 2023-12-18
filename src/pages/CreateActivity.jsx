@@ -163,7 +163,7 @@ const CreateActivity = () => {
                     draggable: true,
                 });
                     await new Promise((resolve) => setTimeout(resolve, 1500)); 
-                    navigate("/");
+                    navigate('/dashboard');
             } catch (error) {
                 toast.error(
                     "Create activity was failed. Please enter valid data and try again.",
@@ -189,7 +189,7 @@ const CreateActivity = () => {
     };
 
     // const handleCancel = () => {
-    //     navigate("/");
+    //     navigate("/dashboard");
     // };
 
     return (

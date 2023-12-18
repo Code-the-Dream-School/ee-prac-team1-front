@@ -104,7 +104,7 @@ const ProfileForm = () => {
         };
 
         fetchUserData();
-    }, []);
+    }, [formik]);
 
     const handleChange = (e) => {
         formik.setValues({
@@ -159,7 +159,7 @@ const ProfileForm = () => {
                 draggable: true,
             });
             await new Promise((resolve) => setTimeout(resolve, 1500));
-            navigate("/");
+            navigate('/dashboard');
         } catch (error) {
             toast.error("Please enter valid data and try again.", {
                 position: "top-center",
@@ -174,7 +174,7 @@ const ProfileForm = () => {
     };
 
     // const handleCancel = () => {
-    //     navigate("/");
+    //     navigate('/dashboard');
     // };
 
     const handleUpdatePassword = () => {
