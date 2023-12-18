@@ -220,6 +220,8 @@ const ActivityPage = () => {
                 display: 'flex',
                 margin: 'auto',
                 paddingTop: 1,
+                paddingLeft: 1,
+                paddingRight: 1,
               }}
             >
               <Box
@@ -362,7 +364,14 @@ const ActivityPage = () => {
                     marginBottom: 2,
                   }}
                 >
-                  <AvatarGroup total={maxPlayers} max={5}>
+                  <AvatarGroup
+                    total={
+                      players?.length < 6
+                        ? maxPlayers
+                        : maxPlayers - players?.length + 6
+                    }
+                    max={7}
+                  >
                     {players?.map((player) => (
                       <Avatar
                         key={player.playerId} // Use playerId as the key
@@ -384,7 +393,7 @@ const ActivityPage = () => {
                           sx={{ color: 'red' }}
                         />
                       </IconButton>
-                    ) : (
+                    ) : players?.length < maxPlayers ? (
                       <IconButton
                         sx={{ marginTop: -1 }}
                         onClick={addUserToActivity}
@@ -394,6 +403,8 @@ const ActivityPage = () => {
                           sx={{ color: 'green' }}
                         />
                       </IconButton>
+                    ) : (
+                      ''
                     )}
 
                     <IconButton
