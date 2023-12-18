@@ -48,14 +48,16 @@ const ActivityPage = () => {
     const fetchActivity = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/api/v1/activities/myActivities/${activityId}`,
+          `${process.env.REACT_APP_BASE_URL}/api/v1/activities/myActivities/${activityId}`
         );
         const data = response.data;
 
         setActivity(data.activity);
         setLoading(false);
 
-        const isPlayerAdded = await data?.activity?.players?.some((player) => player.playerId === userId);
+        const isPlayerAdded = await data?.activity?.players?.some(
+          (player) => player.playerId === userId
+        );
         setIsAdded(isPlayerAdded);
       } catch (error) {
         console.error('Error fetching activities:', error);
@@ -78,7 +80,7 @@ const ActivityPage = () => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${jwtToken}`,
           },
-        },
+        }
       );
 
       const data = response.data;
@@ -107,7 +109,7 @@ const ActivityPage = () => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${jwtToken}`,
           },
-        },
+        }
       );
       const data = response.data;
 
@@ -176,7 +178,9 @@ const ActivityPage = () => {
   const dateObject = new Date(dateString);
 
   if (dateObject instanceof Date && !isNaN(dateObject)) {
-    formattedDate = `${(dateObject.getMonth() + 1).toString().padStart(2, '0')}/${(dateObject.getDate() + 1)
+    formattedDate = `${(dateObject.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}/${(dateObject.getDate() + 1)
       .toString()
       .padStart(2, '0')}/${dateObject.getFullYear()}`;
 
@@ -216,6 +220,8 @@ const ActivityPage = () => {
                 display: 'flex',
                 margin: 'auto',
                 paddingTop: 1,
+                paddingLeft: 1,
+                paddingRight: 1,
               }}
             >
               <Box
@@ -225,27 +231,36 @@ const ActivityPage = () => {
               >
                 <Grid container sx={{ marginTop: 1 }}>
                   <Grid item xs>
-                    <Typography variant='h6'>
-                      <SportsTennisIcon sx={{ marginRight: 1, marginBottom: -1 }} />
+                    <Typography variant="h6">
+                      <SportsTennisIcon
+                        sx={{ marginRight: 1, marginBottom: -1 }}
+                      />
                       Activity
                     </Typography>
                   </Grid>
                   <Grid item xs>
-                    <Typography variant='h6' sx={{ textTransform: 'capitalize' }}>
+                    <Typography
+                      variant="h6"
+                      sx={{ textTransform: 'capitalize' }}
+                    >
                       <strong>{activityType}</strong>
                     </Typography>
                   </Grid>
                 </Grid>
                 <Grid container sx={{ marginTop: 1 }}>
                   <Grid item xs>
-                    <Typography variant='body1'>
-                      <CalendarMonthIcon sx={{ marginRight: 1, marginBottom: -1 }} />
+                    <Typography variant="body1">
+                      <CalendarMonthIcon
+                        sx={{ marginRight: 1, marginBottom: -1 }}
+                      />
                       <strong>{formattedDate}</strong>
                     </Typography>
                   </Grid>
                   <Grid item xs>
-                    <Typography variant='body1'>
-                      <AccessTimeIcon sx={{ marginRight: 0, marginBottom: -1 }} />
+                    <Typography variant="body1">
+                      <AccessTimeIcon
+                        sx={{ marginRight: 0, marginBottom: -1 }}
+                      />
                       <strong> {formattedTime}</strong>
                     </Typography>
                   </Grid>
@@ -253,9 +268,10 @@ const ActivityPage = () => {
                 <Grid container sx={{ marginTop: 1, marginBottom: 2 }}>
                   <LocationOnIcon sx={{ marginRight: 1 }} />
                   <Grid item xs>
-                    <Typography variant='body1'>
+                    <Typography variant="body1">
                       {' '}
-                      {location?.address}, {location?.city}, {location?.state} {location?.zipCode}
+                      {location?.address}, {location?.city}, {location?.state}{' '}
+                      {location?.zipCode}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -263,19 +279,19 @@ const ActivityPage = () => {
                 <Grid container sx={{ marginTop: 2 }}>
                   <StarIcon sx={{ marginRight: 1 }} />
                   <Grid item xs>
-                    <Typography variant='h6'> Experience</Typography>
+                    <Typography variant="h6"> Experience</Typography>
                   </Grid>
                   <Grid item xs>
-                    <Typography variant='h6'> {experienceLevel}</Typography>
+                    <Typography variant="h6"> {experienceLevel}</Typography>
                   </Grid>
                 </Grid>
                 <Grid container sx={{ marginTop: 1 }}>
                   <PeopleIcon sx={{ marginRight: 1 }} />
                   <Grid item xs>
-                    <Typography variant='h6'>Enrollment</Typography>
+                    <Typography variant="h6">Enrollment</Typography>
                   </Grid>
                   <Grid item xs>
-                    <Typography variant='h6'>
+                    <Typography variant="h6">
                       {`min: ${minPlayers}`} {`max: ${maxPlayers}`}
                     </Typography>
                   </Grid>
@@ -283,58 +299,58 @@ const ActivityPage = () => {
                 <Grid container sx={{ marginTop: 1 }}>
                   <WbSunnyIcon sx={{ marginRight: 1 }} />
                   <Grid item xs>
-                    <Typography variant='h6'>Venue</Typography>
+                    <Typography variant="h6">Venue</Typography>
                   </Grid>
                   <Grid item xs>
-                    <Typography variant='h6'>{venue}</Typography>
+                    <Typography variant="h6">{venue}</Typography>
                   </Grid>
                 </Grid>
                 <Grid container sx={{ marginTop: 1, marginBottom: 2 }}>
                   <AttachMoneyIcon sx={{ marginRight: 1 }} />
 
                   <Grid item xs>
-                    <Typography variant='h6'> Activity fee:</Typography>
+                    <Typography variant="h6"> Activity fee:</Typography>
                   </Grid>
                   <Grid item xs>
-                    <Typography variant='h6'> {`$ ${fees}`}</Typography>
+                    <Typography variant="h6"> {`$ ${fees}`}</Typography>
                   </Grid>
                 </Grid>
                 <Divider />
                 <Grid container sx={{ marginTop: 2 }}>
                   <PermDeviceInformationIcon sx={{ marginRight: 1 }} />
                   <Grid item xs>
-                    <Typography variant='h6'> Contact Information</Typography>
+                    <Typography variant="h6"> Contact Information</Typography>
                   </Grid>
                 </Grid>
                 <Grid container sx={{ marginTop: 1 }}>
                   <PersonIcon sx={{ marginRight: 1 }} />
                   <Grid item xs>
-                    <Typography variant='body1'> {contactName}</Typography>
+                    <Typography variant="body1"> {contactName}</Typography>
                   </Grid>
                 </Grid>
                 <Grid container sx={{ marginTop: 1 }}>
                   <AlternateEmailIcon sx={{ marginRight: 1 }} />
                   <Grid item xs>
-                    <Typography variant='body1'> {contactEmail}</Typography>
+                    <Typography variant="body1"> {contactEmail}</Typography>
                   </Grid>
                 </Grid>
                 <Grid container sx={{ marginTop: 1, marginBottom: 2 }}>
                   <LocalPhoneIcon sx={{ marginRight: 1 }} />
                   <Grid item xs>
-                    <Typography variant='body1'> {contactPhoneNum}</Typography>
+                    <Typography variant="body1"> {contactPhoneNum}</Typography>
                   </Grid>
                 </Grid>
                 <Divider />
                 <Grid container sx={{ marginTop: 2 }}>
                   <EventNoteIcon sx={{ marginRight: 1 }} />
                   <Grid item xs>
-                    <Typography variant='h6'> Notes</Typography>
+                    <Typography variant="h6"> Notes</Typography>
                   </Grid>
                 </Grid>
                 <Grid container sx={{ marginTop: 1, marginBottom: 2 }}>
                   <FormatListBulletedIcon sx={{ marginRight: 1 }} />
                   <Grid item xs>
-                    <Typography variant='body1'> {notes}</Typography>
+                    <Typography variant="body1"> {notes}</Typography>
                   </Grid>
                 </Grid>
 
@@ -348,28 +364,57 @@ const ActivityPage = () => {
                     marginBottom: 2,
                   }}
                 >
-                  <AvatarGroup total={maxPlayers} max={5}>
+                  <AvatarGroup
+                    total={
+                      players?.length < 6
+                        ? maxPlayers
+                        : maxPlayers - players?.length + 6
+                    }
+                    max={7}
+                  >
                     {players?.map((player) => (
                       <Avatar
                         key={player.playerId} // Use playerId as the key
                         src={player?.profileImage}
-                        {...stringAvatar(`${player?.firstName} ${player?.lastName}`)}
+                        {...stringAvatar(
+                          `${player?.firstName} ${player?.lastName}`
+                        )}
                       />
                     ))}
                   </AvatarGroup>
                   <span>
                     {isAdded ? (
-                      <IconButton sx={{ marginTop: -1 }} onClick={removeUserFromActivity}>
-                        <PersonRemoveIcon fontSize='large' sx={{ color: 'red' }} />
+                      <IconButton
+                        sx={{ marginTop: -1 }}
+                        onClick={removeUserFromActivity}
+                      >
+                        <PersonRemoveIcon
+                          fontSize="large"
+                          sx={{ color: 'red' }}
+                        />
+                      </IconButton>
+                    ) : players?.length < maxPlayers ? (
+                      <IconButton
+                        sx={{ marginTop: -1 }}
+                        onClick={addUserToActivity}
+                      >
+                        <PersonAddAlt1Icon
+                          fontSize="large"
+                          sx={{ color: 'green' }}
+                        />
                       </IconButton>
                     ) : (
-                      <IconButton sx={{ marginTop: -1 }} onClick={addUserToActivity}>
-                        <PersonAddAlt1Icon fontSize='large' sx={{ color: 'green' }} />
-                      </IconButton>
+                      ''
                     )}
 
-                    <IconButton sx={{ marginTop: -1 }} onClick={() => navigate('/dashboard')}>
-                      <ArrowCircleLeftIcon fontSize='large' sx={{ color: 'orange' }} />
+                    <IconButton
+                      sx={{ marginTop: -1 }}
+                      onClick={() => navigate('/dashboard')}
+                    >
+                      <ArrowCircleLeftIcon
+                        fontSize="large"
+                        sx={{ color: 'orange' }}
+                      />
                     </IconButton>
                   </span>
                 </Box>
@@ -380,7 +425,7 @@ const ActivityPage = () => {
       </ThemeProvider>
       <Footer />
       <ToastContainer
-        position='top-center'
+        position="top-center"
         autoClose={3000}
         hideProgressBar
         newestOnTop={false}
