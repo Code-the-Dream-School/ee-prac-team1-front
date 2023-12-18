@@ -1,10 +1,18 @@
+import { Box, Button, ThemeProvider } from '@mui/material'
+
 import axios from 'axios'
 
-import { Button, ThemeProvider, Box } from '@mui/material'
-// import { toast, ToastContainer } from 'react-toastify'
 import { theme } from '../utils/theme'
+import { useContext } from 'react'
+// import { toast, ToastContainer } from 'react-toastify'
+
+
+import { useNavigate } from 'react-router-dom'
+import { userDataContext } from '../context/userContext'
 
 const ActivitiesSorter = ({ setSortedActivities }) => {
+  const navigate = useNavigate()
+  const { setUserData } = useContext(userDataContext)
   //JOINED
   const handleSubmitJoined = () => {
     const token = localStorage.getItem('jwtToken')
@@ -24,7 +32,17 @@ const ActivitiesSorter = ({ setSortedActivities }) => {
         console.log(data)
 
         setSortedActivities(data.upcomingActivities)
-      } catch (error) {}
+      } catch (error) {
+        const { response } = error
+        const { status } = response
+
+        if (status === 401) {
+          localStorage.removeItem('jwtToken')
+          localStorage.removeItem('userId')
+          setUserData({ isLoggedIn: false })
+          navigate('/')
+        }
+      }
     }
 
     fetchActivitiesJoined()
@@ -48,7 +66,17 @@ const ActivitiesSorter = ({ setSortedActivities }) => {
         const { data } = response
         console.log(data)
         setSortedActivities(data.upcomingActivities)
-      } catch (error) {}
+      } catch (error) {
+        const { response } = error
+        const { status } = response
+
+        if (status === 401) {
+          localStorage.removeItem('jwtToken')
+          localStorage.removeItem('userId')
+          setUserData({ isLoggedIn: false })
+          navigate('/')
+        }
+      }
     }
     fetchActivitiesCreated()
   }
@@ -75,71 +103,81 @@ const ActivitiesSorter = ({ setSortedActivities }) => {
 
         setSortedActivities(upcomingActivities)
         //setSortedActivities(todayActivities)
-      } catch (error) {}
+      } catch (error) {
+        const { response } = error
+        const { status } = response
+
+        if (status === 401) {
+          localStorage.removeItem('jwtToken')
+          localStorage.removeItem('userId')
+          setUserData({ isLoggedIn: false })
+          navigate('/')
+        }
+      }
     }
     fetchActivitiesAllOther()
   }
 
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <Box sx={{ bgcolor: '#caf2c9' }}>
-          <Box
-            display="flex"
-            flexDirection={'row'}
-            maxWidth={500}
-            alignItems={'start'}
-            justifyContent={'center'}
-            margin={'auto'}
-            gap={1}
-            padding={1}
-          >
-            <Button
-              variant="contained"
-              type="submit"
-              color="primary"
-              sx={{
-                ...theme.commonButtonStyles,
-                width: 120,
-              }}
-              onClick={handleSubmitAll}
-              spacing={10}
-            >
-              All
-            </Button>
-            <Button
-              variant="contained"
-              type="submit"
-              color="primary"
-              sx={{
-                ...theme.commonButtonStyles,
-                width: 120,
-              }}
-              onClick={handleSubmitJoined}
-              spacing={10}
-            >
-              Joined
-            </Button>
+      <>
+          <ThemeProvider theme={theme}>
+              <Box sx={{ bgcolor: "#caf2c9" }}>
+                  <Box
+                      display="flex"
+                      flexDirection={"row"}
+                      maxWidth={500}
+                      alignItems={"start"}
+                      justifyContent={"center"}
+                      margin={"auto"}
+                      gap={1}
+                      padding={2}
+                  >
+                      <Button
+                          variant="text"
+                          type="submit"
+                          color="primary"
+                          sx={{
+                              ...theme.sortingButtons,
+                              width: 120,
+                          }}
+                          onClick={handleSubmitAll}
+                          spacing={10}
+                      >
+                          All
+                      </Button>
+                      <Button
+                          variant="text"
+                          type="submit"
+                          color="primary"
+                          sx={{
+                              ...theme.sortingButtons,
+                              width: 120,
+                          }}
+                          onClick={handleSubmitJoined}
+                          spacing={10}
+                      >
+                          Joined
+                      </Button>
 
-            {/* Search  Button */}
-            <Button
-              variant="contained"
-              type="submit"
-              color="primary"
-              sx={{
-                ...theme.commonButtonStyles,
-                width: 120,
-              }}
-              onClick={handleSubmitCreated}
-              spacing={10}
-            >
-              Created
-            </Button>
-          </Box>
-        </Box>
-      </ThemeProvider>
-    </>
-  )
+                      {/* Search  Button */}
+                      <Button
+                          variant="text"
+                          type="submit"
+                          color="primary"
+                          sx={{
+                              ...theme.sortingButtons,
+                              width: 120,
+                          }}
+                          onClick={handleSubmitCreated}
+                          spacing={10}
+                      >
+                          Created
+                      </Button>
+                  </Box>
+              </Box>
+          </ThemeProvider>
+      </>
+  );
 }
 
 export default ActivitiesSorter

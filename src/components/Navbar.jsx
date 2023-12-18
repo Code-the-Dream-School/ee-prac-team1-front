@@ -97,7 +97,9 @@ const Navbar = () => {
         localStorage.removeItem('userId')
         setUserData({ isLoggedIn: false })
         toast.success('Logout successful')
+
         navigate('/dashboard')
+
       } else {
         console.error('Logout failed:', res.data)
         console.log(res.data)
@@ -235,3 +237,4 @@ const Navbar = () => {
 }
 
 export default Navbar
+
