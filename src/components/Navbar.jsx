@@ -54,6 +54,7 @@ const Navbar = () => {
                 setInitials(getInitials(user));
             }
         } catch (error) {
+            handleLogout(false);
             console.error('Error fetching user data:', error);
         }
     };
@@ -73,7 +74,7 @@ const Navbar = () => {
         navigate('/createactivity');
     };
 
-    const handleLogout = async () => {
+    const handleLogout = async (showToast = true) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/logout`);
             if (res.status === 200) {
@@ -89,6 +90,9 @@ const Navbar = () => {
             }
         } catch (error) {
             console.error('Logout error:', error.message);
+            if (!showToast) {
+                return;
+            }
             toast.error('Logout failed. Please try again', {
                 position: 'top-center',
                 autoClose: 3000,
@@ -182,7 +186,7 @@ const Navbar = () => {
                         <IconButton
                             aria-label='home'
                             component={Link}
-                            to='/dashboard'
+                            to='/'
                             sx={{
                                 color: '#090759',
                             }}

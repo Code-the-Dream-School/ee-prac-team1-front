@@ -37,7 +37,7 @@ const ProfileForm = () => {
                 state: '',
                 zipCode: '',
             },
-            experienceLevel: '',
+            experienceLevel: 'Beginner',
         },
         validationSchema: validationSchema,
         // onSubmit: async (values) => {
@@ -136,7 +136,7 @@ const ProfileForm = () => {
             await new Promise((resolve) => setTimeout(resolve, 1500));
             navigate('/dashboard');
         } catch (error) {
-            toast.error('Saving your profile data was failed. Please try again', {
+            toast.error('Please enter valid data and try again.', {
                 position: 'top-center',
                 autoClose: 3000,
                 hideProgressBar: true,
@@ -149,7 +149,7 @@ const ProfileForm = () => {
     };
 
     // const handleCancel = () => {
-    //     navigate("/dashboard");
+    //     navigate("/");
     // };
 
     const handleUpdatePassword = () => {
