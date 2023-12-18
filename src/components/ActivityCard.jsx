@@ -196,7 +196,14 @@ const ActivityCard = ({ activity }) => {
               justifyContent: 'space-between',
             }}
           >
-            <AvatarGroup total={maxPlayers} max={5}>
+            <AvatarGroup
+              total={
+                players?.length < 6
+                  ? maxPlayers
+                  : maxPlayers - players?.length + 6
+              }
+              max={7}
+            >
               {players?.map((player) => (
                 <Avatar
                   key={player?.playerId} // Use playerId as the key
@@ -213,10 +220,12 @@ const ActivityCard = ({ activity }) => {
                 >
                   <PersonRemoveIcon fontSize="large" sx={{ color: 'red' }} />
                 </IconButton>
-              ) : (
+              ) : players?.length < maxPlayers ? (
                 <IconButton sx={{ marginTop: -1 }} onClick={addUserToActivity}>
                   <PersonAddAlt1Icon fontSize="large" sx={{ color: 'green' }} />
                 </IconButton>
+              ) : (
+                ''
               )}
 
               <IconButton
