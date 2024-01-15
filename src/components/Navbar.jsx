@@ -36,12 +36,14 @@ const Navbar = () => {
   const [initials, setInitials] = useState(getInitials())
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem('jwtToken')
-    if (loggedInUser) {
-      setUserData({ isLoggedIn: true, token: loggedInUser })
-      fetchUserData(loggedInUser)
-    }
-    setInitials(getInitials())
+      const loggedInUser = localStorage.getItem("jwtToken");
+      if (loggedInUser) {
+          setUserData({ isLoggedIn: true, token: loggedInUser });
+          fetchUserData(loggedInUser);
+      }
+      setInitials(getInitials());
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setUserData])
 
   const fetchUserData = async (token) => {

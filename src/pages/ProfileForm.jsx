@@ -1,5 +1,7 @@
-import React, { useEffect } from "react";
+import "react-toastify/dist/ReactToastify.css";
+
 import * as Yup from "yup";
+
 import {
     Box,
     Button,
@@ -10,15 +12,16 @@ import {
     TextField,
     ThemeProvider,
 } from "@mui/material";
+import React, { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
+import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ProfileImage from "./ProfileImage";
 import axios from "axios";
 import { theme } from "../utils/theme";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
 
 const validationSchema = Yup.object({
     phoneNumber: Yup.string().matches(
@@ -104,6 +107,7 @@ const ProfileForm = () => {
         };
 
         fetchUserData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleChange = (e) => {

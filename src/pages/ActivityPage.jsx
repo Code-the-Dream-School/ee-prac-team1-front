@@ -4,36 +4,37 @@ import {
   Box,
   Card,
   CircularProgress,
-  IconButton,
-  Typography,
-  Grid,
-  ThemeProvider,
   Divider,
+  Grid,
+  IconButton,
+  ThemeProvider,
+  Typography,
 } from '@mui/material';
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { Footer, Navbar } from '../components';
+import { ToastContainer, toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import SportsTennisIcon from '@mui/icons-material/SportsTennis';
-import PeopleIcon from '@mui/icons-material/People';
-import StarIcon from '@mui/icons-material/Star';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import PermDeviceInformationIcon from '@mui/icons-material/PermDeviceInformation';
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import PersonIcon from '@mui/icons-material/Person';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router';
-import axios from 'axios';
-import { Footer, Navbar } from '../components';
-import { theme } from '../utils/theme';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PeopleIcon from '@mui/icons-material/People';
+import PermDeviceInformationIcon from '@mui/icons-material/PermDeviceInformation';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PersonIcon from '@mui/icons-material/Person';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import SearchForm from '../components/SearchForm';
-import { toast, ToastContainer } from 'react-toastify';
+import SportsTennisIcon from '@mui/icons-material/SportsTennis';
+import StarIcon from '@mui/icons-material/Star';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import axios from 'axios';
+import { theme } from '../utils/theme';
 
 const ActivityPage = () => {
   const [activity, setActivity] = useState([]);
@@ -68,6 +69,7 @@ const ActivityPage = () => {
     };
 
     fetchActivity();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const addUserToActivity = async () => {

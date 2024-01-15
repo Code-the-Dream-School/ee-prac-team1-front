@@ -6,16 +6,17 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
+
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import InfoIcon from '@mui/icons-material/Info';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import InfoIcon from '@mui/icons-material/Info';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SportsTennisIcon from '@mui/icons-material/SportsTennis';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
-import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 const ActivityCard = ({ activity }) => {
   const [singleActivity, setSingleActivity] = useState([]);
@@ -26,11 +27,12 @@ const ActivityCard = ({ activity }) => {
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
-    const isPlayerAdded = activity?.players?.some(
-      (player) => player?.playerId === userId
-    );
-    setSingleActivity(activity);
-    setIsAdded(isPlayerAdded);
+      const isPlayerAdded = activity?.players?.some(
+          (player) => player?.playerId === userId
+      );
+      setSingleActivity(activity);
+      setIsAdded(isPlayerAdded);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const addUserToActivity = async () => {
