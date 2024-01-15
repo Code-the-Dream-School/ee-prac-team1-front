@@ -9,3 +9,4 @@ export { default as ResetPassword } from './ResetPassword';
 export { default as ActivityPage } from './ActivityPage';
 export { default as Landing } from './Landing';
 export { default as VerifyCode } from './VerifyCode';
+export { default as Home } from './Home';

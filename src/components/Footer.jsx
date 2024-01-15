@@ -17,7 +17,7 @@ const Footer = () => {
             avatarUrl: "https://avatars.githubusercontent.com/u/103294778?v=4",
         },
         {
-            name: "Fany Kreminski",
+            name: "Fany Kreminsky",
             username: "Kremifany",
             avatarUrl: "https://avatars.githubusercontent.com/u/34751960?v=4",
         },
