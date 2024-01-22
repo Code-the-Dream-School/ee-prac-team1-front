@@ -89,9 +89,9 @@ const Register = () => {
               email: values.email,
             },
           )
-          const { data, statusText } = response
+          const { data, statusText, status} = response
 
-          if (statusText !== 'Created') {
+          if (statusText !== 'Created'||status!==200) {
             throw new Error('Register failed')
           }
 
