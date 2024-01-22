@@ -70,9 +70,9 @@ const Login = () => {
           )
 
           console.log(response)
-          const { data, statusText, status } = response
+          const { data, status } = response
 
-          if (statusText !== 'OK' || status !==200 ) {
+          if (status!==200 ) {
             throw new Error('Login failed')
           }
 

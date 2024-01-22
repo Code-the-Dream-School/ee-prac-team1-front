@@ -59,7 +59,7 @@ const validationSchema = yup.object({
 const Register = () => {
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
-  const {setUserData } = useContext(userDataContext)
+  const { setUserData } = useContext(userDataContext)
 
   const {
     handleSubmit,
@@ -89,9 +89,9 @@ const Register = () => {
               email: values.email,
             },
           )
-          const { data, statusText, status} = response
+          const { data, status } = response
 
-          if (statusText !== 'Created'||status!==200) {
+          if (status !== 201) {
             throw new Error('Register failed')
           }
 
@@ -103,17 +103,14 @@ const Register = () => {
           localStorage.setItem('userId', userId)
         } catch (error) {
           // Show error message
-          toast.error(
-            `Registration failed: ${error.response?.data?.msg}`,
-            {
-              position: 'top-center',
-              autoClose: 3000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-            },
-          )
+          toast.error(`Registration failed: ${error.response?.data?.msg}`, {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          })
           console.error('Error registration:', error)
           // navigate('/')
           return
